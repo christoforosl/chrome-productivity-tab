@@ -6,10 +6,7 @@
     "newtab": "newProductivityTab.html"
   },
   "manifest_version": 2,
-  "permissions":["tabs"],
-  "background" :{ 
-	"scripts":"backround.js",
-	"persistent":false
-  }
+  "permissions":["tabs","background", "tts" ],
+  "background": { "scripts": ["scripts/common.js", "scripts/background.js"] },
   
 }
