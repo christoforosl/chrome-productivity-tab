@@ -37,6 +37,9 @@ window.startFocusTimer = function() {
     console.log('Start Timer set to ' + value);
   });
   
+  $('#divStartTimer').addClass('invisible');
+  $('#divStopTimer').removeClass('invisible');
+
   chrome.alarms.onAlarm.addListener(function(alarm) {
 
       if (alarm.name == options.focusTimerAlarmName) {
@@ -50,15 +53,19 @@ window.startFocusTimer = function() {
 window.updateFocusTimer = function() {
   chrome.storage.local.get("TIMER_START_KEY", function(result) {
     var startTime = result.TIMER_START_KEY;
-    var elapsedSecs = new Date().getTime() - startTime;
+    var elapsedSecs = (new Date().getTime() - startTime)/1000;
     var hours   = Math.floor(elapsedSecs / 3600);
     var minutes = Math.floor((elapsedSecs - (hours * 3600)) / 60);
-    var seconds = elapsedSecs - (hours * 3600) - (minutes * 60);
+    var seconds = Math.round( elapsedSecs - (hours * 3600) - (minutes * 60), 0);
 
     if (hours   < 10) {hours   = "0"+hours;}
     if (minutes < 10) {minutes = "0"+minutes;}
     if (seconds < 10) {seconds = "0"+seconds;}
-    $html('currentTimerTime', hours+':'+minutes+':'+seconds) ;
+    let timeStr = hours+':'+minutes+':'+seconds
+    //console.log(timeStr);
+    
+    
+    $html('currentTimerTime',  timeStr) ;
 
   });
 }
@@ -79,13 +86,13 @@ window.flashIcon = function() {
 window.stopFlashingIcon = function() {
 };
 
-function $(id) {
+function $e(id) {
   return document.getElementById(id);
 }
 
 function $html(id, text) {
-  if ($(id)){
-    $(id).innerHTML = text;
+  if ($e(id)){
+    $e(id).innerHTML = text;
   }
 }
 
@@ -227,4 +234,9 @@ function ringAlarm(alarmHours, alarmMinutes) {
 function ringAlarmWithCurrentTime() {
   var d = new Date();
   ringAlarm(d.getHours(), d.getMinutes());
+}
+
+if (window.jQuery) {
+  $('#divStartTimer').removeClass('invisible');
+  $('#divStopTimer').addClass('invisible');
 }

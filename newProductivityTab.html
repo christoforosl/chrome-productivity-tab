@@ -7,6 +7,9 @@
       integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
       crossorigin="anonymous"
     />
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
     <script src="scripts/jquery-3.5.1.slim.min.js"></script>
     <script src="scripts/bootstrap.bundle.min.js"></script>
 
@@ -53,41 +56,29 @@
               </div>
 
               <div
-                id="startTimer"
+                id="divStartTimer"
                 class="align-items-center w-100 mt-5"
                 role="group"
                 aria-label="Basic example"
               >
                 <input
-				  type="button"
-				  id="btnStartTimer"
+				          type="button"
+				          id="btnStartTimer"
                   class="btn btn-primary"
                   value="Start Focus Timer"
                   title="Start timer to measure time at current task"
                 />
               </div>
 
-              <div
-                id="stopTimer"
-                class="invisible align-items-center mt-5"
-                role="group"
-                aria-label="Basic example">
-                <div id="currentTimerTime"></div>
+              <div id="divStopTimer" class="align-items-center text-center mt-5" role="group"
+                aria-label="Basic example"><div class="h1" id="currentTimerTime"></div>
 
-                <input
-                  type="button"
-                  class="btn btn-secondary"
-                  onclick="pauseFocusTimer()"
-                  value="Pause Current Focus Timer"
-                  title="Pause timer measuring current task"
-                />
-                <input
-                  type="button"
-                  class="btn btn-danger"
-                  value="End Current Focus Timer"
-                  title="End timer measuring current task"
-                  onclick="stopFocusTimer()"
-                />
+                <button class="btn btn-secondary" id="btnPauseFocusTimer" value="Pause Current Focus Timer"
+                  title="Pause timer measuring current task"><i class="fas fa-pause-circle"></i> Pause Current Focus Timer</button>
+                
+                <button class="btn btn-danger" id="btnStopTimer"
+                  title="Stop timer measuring current task"><i class="fas fa-stop-circle"></i> Stop Current Focus Timer</button>
+                  
               </div>
             </form>
             <div class="fixed-bottom">bottom</div>
