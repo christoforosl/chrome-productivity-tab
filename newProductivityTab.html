@@ -20,66 +20,28 @@
 		}
 		
 	</style>
+	
 	<script src="./scripts/common.js" ></script>
 	<script src="./scripts/background.js" ></script>
 </head>
-<body class="bg-transparent">
+<body class="bg-transparent align-middle text-center vh-100 border-primary">
 
-<div class="container bg-transparent">
+<div class="container-fluid bg-transparent h-100 w-100 align-items-center" style="color:white;">
   <div id="currentTime"></div>
   <div id="greeting" style="font-size: 70px;"></div>
   <div id="whatShallWeWorkOnQuestionText"></div>
 	<form id="frmFocus">
-		<div id="currentFocusContainer"><input type="checkbox" id="currentFocusCompleted" name="currentFocusCompleted"/>
+		<div id="currentFocusContainer">
+			<input type="checkbox" class="custom-control-input" id="currentFocusCompleted" name="currentFocusCompleted"/>
 			<div id="currentFocus"></div>
 		</div>
 		
-		<input type="button" value="Start Focus Timer" title="Start timer to measure time at current task"/>
-		<input type="button" value="Pause Current Focus Timer" title="Pause timer measuring current task"/>
-		<input type="button" value="End Current Focus Timer" title="End timer measuring current task"/>
+		<input type="button" class="btn btn-primary" value="Start Focus Timer" title="Start timer to measure time at current task"/>
+		<input type="button" class="btn btn-secondary" value="Pause Current Focus Timer" title="Pause timer measuring current task"/>
+		<input type="button" class="btn btn-danger" value="End Current Focus Timer" title="End timer measuring current task"/>
 	</form>
+	<div class="fixed-bottom">bottom</div>
 </div> 
 
-<style type="text/css" style="display: none !important;">
-	* {
-		margin: 0;
-		padding: 0;
-	}
-	body {
-		overflow-x: hidden;
-		height: 100%;
-	}
-	
-	.container {
-	  height: 100%;
-	  width: 100%;
-	  box-shadow: inset 0px -4px 14px 0px rgba(50, 50, 50, 0.71);
-	  background-size: 100% auto;
-	  z-index: 0;
-	  position: relative;
-	  display: flex;
-	  flex-direction: column;
-	  align-items: center;
-	  justify-content: center;
-	}
-	
-	.container p {
-	  display: block;
-	  color: white;
-	  text-align: center;
-	  font-size: 24pt;
-	  background-color: transparent;
-	  z-index: 2;
-	}
-	.container div {
-	  display: block;
-	  color: white;
-	  text-align: center;
-	  font-size: 24pt;
-	  background-color: transparent;
-	  z-index: 2;
-	}
-	
-</style>
 </body>
 </html>

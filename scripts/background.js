@@ -1,9 +1,10 @@
+// note: JQuery is not available to this backround js script
 var timer = null;
 
 function setTimer() {
-    
+
   timer = setInterval(myTimer, 1000);
-    
+
 };
 
 function myTimer() {
@@ -18,25 +19,26 @@ function myTimer() {
   } else {
     greeting = "Good Evening " + options.greetingName;
   }
-
-  $('whatShallWeWorkOnQuestionText').innerHTML = options.whatShallWeWorkOnQuestionText;
-  $("currentTime").innerHTML = t;
-  $("greeting").innerHTML = greeting;
-  $("currentFocus").innerHTML = options.currentFocus;
+  
+  $html('whatShallWeWorkOnQuestionText',  options.whatShallWeWorkOnQuestionText);
+  $html("currentTime", t );
+  $html("greeting", greeting );
+  $html("currentFocus", options.currentFocus);
 
 }
 
 function initBackground() {
-  chrome.tabs.onRemoved.addListener(function() {
-     if (timer)  {
+  chrome.tabs.onRemoved.addListener(function () {
+    if (timer) {
+      console.log("Clearing Interval")
       clearInterval(timer);
-     }
+    }
   });
-  
+
 }
 
 chrome.runtime.onInstalled.addListener(function () {
-  console.log("my extensiopns is on!")
+  console.log("my extension is on!")
   initBackground();
   setTimer();
 

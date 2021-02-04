@@ -50,6 +50,13 @@ function $(id) {
   return document.getElementById(id);
 }
 
+function $html(id, text) {
+  if ($(id)){
+    $(id).innerHTML = text;
+  }
+}
+
+
 function parseTime(timeString, ampm) {
   var time = timeString.match(/^(\d\d):(\d\d)$/);
   if (!time) {
