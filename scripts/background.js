@@ -46,3 +46,6 @@ chrome.runtime.onInstalled.addListener(function () {
 
 initBackground();
 setTimer();
+if($("btnStartTimer")) {
+  $("btnStartTimer").addEventListener("click", startFocusTimer);
+}

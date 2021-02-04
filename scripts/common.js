@@ -20,6 +20,7 @@ var isSpeaking = false;
 var isAnimating = false;
 
 var options = {
+  "focusTimerAlarmName":"focusTimerAlarm",
   "username":"christoforosl@netu.com.cy",
   "greetingName":"Christoforos",
   "greetingNameFontSizePixels": 70,
@@ -28,7 +29,39 @@ var options = {
   "currentFocus":""
 }
 
+window.startFocusTimer = function() {
 
+  chrome.alarms.create(options.focusTimerAlarmName, { periodInMinutes: (1/60), when: 1 });
+  var value = new Date().getTime();
+  chrome.storage.local.set({"TIMER_START_KEY": value}, function() {
+    console.log('Start Timer set to ' + value);
+  });
+  
+  chrome.alarms.onAlarm.addListener(function(alarm) {
+
+      if (alarm.name == options.focusTimerAlarmName) {
+        updateFocusTimer();
+      }
+
+  });
+
+}
+
+window.updateFocusTimer = function() {
+  chrome.storage.local.get("TIMER_START_KEY", function(result) {
+    var startTime = result.TIMER_START_KEY;
+    var elapsedSecs = new Date().getTime() - startTime;
+    var hours   = Math.floor(elapsedSecs / 3600);
+    var minutes = Math.floor((elapsedSecs - (hours * 3600)) / 60);
+    var seconds = elapsedSecs - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    $html('currentTimerTime', hours+':'+minutes+':'+seconds) ;
+
+  });
+}
 
 // Overridden in popup.js but not in background.js.
 window.displayAlarmAnimation = function() {

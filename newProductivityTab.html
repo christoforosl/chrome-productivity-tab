@@ -1,68 +1,101 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+      integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+      crossorigin="anonymous"
+    />
+    <script src="scripts/jquery-3.5.1.slim.min.js"></script>
+    <script src="scripts/bootstrap.bundle.min.js"></script>
 
-<head>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-		integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
-	<script src="scripts/jquery-3.5.1.slim.min.js"></script>
-	<script src="scripts/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8" />
+    <title>New Productivity Tab</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
 
-	<meta charset="UTF-8" />
-	<title>New Productivity Tab</title>
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-		}
+      html {
+        background: url(https://cdn.pixabay.com/photo/2021/01/27/13/47/cliff-5954980_960_720.jpg)
+          no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100%;
+      }
+    </style>
 
-		html {
-			background: url(https://cdn.pixabay.com/photo/2021/01/27/13/47/cliff-5954980_960_720.jpg) no-repeat center center fixed;
-			-webkit-background-size: cover;
-			-moz-background-size: cover;
-			-o-background-size: cover;
-			background-size: cover;
-			height: 100%;
-		}
-	</style>
+    
+  </head>
 
-	<script src="./scripts/common.js"></script>
-	<script src="./scripts/background.js"></script>
-</head>
+  <body class="bg-transparent vh-100 border-primary">
+    <div class="container h-100">
+      <div class="row align-items-center h-100 text-center" style="color: white">
+        <div class="col-12 mx-auto">
+         
+            <div id="currentTime"></div>
+            <div id="greeting" style="font-size: 70px"></div>
+            <div id="whatShallWeWorkOnQuestionText"></div>
 
-<body class="bg-transparent  vh-100 border-primary">
-	<div class="align-middle text-center" style="color: white">
+            <form id="frmFocus">
+              <div id="currentFocusContainer">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="currentFocusCompleted"
+                  name="currentFocusCompleted"
+                />
+                <div id="currentFocus"></div>
+              </div>
 
-		<div id="currentTime"></div>
-		<div id="greeting" style="font-size: 70px"></div>
-		<div id="whatShallWeWorkOnQuestionText"></div>
+              <div
+                id="startTimer"
+                class="align-items-center w-100 mt-5"
+                role="group"
+                aria-label="Basic example"
+              >
+                <input
+				  type="button"
+				  id="btnStartTimer"
+                  class="btn btn-primary"
+                  value="Start Focus Timer"
+                  title="Start timer to measure time at current task"
+                />
+              </div>
 
-		<form id="frmFocus">
+              <div
+                id="stopTimer"
+                class="invisible align-items-center mt-5"
+                role="group"
+                aria-label="Basic example">
+                <div id="currentTimerTime"></div>
 
-			<div id="currentFocusContainer">
-				<input type="checkbox" class="custom-control-input" id="currentFocusCompleted"
-					name="currentFocusCompleted" />
-				<div id="currentFocus"></div>
-			</div>
-
-			<div id="startTimer" class="align-items-center w-100 mt-5" role="group" aria-label="Basic example">
-				<input type="button" class="btn btn-primary" value="Start Focus Timer" onclick="startFocusTimer()"
-					title="Start timer to measure time at current task" />
-			</div>
-
-			<div id="stopTimer" class="invisible align-items-center mt-5" role="group" aria-label="Basic example">
-
-				<div id="currentTimerTime"></div>
-
-				<input type="button" class="btn btn-secondary" onclick="pauseFocusTimer()"
-					value="Pause Current Focus Timer" title="Pause timer measuring current task" />
-				<input type="button" class="btn btn-danger" value="End Current Focus Timer"
-					title="End timer measuring current task" onclick="stopFocusTimer()" />
-			</div>
-
-		</form>
-		<div class="fixed-bottom">bottom</div>
-	</div>
-	
+                <input
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="pauseFocusTimer()"
+                  value="Pause Current Focus Timer"
+                  title="Pause timer measuring current task"
+                />
+                <input
+                  type="button"
+                  class="btn btn-danger"
+                  value="End Current Focus Timer"
+                  title="End timer measuring current task"
+                  onclick="stopFocusTimer()"
+                />
+              </div>
+            </form>
+            <div class="fixed-bottom">bottom</div>
+          
+        </div>
+      </div>
+    </div>
 </body>
-
+<script src="./scripts/common.js"></script>
+    <script src="./scripts/background.js"></script>
 </html>
