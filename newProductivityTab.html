@@ -1,47 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-	<script src="scripts/jquery-3.5.1.slim.min.js"></script>
-	<script src="scripts/bootstrap.bundle.min.js" ></script>
 
-<meta charset="UTF-8">
-<title>New Productivity Tab</title>
-<style>
-		* { margin: 0; padding: 0; }
-		
-		html { 
-			background: url(https://cdn.pixabay.com/photo/2021/01/27/13/47/cliff-5954980_960_720.jpg) no-repeat center center fixed; 
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+		integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
+	<script src="scripts/jquery-3.5.1.slim.min.js"></script>
+	<script src="scripts/bootstrap.bundle.min.js"></script>
+
+	<meta charset="UTF-8" />
+	<title>New Productivity Tab</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		html {
+			background: url(https://cdn.pixabay.com/photo/2021/01/27/13/47/cliff-5954980_960_720.jpg) no-repeat center center fixed;
 			-webkit-background-size: cover;
 			-moz-background-size: cover;
 			-o-background-size: cover;
 			background-size: cover;
 			height: 100%;
 		}
-		
 	</style>
-	
-	<script src="./scripts/common.js" ></script>
-	<script src="./scripts/background.js" ></script>
+
+	<script src="./scripts/common.js"></script>
+	<script src="./scripts/background.js"></script>
 </head>
-<body class="bg-transparent align-middle text-center vh-100 border-primary">
 
-<div class="container-fluid bg-transparent h-100 w-100 align-items-center" style="color:white;">
-  <div id="currentTime"></div>
-  <div id="greeting" style="font-size: 70px;"></div>
-  <div id="whatShallWeWorkOnQuestionText"></div>
-	<form id="frmFocus">
-		<div id="currentFocusContainer">
-			<input type="checkbox" class="custom-control-input" id="currentFocusCompleted" name="currentFocusCompleted"/>
-			<div id="currentFocus"></div>
-		</div>
-		
-		<input type="button" class="btn btn-primary" value="Start Focus Timer" title="Start timer to measure time at current task"/>
-		<input type="button" class="btn btn-secondary" value="Pause Current Focus Timer" title="Pause timer measuring current task"/>
-		<input type="button" class="btn btn-danger" value="End Current Focus Timer" title="End timer measuring current task"/>
-	</form>
-	<div class="fixed-bottom">bottom</div>
-</div> 
+<body class="bg-transparent  vh-100 border-primary">
+	<div class="align-middle text-center" style="color: white">
 
+		<div id="currentTime"></div>
+		<div id="greeting" style="font-size: 70px"></div>
+		<div id="whatShallWeWorkOnQuestionText"></div>
+
+		<form id="frmFocus">
+
+			<div id="currentFocusContainer">
+				<input type="checkbox" class="custom-control-input" id="currentFocusCompleted"
+					name="currentFocusCompleted" />
+				<div id="currentFocus"></div>
+			</div>
+
+			<div id="startTimer" class="align-items-center w-100 mt-5" role="group" aria-label="Basic example">
+				<input type="button" class="btn btn-primary" value="Start Focus Timer" onclick="startFocusTimer()"
+					title="Start timer to measure time at current task" />
+			</div>
+
+			<div id="stopTimer" class="invisible align-items-center mt-5" role="group" aria-label="Basic example">
+
+				<div id="currentTimerTime"></div>
+
+				<input type="button" class="btn btn-secondary" onclick="pauseFocusTimer()"
+					value="Pause Current Focus Timer" title="Pause timer measuring current task" />
+				<input type="button" class="btn btn-danger" value="End Current Focus Timer"
+					title="End timer measuring current task" onclick="stopFocusTimer()" />
+			</div>
+
+		</form>
+		<div class="fixed-bottom">bottom</div>
+	</div>
+	
 </body>
+
 </html>
