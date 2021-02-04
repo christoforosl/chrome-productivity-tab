@@ -1,9 +1,8 @@
 var timer = null;
-var userName = "Christoforos"
 
 function setTimer() {
-  
-  setInterval(myTimer, 1000);
+    
+  timer = setInterval(myTimer, 1000);
     
 };
 
@@ -13,16 +12,18 @@ function myTimer() {
   var greeting;
 
   if (d.getHours() > 0 && d.getHours() <= 12) {
-    greeting = "Good Morning " + userName;
+    greeting = "Good Morning " + options.greetingName;
   } else if (d.getHours() > 12 && d.getHours() <= 19) {
-    greeting = "Good Afternoon " + userName;
+    greeting = "Good Afternoon " + options.greetingName;
   } else {
-    greeting = "Good Evening " + userName;
+    greeting = "Good Evening " + options.greetingName;
   }
 
-  document.getElementById("currentTime").innerHTML = t;
-  document.getElementById("greeting").innerHTML = greeting;
-  
+  $('whatShallWeWorkOnQuestionText').innerHTML = options.whatShallWeWorkOnQuestionText;
+  $("currentTime").innerHTML = t;
+  $("greeting").innerHTML = greeting;
+  $("currentFocus").innerHTML = options.currentFocus;
+
 }
 
 function initBackground() {
@@ -33,6 +34,13 @@ function initBackground() {
   });
   
 }
+
+chrome.runtime.onInstalled.addListener(function () {
+  console.log("my extensiopns is on!")
+  initBackground();
+  setTimer();
+
+});
 
 initBackground();
 setTimer();

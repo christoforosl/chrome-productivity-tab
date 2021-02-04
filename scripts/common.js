@@ -19,6 +19,17 @@ var isPlaying = false;
 var isSpeaking = false;
 var isAnimating = false;
 
+var options = {
+  "username":"christoforosl@netu.com.cy",
+  "greetingName":"Christoforos",
+  "greetingNameFontSizePixels": 70,
+  "whatShallWeWorkOnQuestionText":"What is our focus now?",
+  "whatShallWeWorkOnQuestionTextFontSizePixels":50,
+  "currentFocus":""
+}
+
+
+
 // Overridden in popup.js but not in background.js.
 window.displayAlarmAnimation = function() {
 };

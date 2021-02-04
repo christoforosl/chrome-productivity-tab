@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+	<script src="scripts/jquery-3.5.1.slim.min.js"></script>
+	<script src="scripts/bootstrap.bundle.min.js" ></script>
+
 <meta charset="UTF-8">
 <title>New Productivity Tab</title>
 <style>
@@ -16,13 +20,24 @@
 		}
 		
 	</style>
+	<script src="./scripts/common.js" ></script>
 	<script src="./scripts/background.js" ></script>
 </head>
-<body>
+<body class="bg-transparent">
 
-<div class="container">
-  <div id="currentTime">Time shows here</div>
-  <div id="greeting" style="font-size: 70px;">Greeting shows here</div>
+<div class="container bg-transparent">
+  <div id="currentTime"></div>
+  <div id="greeting" style="font-size: 70px;"></div>
+  <div id="whatShallWeWorkOnQuestionText"></div>
+	<form id="frmFocus">
+		<div id="currentFocusContainer"><input type="checkbox" id="currentFocusCompleted" name="currentFocusCompleted"/>
+			<div id="currentFocus"></div>
+		</div>
+		
+		<input type="button" value="Start Focus Timer" title="Start timer to measure time at current task"/>
+		<input type="button" value="Pause Current Focus Timer" title="Pause timer measuring current task"/>
+		<input type="button" value="End Current Focus Timer" title="End timer measuring current task"/>
+	</form>
 </div> 
 
 <style type="text/css" style="display: none !important;">
