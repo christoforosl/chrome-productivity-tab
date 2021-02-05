@@ -20,6 +20,7 @@ var isSpeaking = false;
 var isAnimating = false;
 
 var options = {
+  "APIQuoteOfTheDayApiHost":"https://quotes.rest/qod?language=en",
   "focusTimerAlarmName":"focusTimerAlarm",
   "username":"christoforosl@netu.com.cy",
   "greetingName":"Christoforos",

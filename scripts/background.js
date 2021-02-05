@@ -7,6 +7,29 @@ function setTimer() {
 
 };
 
+function setQuote() {
+
+  const myHeaders = new Headers({
+    "accept": "application/json",
+    "useQueryString": true
+  });
+  
+  const myRequest = new Request( options.APIQuoteOfTheDayApiHost , {
+      "method": "GET",
+      "headers": myHeaders,
+      "mode": 'cors',
+      "cache": 'default'
+    });
+
+    fetch(myRequest)
+      .then(response => response.json())
+      .then(contents => {
+        var quote = contents.contents.quotes[0].quote;
+        var author = contents.contents.quotes[0].author;
+      });
+}
+
+
 function myTimer() {
   var d = new Date();
   var t = d.toDateString() + ', ' + d.toLocaleTimeString();
@@ -46,6 +69,8 @@ chrome.runtime.onInstalled.addListener(function () {
 
 initBackground();
 setTimer();
+setQuote();
+
 if($e("btnStartTimer")) {
   $e("btnStartTimer").addEventListener("click", startFocusTimer);
 }
