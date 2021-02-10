@@ -20,221 +20,32 @@ var isSpeaking = false;
 var isAnimating = false;
 
 var options = {
-  "APIQuoteOfTheDayApiHost":"https://quotes.rest/qod?language=en",
-  "focusTimerAlarmName":"focusTimerAlarm",
-  "username":"christoforosl@netu.com.cy",
-  "greetingName":"Christoforos",
+
+  "APIQuoteOfTheDayApiHost": "https://quotes.rest/qod?language=en",
+  "focusTimerAlarmName": "focusTimerAlarm",
+  "username": "christoforosl@netu.com.cy",
+  "greetingName": "Christoforos",
   "greetingNameFontSizePixels": 70,
-  "whatShallWeWorkOnQuestionText":"What is our focus now?",
-  "whatShallWeWorkOnQuestionTextFontSizePixels":50,
-  "currentFocus":""
-}
-
-window.startFocusTimer = function() {
-
-  chrome.alarms.create(options.focusTimerAlarmName, { periodInMinutes: (1/60), when: 1 });
-  var value = new Date().getTime();
-  chrome.storage.local.set({"TIMER_START_KEY": value}, function() {
-    console.log('Start Timer set to ' + value);
-  });
-  
-  $('#divStartTimer').addClass('invisible');
-  $('#divStopTimer').removeClass('invisible');
-
-  chrome.alarms.onAlarm.addListener(function(alarm) {
-
-      if (alarm.name == options.focusTimerAlarmName) {
-        updateFocusTimer();
-      }
-
-  });
-
-}
-
-window.updateFocusTimer = function() {
-  chrome.storage.local.get("TIMER_START_KEY", function(result) {
-    var startTime = result.TIMER_START_KEY;
-    var elapsedSecs = (new Date().getTime() - startTime)/1000;
-    var hours   = Math.floor(elapsedSecs / 3600);
-    var minutes = Math.floor((elapsedSecs - (hours * 3600)) / 60);
-    var seconds = Math.round( elapsedSecs - (hours * 3600) - (minutes * 60), 0);
-
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    let timeStr = hours+':'+minutes+':'+seconds
-    //console.log(timeStr);
-    
-    
-    $html('currentTimerTime',  timeStr) ;
-
-  });
-}
-
-// Overridden in popup.js but not in background.js.
-window.displayAlarmAnimation = function() {
+  "whatShallWeWorkOnQuestionText": "What is our focus now?",
+  "whatShallWeWorkOnQuestionTextFontSizePixels": 50,
+  "currentFocus": ""
 };
 
-// Overridden in popup.js but not in background.js.
-window.stopAlarmAnimation = function() {
-};
 
-// Overridden in background.js but not in popup.js.
-window.flashIcon = function() {
-};
-
-// Overridden in background.js but not in popup.js.
-window.stopFlashingIcon = function() {
-};
 
 function $e(id) {
   return document.getElementById(id);
 }
 
 function $html(id, text) {
-  if ($e(id)){
-    $e(id).innerHTML = text;
-  }
-}
+  if ($e(id)) {
 
-
-function parseTime(timeString, ampm) {
-  var time = timeString.match(/^(\d\d):(\d\d)$/);
-  if (!time) {
-    throw 'Cannot parse: ' + timeString;
-  }
-
-  var hours = parseInt(time[1], 10);
-  if (hours == 12 && ampm == 0) {
-    hours = 0;
-  } else {
-    hours += (hours < 12 && ampm == 1)? 12 : 0;
-  }
-  var minutes = parseInt(time[2], 10) || 0;
-
-  return [hours, minutes];
-}
-
-function stopAll() {
-  if (audio) {
-    audio.pause();
-    isPlaying = false;
-  }
-  try {
-    chrome.tts.stop();
-    isSpeaking = false;
-  } catch (e) {
-  }
-  window.stopAlarmAnimation();
-  window.stopFlashingIcon();
-}
-
-function playSound(duckAudio) {
-  if (audio) {
-    audio.pause();
-    document.body.removeChild(audio);
-    audio = null;
-  }
-
-  var currentSound = localStorage['sound'] || DEFAULT_SOUND;
-  if (currentSound == 'none') {
-    return;
-  }
-
-  audio = document.createElement('audio');
-  audio.addEventListener('ended', function(evt) {
-    isPlaying = false;
-  });
-  document.body.appendChild(audio);
-  audio.autoplay = true;
-
-  var src = 'audio/' + currentSound + '.ogg';
-  var volume = parseFloat(localStorage['volume']) || DEFAULT_VOLUME;
-  audio.volume = volume;
-  audio.src = src;
-  isPlaying = true;
-
-  if (duckAudio) {
-    for (var i = 0; i < 10; i++) {
-      (function(i) {
-         window.setTimeout(function() {
-           var duckedVolume = volume * (1.0 - 0.07 * (i + 1));
-           audio.volume = duckedVolume;
-         }, 1800 + 50 * i);
-      })(i);
+    if ($e(id).innerHTML != text) {
+      $e(id).innerHTML = text;
     }
+
   }
-}
 
-function getTimeString(hh, mm) {
-  var ampm = hh >= 12 ? 'P M' : 'A M';
-  hh = (hh % 12);
-  if (hh == 0)
-    hh = 12;
-  if (mm == 0)
-    mm = 'o\'clock';
-  else if (mm < 10)
-    mm = 'O ' + mm;
-
-  return hh + ' ' + mm + ' ' + ampm;
-}
-
-function speak(text) {
-  var rate = parseFloat(localStorage['rate']) || DEFAULT_RATE;
-  var pitch = 1.0;
-  var volume = parseFloat(localStorage['volume']) || DEFAULT_VOLUME;
-  var voice = localStorage['voice'];
-  chrome.tts.speak(
-      text,
-      {voiceName: voice,
-       rate: rate,
-       pitch: pitch,
-       volume: volume,
-       onEvent: function(evt) {
-         if (evt.type == 'end') {
-           isSpeaking = false;
-         }
-       }
-      });
-}
-
-function speakPhraseWithTimeString(timeString) {
-  var phraseTemplate = localStorage['phrase'] || DEFAULT_PHRASE;
-  var utterance = phraseTemplate.replace(/\$TIME/g, timeString);
-  speak(utterance);
-}
-
-function speakPhraseWithCurrentTime() {
-  var d = new Date();
-  speakPhraseWithTimeString(getTimeString(d.getHours(), d.getMinutes()));
-}
-
-function ringAlarm(alarmHours, alarmMinutes) {
-  window.displayAlarmAnimation();
-  window.flashIcon();
-
-  var phraseTemplate = localStorage['phrase'] || DEFAULT_PHRASE;
-  var currentSound = localStorage['sound'] || DEFAULT_SOUND;
-
-  if (phraseTemplate == '') {
-    playSound(false);
-  } else if (currentSound == 'none') {
-    speakPhraseWithTimeString(getTimeString(alarmHours, alarmMinutes));
-  } else {
-    chrome.tts.stop();
-    playSound(true);
-    isSpeaking = true;
-    window.setTimeout(function() {
-      if (isSpeaking) {
-        speakPhraseWithTimeString(getTimeString(alarmHours, alarmMinutes));
-      }
-    }, 2000);
-  }
-}
-
-function ringAlarmWithCurrentTime() {
-  var d = new Date();
-  ringAlarm(d.getHours(), d.getMinutes());
 }
 
 if (window.jQuery) {

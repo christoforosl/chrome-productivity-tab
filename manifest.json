@@ -6,8 +6,8 @@
     "newtab": "newProductivityTab.html"
   },
   "manifest_version": 2,
-  "permissions":["tabs","background", "tts","alarms", "storage"],
-  "background": { "scripts": ["scripts/common.js", "scripts/background.js"] }
+  "permissions":["tabs","background", "tts","alarms", "storage", "https://quotes.rest/*"],
+  "background": { "scripts": ["scripts/common.js",  "scripts/backgroundFocusTimer.js","scripts/background.js"] }
   
   
 }
