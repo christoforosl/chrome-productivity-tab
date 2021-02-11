@@ -114,4 +114,8 @@ if($e("btnStartTimer")) {
 if($e("btnEndTimer")) {
   $e("btnEndTimer").addEventListener("click", endFocusTimer);
 }
+if($e("btnSetCurrentFocusAndStartTimer")) {
+  $e("btnSetCurrentFocusAndStartTimer").addEventListener("click", SetCurrentFocusAndStartTimer);
+}
+
 

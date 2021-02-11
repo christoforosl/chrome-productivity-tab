@@ -20,7 +20,7 @@ var isSpeaking = false;
 var isAnimating = false;
 
 var options = {
-
+  "APIDBHost": "https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks/",
   "APIQuoteOfTheDayApiHost": "https://quotes.rest/qod?language=en",
   "focusTimerAlarmName": "focusTimerAlarm",
   "username": "christoforosl@netu.com.cy",

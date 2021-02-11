@@ -1,11 +1,35 @@
 
+
+window.SetCurrentFocusAndStartTimer = function() {
+  var myRequest = new Request(options.APIQuoteOfTheDayApiHost, {
+    "method": "POST",
+    "headers": CALL_QUOTE_HEADERS,
+    "mode": 'cors',
+    "cache": 'default',
+    body: {
+      "user": "chris",
+      "startTime": new Date().getTime(),
+      "focusTaskName": $('#taskName').val()
+    }
+  });
+
+  fetch(myRequest)
+    .then(response => response.json())
+    .then(contents => {
+      var id = contents._id;
+      
+      
+
+    });
+}
+
 /**
  * Called on tab open. Checks if a focus timer is active from another tab and continues
  */
 window.checkForActiveFocusTimer = function () {
 
-  chrome.storage.local.get("TIMER_START_KEY", function (value) {
-    if ( value && value > 0  ) {
+  chrome.storage.local.get(["TIMER_START_KEY","TIMER_ID"], function (value) {
+    if ( value && value.TIMER_START_KEY > 0 && value.TIMER_ID ) {
       options.startFocusTimer = setInterval(updateFocusTimer, 1000);
     } else {
 
@@ -21,30 +45,45 @@ window.checkForActiveFocusTimer = function () {
 
 window.endFocusTimer = function () {
 
-  chrome.storage.local.get("TIMER_START_KEY", function (result) {
-    if ( value && value > 0  ) {
-      var endTaskTime = new Date().getTime();
-      console.log("set end time to:" + endTaskTime);
-
-      chrome.storage.local.remove("TIMER_START_KEY", function () {
+  chrome.storage.local.get( ["TIMER_START_KEY","TIMER_ID"] , function (getStorageResult) {
+    
+    if ( getStorageResult.TIMER_ID && getStorageResult.TIMER_ID > 0  ) {
+      
+      chrome.storage.local.remove( ["TIMER_START_KEY","TIMER_ID"] , function () {
         console.log('Start Timer set to ' + null);
         chrome.tabs.query({}, function (tabs) {
 
           for (var i = 0; i < tabs.length; ++i) {
-            console.log("sending message to tab:"+ tabs[i].id);
+            console.log("sending END_TIMER message to tab:"+ tabs[i].id);
             chrome.tabs.sendMessage(tabs[i].id, "END_TIMER");
           }
-      
+
+          var dnow = new Date().getTime();
+          var myRequest = new Request(options.APIDBHost + getStorageResult.TIMER_ID, {
+            "method": "PATCH",
+            "headers": CALL_QUOTE_HEADERS,
+            "mode": 'cors',
+            "cache": 'default',
+            body: {
+              "endTime": dnow,
+              "lastHeartbeat": dnow
+            }
+          });
+        
+          fetch(myRequest)
+            .then(response => response.json())
+            .then(contents => {
+        
+            });
+
         });
       });
     };
- }
-
-  
+ });
 
 }
 
-window.startFocusTimer = function () {
+window.startFocusTimer = function ( timerid ) {
   if (options.startFocusTimer) {
     clearInterval(options.startFocusTimer);
     options.startFocusTimer = null;
@@ -52,9 +91,10 @@ window.startFocusTimer = function () {
 
   var value = new Date().getTime();
   chrome.storage.local.set({
-    "TIMER_START_KEY": value
+    "TIMER_START_KEY": value,
+    "TIMER_ID":timerid
   }, function () {
-    console.log('Start Timer set to ' + value);
+    console.log('Start Timer set to ' + value + ", server timerid: " + timerid);
   });
 
   $('#divStartTimer').addClass('invisible');
@@ -66,8 +106,10 @@ window.startFocusTimer = function () {
 
 window.updateFocusTimer = function () {
 
-  chrome.storage.local.get("TIMER_START_KEY", function (result) {
+  chrome.storage.local.get( ["TIMER_START_KEY","TIMER_ID"] , function (result) {
+    
     var startTime = result.TIMER_START_KEY;
+    var taskTimerId = result.TIMER_ID;
     var elapsedSecs = (new Date().getTime() - startTime) / 1000;
     var hours = Math.floor(elapsedSecs / 3600);
     var minutes = Math.floor((elapsedSecs - (hours * 3600)) / 60);
