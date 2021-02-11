@@ -38,10 +38,17 @@ function $e(id) {
 }
 
 function $html(id, text) {
-  if ($e(id)) {
-
-    if ($e(id).innerHTML != text) {
-      $e(id).innerHTML = text;
+  const elent = $e(id);
+  if (elent) {
+    
+    if (elent.nodeName === 'DIV') {
+      if (elent.innerHTML != text) {
+        elent.innerHTML = text;
+      }
+    } else if (elent.nodeName === 'BUTTON') {
+      if (elent.value != text) {
+        elent.value = text;
+      }
     }
 
   }
@@ -50,5 +57,5 @@ function $html(id, text) {
 
 if (window.jQuery) {
   $('#divStartTimer').removeClass('invisible');
-  $('#divStopTimer').addClass('invisible');
+  $('#divEndTimer').addClass('invisible');
 }

@@ -42,6 +42,8 @@
          
             <div id="currentTime"></div>
             <div id="greeting" style="font-size: 70px"></div>
+            
+            <button id="btnSetWorkItem" type="button" class="btn btn-primary" data-toggle="modal" data-target="#workItemModal" data-whatever="@getbootstrap">What shall we work on?</button>
             <div id="whatShallWeWorkOnQuestionText"></div>
 
             <form id="frmFocus">
@@ -67,14 +69,14 @@
                 />
               </div>
 
-              <div id="divStopTimer" class="align-items-center text-center mt-5" role="group"
+              <div id="divEndTimer" class="align-items-center text-center mt-5" role="group"
                 aria-label="Basic example"><div class="h1" id="currentTimerTime">00:00:00</div>
 
                 <button class="btn btn-secondary" id="btnPauseFocusTimer" value="Pause Current Focus Timer"
                   title="Pause timer measuring current task"><i class="fas fa-pause-circle"></i> Pause Current Focus Timer</button>
                 
-                <button class="btn btn-danger" id="btnStopTimer"
-                  title="Stop timer measuring current task"><i class="fas fa-stop-circle"></i> Stop Current Focus Timer</button>
+                <button class="btn btn-danger" id="btnEndTimer"
+                  title="End timer measuring current task"><i class="fas fa-End-circle"></i> End Current Focus Timer</button>
                   
               </div>
             </form>
@@ -83,6 +85,38 @@
         </div>
       </div>
     </div>
+
+    
+
+
+<div class="modal fade" id="workItemModal" tabindex="-1" role="dialog" aria-labelledby="workItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="workItemModalLabel">Set New Work Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Enter Task Name:</label>
+            <input type="text" class="form-control" id="task-name">
+          </div>
+          <!--div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div-->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Set As Current Work Item</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
     <script src="./scripts/common.js"></script>
     <script src="./scripts/backgroundFocusTimer.js"></script>

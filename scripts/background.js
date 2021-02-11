@@ -80,7 +80,7 @@ function setCurrentDateTime() {
     greeting = "Good Evening " + options.greetingName;
   }
   
-  $html('whatShallWeWorkOnQuestionText',  options.whatShallWeWorkOnQuestionText);
+  $html('btnSetWorkItem',  options.whatShallWeWorkOnQuestionText);
   $html("currentTime", t );
   $html("greeting", greeting );
   $html("currentFocus", options.currentFocus);
@@ -111,6 +111,6 @@ initBackground();
 if($e("btnStartTimer")) {
   $e("btnStartTimer").addEventListener("click", startFocusTimer);
 }
-
-
-
+if($e("btnEndTimer")) {
+  $e("btnEndTimer").addEventListener("click", endFocusTimer);
+}
