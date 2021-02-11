@@ -5,8 +5,15 @@
 window.checkForActiveFocusTimer = function () {
 
   chrome.storage.local.get("TIMER_START_KEY", function (value) {
-    if (value != null) {
+    if (value ) {
       options.startFocusTimer = setInterval(updateFocusTimer, 1000);
+    } else {
+
+      if(window.jQuery) {
+        $('#divEndTimer').addClass('invisible');
+        $('#divStartTimer').removeClass('invisible');
+      }
+
     }
   });
 
@@ -17,7 +24,7 @@ window.endFocusTimer = function () {
   chrome.storage.local.get("TIMER_START_KEY", function (result) {
     var endTaskTime = new Date().getTime();
     console.log("set end time to:" + endTaskTime);
-    
+
     chrome.storage.local.remove("TIMER_START_KEY", function () {
       console.log('Start Timer set to ' + null);
       chrome.tabs.query({}, function (tabs) {
