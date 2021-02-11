@@ -24,7 +24,8 @@ window.SetCurrentFocusAndStartTimer = function() {
       startFocusTimer(timerid);
 
     });
-
+    options.currentFocus =  $('#taskName').val();
+    $html('currentFocus',$('#taskName').val() );
     $('#workItemModal').modal('hide');
 }
 
@@ -42,7 +43,7 @@ window.startFocusTimer = function ( timerid ) {
     console.log('Start Timer set to ' + value + ", server timerid: " + timerid);
   });
 
-  $('#divStartTimer').addClass('invisible');
+  $('#btnSetWorkItem').addClass('invisible');
   $('#divEndTimer').removeClass('invisible');
 
   options.startFocusTimer = setInterval(updateFocusTimer, 1000);
@@ -61,7 +62,7 @@ window.checkForActiveFocusTimer = function () {
 
       if(window.jQuery) {
         $('#divEndTimer').addClass('invisible');
-        $('#divStartTimer').removeClass('invisible');
+        $('#btnSetWorkItem').removeClass('invisible');
       }
 
     }
@@ -137,7 +138,7 @@ window.updateFocusTimer = function () {
     var timeStr = hours + ':' + minutes + ':' + seconds;
     $html('currentTimerTime', timeStr);
     if (window.jQuery) {
-      $('#divStartTimer').addClass('invisible');
+      $('#btnSetWorkItem').addClass('invisible');
       $('#divEndTimer').removeClass('invisible');
     }
 
@@ -158,7 +159,7 @@ chrome.runtime.onMessage.addListener(
       }
       if(window.jQuery) {
         $('#divEndTimer').addClass('invisible');
-        $('#divStartTimer').removeClass('invisible');
+        $('#btnSetWorkItem').removeClass('invisible');
       }
       sendResponse("END_TIMER_DONE_SUCCESS");
   }

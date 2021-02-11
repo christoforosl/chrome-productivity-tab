@@ -56,6 +56,6 @@ function $html(id, text) {
 }
 
 if (window.jQuery) {
-  $('#divStartTimer').removeClass('invisible');
+  $('#btnSetWorkItem').removeClass('invisible');
   $('#divEndTimer').addClass('invisible');
 }
