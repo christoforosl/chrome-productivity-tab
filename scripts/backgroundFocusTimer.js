@@ -1,24 +1,4 @@
 
-
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-      console.log("we just received a message")
-      console.log(request);
-      console.log(sender);
-      if (options.startFocusTimer) {
-        console.log("clearInterval "+ options.startFocusTimer );
-        clearInterval(options.startFocusTimer);
-        options.startFocusTimer = null;
-      }
-      if(window.jQuery) {
-        $('#divEndTimer').addClass('invisible');
-        $('#divStartTimer').removeClass('invisible');
-      }
-      sendResponse("END_TIMER_DONE_SUCCESS");
-  }
-);
-
-
 /**
  * Called on tab open. Checks if a focus timer is active from another tab and continues
  */
@@ -37,15 +17,21 @@ window.endFocusTimer = function () {
   chrome.storage.local.get("TIMER_START_KEY", function (result) {
     var endTaskTime = new Date().getTime();
     console.log("set end time to:" + endTaskTime);
+    
+    chrome.storage.local.remove("TIMER_START_KEY", function () {
+      console.log('Start Timer set to ' + null);
+      chrome.tabs.query({}, function (tabs) {
+
+        for (var i = 0; i < tabs.length; ++i) {
+          console.log("sending message to tab:"+ tabs[i].id);
+          chrome.tabs.sendMessage(tabs[i].id, "END_TIMER");
+        }
+    
+      });
+    });
   });
 
-  chrome.tabs.query({}, function (tabs) {
-
-    for (var i = 0; i < tabs.length; ++i) {
-      chrome.tabs.sendMessage(tabs[i].id, "END_TIMER");
-    }
-
-  });
+  
 
 }
 
@@ -96,3 +82,24 @@ window.updateFocusTimer = function () {
 
   });
 };
+
+
+chrome.runtime.onMessage.addListener(
+
+  function(request, sender, sendResponse) {
+      console.log("we just received a message")
+      console.log(request);
+      console.log(sender);
+      if (options.startFocusTimer) {
+        console.log("clearInterval "+ options.startFocusTimer );
+        clearInterval(options.startFocusTimer);
+        options.startFocusTimer = null;
+      }
+      if(window.jQuery) {
+        $('#divEndTimer').addClass('invisible');
+        $('#divStartTimer').removeClass('invisible');
+      }
+      sendResponse("END_TIMER_DONE_SUCCESS");
+  }
+
+);
