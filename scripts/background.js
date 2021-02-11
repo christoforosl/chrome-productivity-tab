@@ -35,7 +35,7 @@ function setQuote() {
       setQuoteFromService();
     } else {
       console.log('Set quote from storage :-)' );
-      $html("quote", value.quote);
+      $html("quote", '\"' + value.quote + '\"');
       $html("quoteBy", value.quoteBy);
     } 
   });
@@ -56,8 +56,7 @@ function setQuoteFromService() {
     .then(contents => {
       var quote = contents.contents.quotes[0].quote;
       var author = contents.contents.quotes[0].author;
-
-      $html("quote", quote);
+      $html("quote", '\"' + quote + '\"');
       $html("quoteBy", author);
       var quoteObj = { "quote": quote, "quoteBy": author, "quoteDate": new Date().getTime() };
       chrome.storage.local.set(quoteObj, function () {
