@@ -1,27 +1,53 @@
-
+const DB_API_HEADERS = new Headers({
+  "content-type": "application/json",
+  "x-apikey": "602510f75ad3610fb5bb5ec5",
+})
 
 window.SetCurrentFocusAndStartTimer = function() {
-  var myRequest = new Request(options.APIQuoteOfTheDayApiHost, {
+
+  var myRequest = new Request(options.APIDBHost, {
     "method": "POST",
-    "headers": CALL_QUOTE_HEADERS,
+    "headers": DB_API_HEADERS,
     "mode": 'cors',
     "cache": 'default',
-    body: {
+    body: JSON.stringify({
       "user": "chris",
       "startTime": new Date().getTime(),
       "focusTaskName": $('#taskName').val()
-    }
+    })
   });
 
   fetch(myRequest)
     .then(response => response.json())
     .then(contents => {
-      var id = contents._id;
-      
-      
+      var timerid = contents._id;
+      startFocusTimer(timerid);
 
     });
+
+    $('#workItemModal').modal('hide');
 }
+
+window.startFocusTimer = function ( timerid ) {
+  if (options.startFocusTimer) {
+    clearInterval(options.startFocusTimer);
+    options.startFocusTimer = null;
+  }
+
+  var value = new Date().getTime();
+  chrome.storage.local.set({
+    "TIMER_START_KEY": value,
+    "TIMER_ID":timerid
+  }, function () {
+    console.log('Start Timer set to ' + value + ", server timerid: " + timerid);
+  });
+
+  $('#divStartTimer').addClass('invisible');
+  $('#divEndTimer').removeClass('invisible');
+
+  options.startFocusTimer = setInterval(updateFocusTimer, 1000);
+
+};
 
 /**
  * Called on tab open. Checks if a focus timer is active from another tab and continues
@@ -47,62 +73,46 @@ window.endFocusTimer = function () {
 
   chrome.storage.local.get( ["TIMER_START_KEY","TIMER_ID"] , function (getStorageResult) {
     
-    if ( getStorageResult.TIMER_ID && getStorageResult.TIMER_ID > 0  ) {
-      
-      chrome.storage.local.remove( ["TIMER_START_KEY","TIMER_ID"] , function () {
-        console.log('Start Timer set to ' + null);
-        chrome.tabs.query({}, function (tabs) {
+    if ( getStorageResult.TIMER_ID  ) {
+      var timerid =  getStorageResult.TIMER_ID;
 
-          for (var i = 0; i < tabs.length; ++i) {
-            console.log("sending END_TIMER message to tab:"+ tabs[i].id);
-            chrome.tabs.sendMessage(tabs[i].id, "END_TIMER");
-          }
+      chrome.storage.local.remove( "TIMER_START_KEY");
+      chrome.storage.local.remove( "TIMER_ID" );
+  
+      // skip active tab ... 
+      chrome.tabs.query({active: false}, function (tabs) {
 
-          var dnow = new Date().getTime();
-          var myRequest = new Request(options.APIDBHost + getStorageResult.TIMER_ID, {
-            "method": "PATCH",
-            "headers": CALL_QUOTE_HEADERS,
-            "mode": 'cors',
-            "cache": 'default',
-            body: {
-              "endTime": dnow,
-              "lastHeartbeat": dnow
-            }
-          });
-        
-          fetch(myRequest)
-            .then(response => response.json())
-            .then(contents => {
-        
-            });
-
-        });
+        for (var i = 0; i < tabs.length; ++i) {
+          console.log("sending END_TIMER message to tab:"+ tabs[i].id);
+          chrome.tabs.sendMessage(tabs[i].id, "END_TIMER");
+        }
       });
+
+      var dnow = new Date().getTime();
+
+      var myRequest = new Request(options.APIDBHost + "/" + timerid, {
+        "method": "PATCH",
+        "headers": DB_API_HEADERS,
+        "mode": 'cors',
+        "cache": 'default',
+        body: JSON.stringify({
+          "endTime": dnow,
+          "lastHeartbeat": dnow
+        })
+      });
+    
+      fetch(myRequest)
+        .then(response => response.json())
+        .then(contents => {
+          console.log('Ended Timer ' + timerid);
+      });
+     
     };
  });
 
 }
 
-window.startFocusTimer = function ( timerid ) {
-  if (options.startFocusTimer) {
-    clearInterval(options.startFocusTimer);
-    options.startFocusTimer = null;
-  }
 
-  var value = new Date().getTime();
-  chrome.storage.local.set({
-    "TIMER_START_KEY": value,
-    "TIMER_ID":timerid
-  }, function () {
-    console.log('Start Timer set to ' + value + ", server timerid: " + timerid);
-  });
-
-  $('#divStartTimer').addClass('invisible');
-  $('#divEndTimer').removeClass('invisible');
-
-  options.startFocusTimer = setInterval(updateFocusTimer, 1000);
-
-};
 
 window.updateFocusTimer = function () {
 
