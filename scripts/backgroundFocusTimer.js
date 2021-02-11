@@ -5,7 +5,7 @@
 window.checkForActiveFocusTimer = function () {
 
   chrome.storage.local.get("TIMER_START_KEY", function (value) {
-    if (value ) {
+    if ( value && value > 0  ) {
       options.startFocusTimer = setInterval(updateFocusTimer, 1000);
     } else {
 
@@ -22,21 +22,23 @@ window.checkForActiveFocusTimer = function () {
 window.endFocusTimer = function () {
 
   chrome.storage.local.get("TIMER_START_KEY", function (result) {
-    var endTaskTime = new Date().getTime();
-    console.log("set end time to:" + endTaskTime);
+    if ( value && value > 0  ) {
+      var endTaskTime = new Date().getTime();
+      console.log("set end time to:" + endTaskTime);
 
-    chrome.storage.local.remove("TIMER_START_KEY", function () {
-      console.log('Start Timer set to ' + null);
-      chrome.tabs.query({}, function (tabs) {
+      chrome.storage.local.remove("TIMER_START_KEY", function () {
+        console.log('Start Timer set to ' + null);
+        chrome.tabs.query({}, function (tabs) {
 
-        for (var i = 0; i < tabs.length; ++i) {
-          console.log("sending message to tab:"+ tabs[i].id);
-          chrome.tabs.sendMessage(tabs[i].id, "END_TIMER");
-        }
-    
+          for (var i = 0; i < tabs.length; ++i) {
+            console.log("sending message to tab:"+ tabs[i].id);
+            chrome.tabs.sendMessage(tabs[i].id, "END_TIMER");
+          }
+      
+        });
       });
-    });
-  });
+    };
+ }
 
   
 
