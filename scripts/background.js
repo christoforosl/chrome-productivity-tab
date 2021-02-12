@@ -72,18 +72,17 @@ function setCurrentDateTime() {
   var greeting;
 
   if (d.getHours() > 0 && d.getHours() <= 12) {
-    greeting = "Good Morning " + options.greetingName;
+    greeting = "Good Morning, " + options.greetingName;
   } else if (d.getHours() > 12 && d.getHours() <= 19) {
-    greeting = "Good Afternoon " + options.greetingName;
+    greeting = "Good Afternoon, " + options.greetingName;
   } else {
-    greeting = "Good Evening " + options.greetingName;
+    greeting = "Good Evening, " + options.greetingName;
   }
   
   $html('btnSetWorkItem',  options.whatShallWeWorkOnQuestionText);
   $html("currentTime", t );
   $html("greeting", greeting );
-  $html("currentFocus", options.currentFocus);
-
+  
 }
 
 function initBackground() {

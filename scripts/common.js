@@ -27,8 +27,7 @@ var options = {
   "greetingName": "Christoforos",
   "greetingNameFontSizePixels": 70,
   "whatShallWeWorkOnQuestionText": "What is our focus now?",
-  "whatShallWeWorkOnQuestionTextFontSizePixels": 50,
-  "currentFocus": ""
+  "whatShallWeWorkOnQuestionTextFontSizePixels": 50
 };
 
 

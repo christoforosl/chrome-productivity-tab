@@ -28,9 +28,8 @@ window.SetCurrentFocusAndStartTimer = function () {
       record.timerId = contents._id;
       startFocusTimer(record);
 
-  });
-  options.currentFocus = $('#taskName').val();
-  $html('currentFocus', $('#taskName').val());
+    });
+
   $('#workItemModal').modal('hide');
 }
 
@@ -43,7 +42,7 @@ window.startFocusTimer = function (record) {
   }
 
   localStorage.setItem("focusTimer", JSON.stringify(record));
-  console.log('Start Timer set to ' + record.startTime + ", server timerId: " +record.timerId);
+  console.log('Start Timer set to ' + record.startTime + ", server timerId: " + record.timerId);
 
   withFocusTimerUI();
   focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
@@ -56,18 +55,15 @@ window.startFocusTimer = function (record) {
 window.checkForActiveFocusTimer = function () {
 
   var timerRecord = getTimerRecordFromStorage();
-  
-  if(!timerRecord)return;
-  
-    var timerStart = timerRecord.startTime;
-    var timerId = timerRecord.timerId;
 
-    if (timerStart && timerId) {
-      focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
-    } else {
-      withFocusTimerUI();
-    }
-  
+  if (!timerRecord) {
+    noFocusTimerUI();
+    return;
+  }
+
+  $html('currentFocus', timerRecord.focusTaskName);
+  focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
+  withFocusTimerUI();
 };
 
 window.endFocusTimer = function () {
@@ -119,7 +115,7 @@ window.setTaskEndTime = function (timerId) {
 window.updateFocusTimer = function () {
 
   var timerRecord = getTimerRecordFromStorage();
-  if(!timerRecord) {
+  if (!timerRecord) {
     console.warn("I am in updateFocusTimer but there is no timerRecord. I am resetting the timer!");
     clearFocusTimerInterval();
     noFocusTimerUI();
@@ -127,7 +123,7 @@ window.updateFocusTimer = function () {
   }
 
   var startTime = timerRecord.startTime;
-  
+
   if (!startTime) {
     throw ('updateFocusTimer Error: no startTime');
   }
@@ -153,13 +149,13 @@ window.updateFocusTimer = function () {
 };
 
 
-function clearFocusTimerInterval() {    
+function clearFocusTimerInterval() {
   if (focusTimerVars.focusTimerClientId) {
     console.log("clearInterval " + focusTimerVars.focusTimerClientId);
     clearInterval(focusTimerVars.focusTimerClientId);
     focusTimerVars.focusTimerClientId = null;
   }
-  
+
 }
 
 function noFocusTimerUI() {
@@ -170,18 +166,19 @@ function noFocusTimerUI() {
 }
 function withFocusTimerUI() {
   if (window.jQuery) {
+
     $('#divEndTimer').removeClass('invisible');
     $('#btnSetWorkItem').addClass('invisible');
   }
 }
 
 function getTimerRecordFromStorage() {
-  
+
   var timerRecordStr = localStorage.getItem("focusTimer");
-  if(!timerRecordStr)return null;
+  if (!timerRecordStr) return null;
 
   var timerRecord = JSON.parse(timerRecordStr);
-  if(!timerRecord)return null;
+  if (!timerRecord) return null;
   return timerRecord;
 
 }

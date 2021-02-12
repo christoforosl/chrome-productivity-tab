@@ -38,15 +38,30 @@
   </head>
 
   <body class="bg-transparent vh-100 border-primary" style="font-family: 'Poppins', sans-serif;">
+    <nav id="navbar-example2" class="navbar navbar-light bg-transparent">
+      <ul class="nav nav-pills">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog"></i></a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#one">Focus Items History</a>
+            
+            <div role="separator" class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#three">Settings</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+     
     <div class="container h-100">
       <div class="row align-items-center h-100 text-center" style="color: white">
         <div class="col-12 mx-auto">
          
-            <div id="currentTime"></div>
-            <div id="greeting" style="font-size: 70px"></div>
-            
-            <button id="btnSetWorkItem" type="button" class="btn btn-primary" data-toggle="modal" data-target="#workItemModal" data-whatever="@getbootstrap">What shall we work on?</button>
-            <div id="whatShallWeWorkOnQuestionText"></div>
+            <div id="currentTime" class="h2"></div>
+            <div id="greeting" class="display-3"></div>
+            <div class="mt-5 mb-5">
+              <button id="btnSetWorkItem" type="button" class="btn btn-primary col-5 h-50" data-toggle="modal" data-target="#workItemModal">What shall we work on?</button>
+              <div id="whatShallWeWorkOnQuestionText"></div>
+            </div>
 
             <form id="frmFocus">
               <div id="currentFocusContainer">
@@ -56,23 +71,25 @@
                   id="currentFocusCompleted"
                   name="currentFocusCompleted"
                 />
-                <div id="currentFocus" style="font-size: 30px" ></div>
+                Current Focus: <div id="currentFocus" class="display-4 mt-3 mb-3" ></div>
               </div>
               
 
               <div id="divEndTimer" class="align-items-center text-center mt-5" role="group"
                 aria-label="Basic example"><div class="h1" id="currentTimerTime">00:00:00</div>
 
+                <!--
                 <button type="button" class="btn btn-secondary" id="btnPauseFocusTimer" value="Pause Current Focus Timer"
                   title="Pause timer measuring current task"><i class="fas fa-pause-circle"></i> Pause Current Focus Timer</button>
-                
+                -->
+
                 <button type="button" class="btn btn-danger" id="btnEndTimer"
-                  title="End timer measuring current task"><i class="fas fa-End-circle"></i> End Current Focus Timer</button>
+                  title="End timer measuring current task"><i class="fas fa-stop-circle"></i> End Current Focus Timer</button>
                   
               </div>
             </form>
 
-            <div class="fixed-bottom" id="quoteContent">
+            <div class="fixed-top" id="quoteContent">
               <div id="quote" class="small" style="display: inline;" ></div> - <div  class="small" style="display: inline;" id="quoteBy"></div>
             </div>
         </div>
