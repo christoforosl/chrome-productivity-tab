@@ -106,10 +106,6 @@ chrome.runtime.onInstalled.addListener(function () {
 
 initBackground();
 
-
-if($e("btnStartTimer")) {
-  $e("btnStartTimer").addEventListener("click", startFocusTimer);
-}
 if($e("btnEndTimer")) {
   $e("btnEndTimer").addEventListener("click", endFocusTimer);
 }
