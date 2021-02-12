@@ -62,6 +62,7 @@ window.checkForActiveFocusTimer = function () {
   }
 
   $html('currentFocus', timerRecord.focusTaskName);
+  
   focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
   withFocusTimerUI();
 };
