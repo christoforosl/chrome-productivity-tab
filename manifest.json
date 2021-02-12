@@ -1,12 +1,15 @@
 {
+  
   "name": "New Productivity Tab",
   "description": "Overrides the new tab page with the New Productivity Tab",
   "version": "0.1",
+
   "chrome_url_overrides": {
     "newtab": "newProductivityTab.html"
   },
+
   "manifest_version": 2,
   "permissions":["tabs","background", "tts","alarms", "storage", "https://quotes.rest/*", "https://chrometimertasks-879e.restdb.io/*"],
   "background": { "scripts": ["scripts/common.js",  "scripts/backgroundFocusTimer.js","scripts/background.js"] }
-    
+
 }
