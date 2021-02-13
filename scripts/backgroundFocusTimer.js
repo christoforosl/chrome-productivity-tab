@@ -33,7 +33,7 @@ window.SetCurrentFocusAndStartTimer = function () {
     });
 
   $('#workItemModal').modal('hide');
-}
+};
 
 window.startFocusTimer = function (record) {
 
@@ -131,7 +131,16 @@ window.updateFocusTimer = function () {
     throw ('updateFocusTimer Error: no startTime');
   }
 
-  var elapsedSecs = (new Date().getTime() - startTime) / 1000;
+  var timeStr = getElapsedTime(startTime, new Date().getTime());
+  $html('currentTimerTime', timeStr);
+  withFocusTimerUI();
+
+};
+
+function getElapsedTime(startTime, endTime) {
+  if(!startTime)return '';
+  if(!endTime)return '';
+  var elapsedSecs = (endTime - startTime) / 1000;
   var hours = Math.floor(elapsedSecs / 3600);
   var minutes = Math.floor((elapsedSecs - (hours * 3600)) / 60);
   var seconds = Math.round(elapsedSecs - (hours * 3600) - (minutes * 60), 0);
@@ -145,12 +154,8 @@ window.updateFocusTimer = function () {
   if (seconds < 10) {
     seconds = "0" + seconds;
   }
-  var timeStr = hours + ':' + minutes + ':' + seconds;
-  $html('currentTimerTime', timeStr);
-  withFocusTimerUI();
-
-};
-
+  return hours + ':' + minutes + ':' + seconds;
+}
 
 function clearFocusTimerInterval() {
   if (focusTimerVars.focusTimerClientId) {
@@ -188,8 +193,8 @@ function getTimerRecordFromStorage() {
 
 function getFocusHistoryData(callback) {
 
-  var query = "?max=20&h={%22$orderby%22:{%22startTime%22:-1}}&q={%22user%22:%22chris%22}";
-  var myRequest = new Request(options.APIDBHost + "/" + query, {
+  var query = "max=20&h={\"$orderby\":{\"startTime\":-1}}&q={\"user\":\"chris\"}";
+  var myRequest = new Request(options.APIDBHost + "?" + query, {
     "method": "GET",
     "headers": DB_API_HEADERS
   });
@@ -206,16 +211,18 @@ function getFocusHistoryData(callback) {
 if($e("btnShowHistory")) {
   $e("btnShowHistory").addEventListener("click", function(){
 
-    var $table = $('#tblFocusTimerHistory');
-    $(function() {
-      $('#tblFocusTimerHistory').on('shown.bs.modal', function () {
-        getFocusHistoryData(function(){
+        getFocusHistoryData(function(data){
+          data.forEach(function (obj) {
+            obj.endDateTime= obj.endTime  ? new Date( obj.endTime ).toLocaleString("el-GR"): '';
+            obj.startDateTime = obj.startTime? new Date( obj.startTime ).toLocaleString("el-GR"): '';
+            obj.workHours = getElapsedTime(obj.startTime, obj.endTime)
+          });
+          var $table = $('#tblFocusTimerHistory');
           //https://bootstrap-table.com/docs/getting-started/introduction/
+          $table.bootstrapTable({ data:data });
           $table.bootstrapTable('resetView');
+          $('#listTimersModal').modal('show');
         });
-        
-      });
-    });
-
+    
   });
 }
