@@ -1,131 +1,164 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-      integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
-      crossorigin="anonymous"
-    />
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
-    <script src="scripts/jquery-3.5.1.slim.min.js"></script>
-    <script src="scripts/bootstrap.bundle.min.js"></script>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link href="scripts/lib/bootstrap-table.min.css" rel="stylesheet">
 
-    <meta charset="UTF-8" />
-    <title>New Productivity Tab</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
+  <script src="scripts/lib/jquery-3.5.1.slim.min.js"></script>
+  <script src="scripts/lib/bootstrap.bundle.min.js"></script>
+  <script src="scripts/lib/bootstrap-table.min.js"></script>
 
-      html {
-        
-        background: url(https://source.unsplash.com/daily?nature,forest,mountain,water)
-          no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-        height: 100%;
-      }
-    </style>
+  <!-- https://bootstrap-table.com/docs/getting-started/introduction/ -->
 
-    
-  </head>
+  <meta charset="UTF-8" />
+  <title>New Productivity Tab</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-  <body class="bg-transparent vh-100 border-primary" style="font-family: 'Poppins', sans-serif;">
-    <nav id="navbar-example2" class="navbar navbar-light bg-transparent fixed-top">
-      <ul class="nav nav-pills">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" style="color: white;" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog"></i></a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#one">Focus Items History</a>
-            
-            <div role="separator" class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#three">Settings</a>
+    html {
+
+      background: url(https://source.unsplash.com/daily?nature,forest,mountain,water) no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      height: 100%;
+    }
+  </style>
+
+
+</head>
+
+<body class="bg-transparent vh-100 border-primary" style="font-family: 'Poppins', sans-serif;">
+  <nav id="navbar-example2" class="navbar navbar-light bg-transparent fixed-top">
+    <ul class="nav nav-pills">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" style="color: white;" data-toggle="dropdown" href="#" role="button"
+          aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog"></i></a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" id="btnShowHistory" href="#">Focus Items History</a>
+
+          <div role="separator" class="dropdown-divider"></div>
+          <a class="dropdown-item" id="btnShowSettings" href="#">Settings</a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="container h-100">
+    <div class="row align-items-center h-100 text-center" style="color: white">
+      <div class="col-12 mx-auto">
+
+        <div id="currentTime" class="h2"></div>
+        <div id="greeting" class="display-3"></div>
+        <div class="mt-5 mb-5">
+          <button id="btnSetWorkItem" type="button" class="btn btn-primary col-5 h-50" data-toggle="modal"
+            data-target="#workItemModal">What shall we work on?</button>
+          <div id="whatShallWeWorkOnQuestionText"></div>
+        </div>
+
+        <form id="frmFocus">
+          <div id="currentFocusContainer">
+            <input type="checkbox" class="custom-control-input" id="currentFocusCompleted"
+              name="currentFocusCompleted" />
+            Current Focus: <div id="currentFocus" class="display-4 mt-3 mb-3"></div>
           </div>
-        </li>
-      </ul>
-    </nav>
-     
-    <div class="container h-100">
-      <div class="row align-items-center h-100 text-center" style="color: white">
-        <div class="col-12 mx-auto">
-         
-            <div id="currentTime" class="h2"></div>
-            <div id="greeting" class="display-3"></div>
-            <div class="mt-5 mb-5">
-              <button id="btnSetWorkItem" type="button" class="btn btn-primary col-5 h-50" data-toggle="modal" data-target="#workItemModal">What shall we work on?</button>
-              <div id="whatShallWeWorkOnQuestionText"></div>
-            </div>
 
-            <form id="frmFocus">
-              <div id="currentFocusContainer">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="currentFocusCompleted"
-                  name="currentFocusCompleted"
-                />
-                Current Focus: <div id="currentFocus" class="display-4 mt-3 mb-3" ></div>
-              </div>
-              
 
-              <div id="divEndTimer" class="align-items-center text-center mt-5" role="group"
-                aria-label="Basic example"><div class="h1" id="currentTimerTime">00:00:00</div>
+          <div id="divEndTimer" class="align-items-center text-center mt-5" role="group" aria-label="Basic example">
+            <div class="h1" id="currentTimerTime">00:00:00</div>
 
-                <!--
+            <!--
                 <button type="button" class="btn btn-secondary" id="btnPauseFocusTimer" value="Pause Current Focus Timer"
                   title="Pause timer measuring current task"><i class="fas fa-pause-circle"></i> Pause Current Focus Timer</button>
                 -->
 
-                <button type="button" class="btn btn-danger" id="btnEndTimer"
-                  title="End timer measuring current task"><i class="fas fa-stop-circle"></i> End Current Focus Timer</button>
-                  
-              </div>
-            </form>
+            <button type="button" class="btn btn-danger" id="btnEndTimer" title="End timer measuring current task"><i
+                class="fas fa-stop-circle"></i> End Current Focus Timer</button>
 
-            <div class="fixed-top" id="quoteContent">
-              <div id="quote" class="small" style="display: inline;" ></div> - <div  class="small" style="display: inline;" id="quoteBy"></div>
-            </div>
+          </div>
+        </form>
+
+        <div class="fixed-top" id="quoteContent">
+          <div id="quote" class="small" style="display: inline;"></div> - <div class="small" style="display: inline;"
+            id="quoteBy"></div>
         </div>
       </div>
     </div>
+  </div>
 
-    
 
 
-<div class="modal fade" id="workItemModal" tabindex="-1" role="dialog" aria-labelledby="workItemModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="workItemModalLabel">Set New Work Item</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Enter Task Name:</label>
-            <input type="text" class="form-control" id="taskName">
-          </div>
-         
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="btnSetCurrentFocusAndStartTimer">Set As Current Work Item Ans Start Timer</button>
+  <div class="modal fade" id="listTimersModal" tabindex="-1" role="dialog" aria-labelledby="listTimersModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="workItemModalLabel">Focus Item History</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="listTimersModalContent">
+          <table id="tblFocusTimerHistory" 
+                  data-pagination="true"
+                  data-search="true"
+                  data-toggle="table" data-height="299">
+            <thead>
+              <tr>
+                <th data-field="id">ID</th>
+                <th data-field="name">Item Name</th>
+                <th data-field="price">Item Price</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="modal fade" id="workItemModal" tabindex="-1" role="dialog" aria-labelledby="workItemModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="workItemModalLabel">Set New Work Item</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Enter Task Name:</label>
+              <input type="text" class="form-control" id="taskName">
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btnSetCurrentFocusAndStartTimer">Set As Current Work Item
+            Ans Start Timer</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
-    <script src="./scripts/common.js"></script>
-    <script src="./scripts/backgroundFocusTimer.js"></script>
-    <script src="./scripts/background.js"></script>
+<script src="./scripts/common.js"></script>
+<script src="./scripts/backgroundFocusTimer.js"></script>
+<script src="./scripts/background.js"></script>
+
 </html>

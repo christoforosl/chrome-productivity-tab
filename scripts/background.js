@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */ 
 // note: JQuery is not available to this backround js script
 var curentDateTimeTimer = null;
 
@@ -41,6 +42,7 @@ function setQuote() {
   });
           
 }
+
 
 function setQuoteFromService() {
   
@@ -111,5 +113,6 @@ if($e("btnEndTimer")) {
 if($e("btnSetCurrentFocusAndStartTimer")) {
   $e("btnSetCurrentFocusAndStartTimer").addEventListener("click", SetCurrentFocusAndStartTimer);
 }
+
 
 

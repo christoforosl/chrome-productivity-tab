@@ -1,10 +1,12 @@
+/* jshint esversion: 6 */ 
+
 var focusTimerVars = {};
 
 const DB_API_HEADERS = new Headers({
   "Accept": "application/json",
   "content-type": "application/json",
   "x-apikey": "602510f75ad3610fb5bb5ec5"
-})
+});
 
 window.SetCurrentFocusAndStartTimer = function () {
 
@@ -84,10 +86,10 @@ window.endFocusTimer = function () {
     //   }
     // });
 
-  };
+  }
 
 
-}
+};
 
 window.setTaskEndTime = function (timerId) {
   if (!timerId) {
@@ -111,7 +113,7 @@ window.setTaskEndTime = function (timerId) {
 
     });
 
-}
+};
 
 window.updateFocusTimer = function () {
 
@@ -182,4 +184,38 @@ function getTimerRecordFromStorage() {
   if (!timerRecord) return null;
   return timerRecord;
 
+}
+
+function getFocusHistoryData(callback) {
+
+  var query = "?max=20&h={%22$orderby%22:{%22startTime%22:-1}}&q={%22user%22:%22chris%22}";
+  var myRequest = new Request(options.APIDBHost + "/" + query, {
+    "method": "GET",
+    "headers": DB_API_HEADERS
+  });
+
+  fetch(myRequest)
+    .then(response => response.json())
+    .then(contents => {
+      callback(contents);
+
+    });
+
+}
+
+if($e("btnShowHistory")) {
+  $e("btnShowHistory").addEventListener("click", function(){
+
+    var $table = $('#tblFocusTimerHistory');
+    $(function() {
+      $('#tblFocusTimerHistory').on('shown.bs.modal', function () {
+        getFocusHistoryData(function(){
+          //https://bootstrap-table.com/docs/getting-started/introduction/
+          $table.bootstrapTable('resetView');
+        });
+        
+      });
+    });
+
+  });
 }
