@@ -11,7 +11,7 @@ const DB_API_HEADERS = new Headers({
 window.SetCurrentFocusAndStartTimer = function () {
 
   var record = {
-    "user": "chris",
+    "user": localStorage.getItem("userInfo"),
     "startTime": new Date().getTime(),
     "focusTaskName": $('#taskName').val()
   };
@@ -77,14 +77,6 @@ window.endFocusTimer = function () {
     console.log("will end timer:" + timerRecord.timerId);
     setTaskEndTime(timerRecord.timerId);
     localStorage.removeItem("focusTimer");
-
-    // // skip active tab ... 
-    // chrome.tabs.query({active: false}, function (tabs) {
-    //   for (var i = 0; i < tabs.length; ++i) {
-    //     console.log("sending END_TIMER message to tab:"+ tabs[i].id);
-    //     chrome.tabs.sendMessage(tabs[i].id, "END_TIMER");
-    //   }
-    // });
 
   }
 
@@ -192,8 +184,8 @@ function getTimerRecordFromStorage() {
 }
 
 function getFocusHistoryData(callback) {
-
-  var query = "max=20&h={\"$orderby\":{\"startTime\":-1}}&q={\"user\":\"chris\"}";
+  var user = localStorage.getItem("userInfo");
+  var query = "max=20&h={\"$orderby\":{\"startTime\":-1}}&q={\"user\":\"" + user + "\"}";
   var myRequest = new Request(options.APIDBHost + "?" + query, {
     "method": "GET",
     "headers": DB_API_HEADERS

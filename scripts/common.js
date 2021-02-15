@@ -1,4 +1,4 @@
-/* jshint esversion: 6 */ 
+/* jshint esversion: 6 */
 
 
 var options = {
@@ -19,7 +19,7 @@ function $e(id) {
 function $html(id, text) {
   const elent = $e(id);
   if (elent) {
-    
+
     if (elent.nodeName === 'DIV') {
       if (elent.innerHTML != text) {
         elent.innerHTML = text;
@@ -32,4 +32,21 @@ function $html(id, text) {
 
   }
 
+
+
+}
+if (!window.localStorage.getItem("userInfo")) {
+
+  chrome.identity.getProfileUserInfo(function (userInfo) {
+    if ( userInfo.email ) {
+      window.localStorage.setItem("userInfo", userInfo.email);
+    } else {
+      window.localStorage.setItem("userInfo", randomIntFromInterval(1000000,9999999));
+    }
+
+  });
+}
+
+function randomIntFromInterval(min, max) { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }

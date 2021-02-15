@@ -28,7 +28,7 @@
 
     html {
 
-      background: url(https://source.unsplash.com/daily?nature,forest,mountain,water) no-repeat center center fixed;
+      background: url(https://source.unsplash.com/daily?Wallpapers,Architecture,Travel) no-repeat center center fixed;
       -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
@@ -108,7 +108,10 @@
           </button>
         </div>
         <div class="modal-body" id="listTimersModalContent">
-          <table id="tblFocusTimerHistory" data-pagination="true" data-show-footer="true" data-search="true" data-sortable="true" class="table-striped table-sm table">
+          <table id="tblFocusTimerHistory" 
+                data-show-refresh="true"
+                data-buttons="buttons"
+                data-pagination="true" data-show-footer="true" data-search="true" data-sortable="true" class="table-striped table-sm table">
             <thead>
               <tr>
                 <th data-field="focusTaskName" data-sortable="true">Item Name</th>
@@ -127,10 +130,6 @@
     </div>
   </div>
   </div>
-
-
-
-  
 
   <div class="modal fade" id="workItemModal" tabindex="-1" role="dialog" aria-labelledby="workItemModalLabel"
     aria-hidden="true">
