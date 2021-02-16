@@ -31,7 +31,7 @@ window.SetCurrentFocusAndStartTimer = function () {
       startFocusTimer(record);
 
     });
-    $html('currentFocus', timerRecord.focusTaskName);
+    $html('currentFocus', "[" + timerRecord.focusTaskName + "]");
     $('#workItemModal').modal('hide');
 };
 
@@ -63,7 +63,7 @@ window.checkForActiveFocusTimer = function () {
     return;
   }
 
-  $html('currentFocus', timerRecord.focusTaskName);
+  $html('currentFocus',  "[" + timerRecord.focusTaskName + "]");
   
   focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
   withFocusTimerUI();
@@ -125,6 +125,7 @@ window.updateFocusTimer = function () {
 
   var timeStr = getElapsedTime(startTime, new Date().getTime());
   $html('currentTimerTime', timeStr);
+  document.title = "Focus:[" + timeStr+"]";
   withFocusTimerUI();
 
 };
@@ -198,6 +199,18 @@ function getFocusHistoryData(callback) {
 
     });
 
+}
+
+if ($e("btnShowSettings")) {
+  $e("btnShowSettings").addEventListener("click", function(){
+    $('#settingsModal').modal('show');
+  });
+}
+if ($e("btnSaveSettings")) {
+  $e("btnSaveSettings").addEventListener("click", function(){
+    
+    $('#settingsModal').modal('close');
+  });
 }
 
 if($e("btnShowHistory")) {

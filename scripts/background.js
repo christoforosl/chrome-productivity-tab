@@ -113,6 +113,15 @@ if($e("btnEndTimer")) {
 if($e("btnSetCurrentFocusAndStartTimer")) {
   $e("btnSetCurrentFocusAndStartTimer").addEventListener("click", SetCurrentFocusAndStartTimer);
 }
+if($e("btnShowSettings")) {
+  $('#backroundImageSearchTerms').val(settings.imageKeywords);
+  $e("btnShowSettings").addEventListener("click", function(){
+
+  });
+}
+
+
+
 
 
 
