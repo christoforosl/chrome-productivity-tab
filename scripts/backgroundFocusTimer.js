@@ -31,8 +31,8 @@ window.SetCurrentFocusAndStartTimer = function () {
       startFocusTimer(record);
 
     });
-
-  $('#workItemModal').modal('hide');
+    $html('currentFocus', timerRecord.focusTaskName);
+    $('#workItemModal').modal('hide');
 };
 
 window.startFocusTimer = function (record) {
