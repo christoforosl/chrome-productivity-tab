@@ -43,52 +43,54 @@
 <body class="bg-transparent vh-100 border-primary" style="font-family: 'Poppins', sans-serif;">
   <nav id="navbar-example2" class="navbar navbar-light bg-transparent fixed-top">
     <ul class="nav nav-pills">
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown small">
         <a class="nav-link dropdown-toggle" style="color: white;" data-toggle="dropdown" href="#" role="button"
-          aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog"></i></a>
+          aria-haspopup="true" aria-expanded="false"><i class="h4 fas fa-cog"></i></a>
         <div class="dropdown-menu">
-          <a class="dropdown-item" id="btnShowHistory" href="#">Focus Items History</a>
+          <a class="dropdown-item small" id="btnShowHistory" href="#">Focus Items History</a>
 
           <div role="separator" class="dropdown-divider"></div>
-          <a class="dropdown-item" id="btnShowSettings" href="#">Settings</a>
+          <a class="dropdown-item small" id="btnShowSettings" href="#">Settings</a>
         </div>
       </li>
     </ul>
+    <div id="currentTime" style="color: white;" class="small"></div>
   </nav>
 
   <div class="container h-100">
     <div class="row align-items-center h-100 text-center" style="color: white">
       <div class="col-12 mx-auto">
-
-        <div id="currentTime" class="h2"></div>
+        
         <div id="greeting" class="display-3"></div>
         <div class="mt-5 mb-5">
           <button id="btnSetWorkItem" type="button" class="btn btn-primary col-5 h-50" data-toggle="modal"
             data-target="#workItemModal">What shall we work on?</button>
           <div id="whatShallWeWorkOnQuestionText"></div>
         </div>
-
+        <div id="divFocus" class="align-items-center" style="border: 2px hidden white; border-radius: 20px; background-color: rgba(7, 7, 7, 0.1);">
         <form id="frmFocus">
-          <div id="currentFocusContainer">
+          <div id="currentFocusContainer" class="mt-5"> 
             <input type="checkbox" class="custom-control-input" id="currentFocusCompleted" name="currentFocusCompleted" />
             Current Focus: <div id="currentFocus" class="display-4 mt-3 mb-3"></div>
           </div>
 
 
-          <div id="divEndTimer" class="align-items-center text-center mt-5" role="group" aria-label="Basic example">
+          <div id="divEndTimer" class="align-items-center text-center mt-5 mb-5" role="group" aria-label="Basic example">
             <div class="h1" id="currentTimerTime">00:00:00</div>
 
             <!--
                 <button type="button" class="btn btn-secondary" id="btnPauseFocusTimer" value="Pause Current Focus Timer"
                   title="Pause timer measuring current task"><i class="fas fa-pause-circle"></i> Pause Current Focus Timer</button>
-                -->
+            -->
 
-            <button type="button" class="btn btn-danger" id="btnEndTimer" title="End timer measuring current task"><i
+            <button type="button" class="btn btn-danger mb-5" id="btnEndTimer" title="End timer measuring current task"><i
                 class="fas fa-stop-circle"></i> End Current Focus Timer</button>
 
           </div>
+
         </form>
 
+      </div>
         <div class="fixed-bottom" style="background-color: rgba(7, 7, 7, 0.3);" id="quoteContent">
           <div id="quote" class="small" style="display: inline;"></div> -
           <div class="small" style="display: inline;" id="quoteBy"></div>
