@@ -70,7 +70,7 @@ function setQuoteFromService() {
 
 function setCurrentDateTime() {
   var d = new Date();
-  var t = d.toDateString() + ', ' + d.toLocaleTimeString();
+  var t = d.toDateString() + ', ' + d.toLocaleTimeString().substring(0,5);
   var greeting;
 
   if (d.getHours() > 0 && d.getHours() <= 12) {
