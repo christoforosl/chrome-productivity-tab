@@ -209,7 +209,12 @@ if ($e("btnShowSettings")) {
 if ($e("btnSaveSettings")) {
   $e("btnSaveSettings").addEventListener("click", function(){
     
-    $('#settingsModal').modal('close');
+    settings.imageKeywords = $('#backroundImageSearchTerms').val();
+    if(!settings.imageKeywords){
+      settings.imageKeywords = "nature,forest,mountain,water";
+    }
+    window.localStorage.setItem("settings", JSON.stringify(settings));
+    $('#settingsModal').modal('hide');
   });
 }
 

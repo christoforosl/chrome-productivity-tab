@@ -37,10 +37,8 @@ function $html(id, text) {
     }
 
   }
-
-
-
 }
+
 if (!window.localStorage.getItem("userInfo")) {
 
   chrome.identity.getProfileUserInfo(function (userInfo) {
