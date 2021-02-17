@@ -170,10 +170,17 @@
         </div>
         <div class="modal-body">
           <form>
+           
             <div class="form-group">
-              <label for="backroundImageSearchTerms" class="col-form-label">Search Terms For Backround Image:</label>
-              <input type="text" class="form-control" id="backroundImageSearchTerms" value="" />
+              <label for="backroundImageSearchTerms">Search Terms For Backround Image:</label> 
+              <input id="backroundImageSearchTerms" name="backroundImageSearchTerms" type="text" class="form-control" aria-describedby="backroundImageSearchTermsHelpBlock"> 
+              <span id="backroundImageSearchTermsHelpBlock" class="form-text text-muted">The terms will be appended to url like this: https://source.unsplash.com/daily?[your terms]</span>
             </div>
+            <div class="form-group">
+              <label for="greetingName">Your Greeting Name</label> 
+              <input id="greetingName" name="greetingName" placeholder="How shall we greet you?" type="text" required="required" class="form-control">
+            </div> 
+            
           </form>
         </div>
         <div class="modal-footer">

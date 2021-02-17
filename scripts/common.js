@@ -1,13 +1,13 @@
 /* jshint esversion: 6 */
 
-var settings = JSON.parse( window.localStorage.getItem("settings") ) || {"imageKeywords":"nature,forest,mountain,water"};
+
 var options = {
   
   "APIDBHost": "https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks",
   "APIQuoteOfTheDayApiHost": "https://quotes.rest/qod?language=en",
   "focusTimerAlarmName": "focusTimerAlarm",
   "username": "christoforosl@netu.com.cy",
-  "greetingName": "Christoforos",
+  
   "greetingNameFontSizePixels": 70,
   "whatShallWeWorkOnQuestionText": "What is our focus now?",
   "whatShallWeWorkOnQuestionTextFontSizePixels": 50,
@@ -56,11 +56,6 @@ function randomIntFromInterval(min, max) { // min and max included
 }
 
 
-if (window.jQuery) {
-  var defaultKeywords = settings.imageKeywords||"nature,forest,mountain,water";
-  $(document).ready(function(){
-    $("html").css("background-image", "url('https://source.unsplash.com/daily?" + defaultKeywords +"')");
-  });
-}
+
 
 

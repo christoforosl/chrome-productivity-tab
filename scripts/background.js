@@ -1,6 +1,7 @@
 /* jshint esversion: 6 */ 
 // note: JQuery is not available to this backround js script
 var curentDateTimeTimer = null;
+var settings;
 
 const CALL_QUOTE_HEADERS = new Headers({
   "accept": "application/json",
@@ -74,11 +75,11 @@ function setCurrentDateTime() {
   var greeting;
 
   if (d.getHours() > 0 && d.getHours() <= 12) {
-    greeting = "Good Morning, " + options.greetingName;
+    greeting = "Good Morning, " + settings.greetingName;
   } else if (d.getHours() > 12 && d.getHours() <= 19) {
-    greeting = "Good Afternoon, " + options.greetingName;
+    greeting = "Good Afternoon, " + settings.greetingName;
   } else {
-    greeting = "Good Evening, " + options.greetingName;
+    greeting = "Good Evening, " + settings.greetingName;
   }
   
   $html('btnSetWorkItem',  options.whatShallWeWorkOnQuestionText);
@@ -88,7 +89,16 @@ function setCurrentDateTime() {
 }
 
 function initBackground() {
+
   console.log("init backround");
+  if(!settings) {
+    console.log("loading settings");
+    settings = JSON.parse( window.localStorage.getItem("settings") ) || {"imageKeywords":"nature,forest,mountain,water"};
+    if(!settings.greetingName){
+      settings.greetingName = "[Specify Name In Settings]";
+    }
+  }
+
   noFocusTimerUI() ;
   checkForActiveFocusTimer();
   setCurrentDateTimeTimer();
@@ -99,6 +109,13 @@ function initBackground() {
       clearInterval(curentDateTimeTimer);
     }
   });
+
+  if (window.jQuery) {
+    var defaultKeywords = settings.imageKeywords||"nature,forest,mountain,water";
+    $(document).ready(function(){
+      $("html").css("background-image", "url('https://source.unsplash.com/daily?" + defaultKeywords +"')");
+    });
+  }
 
 }
 
@@ -116,6 +133,8 @@ if($e("btnSetCurrentFocusAndStartTimer")) {
 }
 if($e("btnShowSettings")) {
   $('#backroundImageSearchTerms').val(settings.imageKeywords);
+  $('#greetingName').val(settings.greetingName);
+  
   $e("btnShowSettings").addEventListener("click", function(){
 
   });

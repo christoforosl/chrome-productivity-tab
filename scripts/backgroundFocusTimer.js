@@ -215,6 +215,13 @@ if ($e("btnSaveSettings")) {
     if(!settings.imageKeywords){
       settings.imageKeywords = "nature,forest,mountain,water";
     }
+
+    if(! $('#greetingName').val()) {
+      
+      return;
+    }
+    settings.greetingName = $('#greetingName').val();
+
     window.localStorage.setItem("settings", JSON.stringify(settings));
     $('#settingsModal').modal('hide');
   });
