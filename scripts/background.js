@@ -71,7 +71,7 @@ function setQuoteFromService() {
 
 function setCurrentDateTime() {
   var d = new Date();
-  var t = d.toDateString() + ', ' + d.toLocaleTimeString().substring(0,5);
+  var t = d.toDateString() + ', ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   var greeting;
 
   if (d.getHours() > 0 && d.getHours() <= 12) {

@@ -234,7 +234,7 @@ if($e("btnShowHistory")) {
           data.forEach(function (obj) {
             obj.endDateTime= obj.endTime  ? new Date( obj.endTime ).toLocaleString("el-GR"): '';
             obj.startDateTime = obj.startTime? new Date( obj.startTime ).toLocaleString("el-GR"): '';
-            obj.workHours = getElapsedTime(obj.startTime, obj.endTime)
+            obj.workHours = getElapsedTime(obj.startTime, obj.endTime);
           });
           var $table = $('#tblFocusTimerHistory');
           //https://bootstrap-table.com/docs/getting-started/introduction/
