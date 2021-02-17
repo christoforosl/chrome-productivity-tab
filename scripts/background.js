@@ -98,7 +98,7 @@ function initBackground() {
       settings.greetingName = "[Specify Name In Settings]";
     }
   }
-
+  setBackroundImage();
   noFocusTimerUI() ;
   checkForActiveFocusTimer();
   setCurrentDateTimeTimer();
@@ -109,14 +109,16 @@ function initBackground() {
       clearInterval(curentDateTimeTimer);
     }
   });
+  
+}
 
+window.setBackroundImage = function() {
   if (window.jQuery) {
     var defaultKeywords = settings.imageKeywords||"nature,forest,mountain,water";
     $(document).ready(function(){
       $("html").css("background-image", "url('https://source.unsplash.com/daily?" + defaultKeywords +"')");
     });
   }
-
 }
 
 chrome.runtime.onInstalled.addListener(function () {

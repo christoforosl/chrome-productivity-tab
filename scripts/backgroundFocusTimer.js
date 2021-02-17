@@ -210,16 +210,21 @@ if ($e("btnShowSettings")) {
 }
 if ($e("btnSaveSettings")) {
   $e("btnSaveSettings").addEventListener("click", function(){
-    
-    settings.imageKeywords = $('#backroundImageSearchTerms').val();
-    if(!settings.imageKeywords){
-      settings.imageKeywords = "nature,forest,mountain,water";
-    }
 
     if(! $('#greetingName').val()) {
       
       return;
     }
+
+    var tmp = $('#backroundImageSearchTerms').val();
+    if(!tmp){
+      tmp = "nature,forest,mountain,water";
+    }
+    if(settings.imageKeywords !== tmp) {
+      settings.imageKeywords = tmp;
+      setBackroundImage();
+    }
+       
     settings.greetingName = $('#greetingName').val();
 
     window.localStorage.setItem("settings", JSON.stringify(settings));
