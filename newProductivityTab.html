@@ -116,12 +116,13 @@
           </div>
           <div class="modal-body" id="listTimersModalContent">
             <table id="tblFocusTimerHistory" data-show-refresh="true" data-buttons="buttons" data-pagination="true"
-              data-show-footer="true" data-search="true" data-sortable="true" class="table-striped table-sm table">
+              data-show-footer="true" data-search="true" data-sortable="true" data-sort-name="startDateTime"
+              data-sort-order="desc" class="table-striped table-sm table">
               <thead>
                 <tr>
                   <th data-field="focusTaskName" data-sortable="true">Item Name</th>
-                  <th data-field="startDateTime" data-sortable="true">Start Date</th>
-                  <th data-field="endDateTime" data-sortable="true">End Date</th>
+                  <th data-field="startDateTime" data-sortable="true" data-sort-name="startTime">Start Date</th>
+                  <th data-field="endDateTime" data-sortable="true" data-sort-name="endTime">End Date</th>
                   <th data-field="workHours" data-sortable="false">Work Hours</th>
 
                 </tr>
