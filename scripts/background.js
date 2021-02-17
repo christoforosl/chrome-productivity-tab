@@ -89,6 +89,7 @@ function setCurrentDateTime() {
 
 function initBackground() {
   console.log("init backround");
+  noFocusTimerUI() ;
   checkForActiveFocusTimer();
   setCurrentDateTimeTimer();
   setQuote();

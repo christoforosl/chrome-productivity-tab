@@ -31,7 +31,7 @@ window.SetCurrentFocusAndStartTimer = function () {
       startFocusTimer(record);
 
     });
-    $html('currentFocus', "[" + timerRecord.focusTaskName + "]");
+    $html('currentFocus', "[" + record.focusTaskName + "]");
     $('#workItemModal').modal('hide');
 };
 
@@ -161,13 +161,15 @@ function clearFocusTimerInterval() {
 
 function noFocusTimerUI() {
   if (window.jQuery) {
+    
+    $('#divFocus').addClass('invisible');
     $('#divEndTimer').addClass('invisible');
     $('#btnSetWorkItem').removeClass('invisible');
   }
 }
 function withFocusTimerUI() {
   if (window.jQuery) {
-
+    $('#divFocus').removeClass('invisible');
     $('#divEndTimer').removeClass('invisible');
     $('#btnSetWorkItem').addClass('invisible');
   }
