@@ -143,7 +143,3 @@ if($e("btnShowSettings")) {
 }
 
 
-
-
-
-

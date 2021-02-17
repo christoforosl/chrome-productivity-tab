@@ -250,3 +250,10 @@ if($e("btnShowHistory")) {
     
   });
 }
+
+if($e("currentFocusAddNote")) {
+  $e("currentFocusAddNote").addEventListener("click", function(){
+    $('#noteModal').modal('show');
+
+  });
+}
