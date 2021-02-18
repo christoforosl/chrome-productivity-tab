@@ -11,10 +11,12 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
     integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
+  <link href="scripts/lib/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
   <script src="scripts/lib/jquery-3.5.1.slim.min.js"></script>
   <script src="scripts/lib/bootstrap.bundle.min.js"></script>
   <script src="scripts/lib/bootstrap-table.min.js"></script>
+  <script src="scripts/lib/bootstrap-datetimepicker.min.js"></script>
 
   <!-- https://bootstrap-table.com/docs/getting-started/introduction/ -->
 
@@ -121,8 +123,8 @@
               <thead>
                 <tr>
                   <th data-field="focusTaskName" data-sortable="true">Item Name</th>
-                  <th data-field="startDateTime" data-sortable="true" data-sort-name="startTime">Start Date</th>
-                  <th data-field="endDateTime" data-sortable="true" data-sort-name="endTime">End Date</th>
+                  <th data-field="startDateTime"  data-formatter="dateTimeColumnFormatter" data-sortable="true" data-sort-name="startTime">Start Date</th>
+                  <th data-field="endDateTime"  data-formatter="dateTimeColumnFormatter" data-sortable="true" data-sort-name="endTime">End Date</th>
                   <th data-field="workHours" data-sortable="false">Work Hours</th>
 
                 </tr>
@@ -197,8 +199,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModal"
-  aria-hidden="true">
+  <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModal" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content panel-warning">
       <div class="modal-header">
@@ -223,6 +224,38 @@
   </div>
 </div>
 
+<div class="modal fade" id="dateModal" tabindex="-1" role="dialog" aria-labelledby="dateModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content panel-warning">
+      <div class="modal-header">
+        <h5 class="modal-title">Change Data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+         
+          <div class="form-group">
+            <label for="txtDate">Note:</label> 
+            <div class="input-append date" id="datetimepicker4">
+              <input data-format="dd/MM/yyyy hh:mm" type="text" id="txtDate">
+              <span class="add-on">
+                <i data-date-icon="icon-calendar" data-time-icon="icon-time" class="icon-calendar">
+                </i>
+              </span>
+              </div>
+
+          </div>
+          
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnSaveNote">Save Note</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 <script src="./scripts/common.js"></script>

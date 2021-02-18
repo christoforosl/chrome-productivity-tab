@@ -103,6 +103,7 @@ function initBackground() {
   checkForActiveFocusTimer();
   setCurrentDateTimeTimer();
   setQuote();
+  
   chrome.tabs.onRemoved.addListener(function () {
     if (curentDateTimeTimer) {
       console.log("Clearing Interval");

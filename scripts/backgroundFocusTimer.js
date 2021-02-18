@@ -232,20 +232,49 @@ if ($e("btnSaveSettings")) {
   });
 }
 
+function dateTimeColumnFormatter (value, row) {
+  var columnValue, columnName;
+  if(value===row.startDateTime) {
+    columnValue = row.startTime;
+    columnName = 'startTime';
+  } else {
+    columnValue = row.endDateTime;
+    columnName = 'endTime';
+  }
+  return '<button type="button" id="btnChangeDate" data-columnvalue="'+ columnValue +'"  data-columnname="'+ columnName +'" class="btn btn-sm btn-link">'+value+'</button>';
+  //return '<a href=\"javascript:openDateChanger(\''+columnValue+'\',\''+ columnName +'\')\">' + value + '</a>';
+  
+}
+
 if($e("btnShowHistory")) {
   $e("btnShowHistory").addEventListener("click", function(){
+        $('#listTimersModal').modal('show');
 
         getFocusHistoryData(function(data){
+          var $table = $('#tblFocusTimerHistory');
           data.forEach(function (obj) {
-            obj.endDateTime= obj.endTime  ? new Date( obj.endTime ).toLocaleString("el-GR"): '';
-            obj.startDateTime = obj.startTime? new Date( obj.startTime ).toLocaleString("el-GR"): '';
+            obj.endDateTime= obj.endTime  ? new Date( obj.endTime ).toLocaleString(options.language): '';
+            obj.startDateTime = obj.startTime? new Date( obj.startTime ).toLocaleString(options.language): '';
             obj.workHours = getElapsedTime(obj.startTime, obj.endTime);
           });
-          var $table = $('#tblFocusTimerHistory');
+          
           //https://bootstrap-table.com/docs/getting-started/introduction/
           $table.bootstrapTable({ data:data });
           $table.bootstrapTable('resetView');
-          $('#listTimersModal').modal('show');
+          
+          $("#btnChangeDate").click(function( index ) {
+             //http://tarruda.github.io/bootstrap-datetimepicker/
+             // this.dataset.columnname
+            // this.dataset.columnvalue
+            $('#dateModal').modal('show');
+            var picker = $('#datetimepicker4').datetimepicker({
+              format: 'dd/MM/yyyy hh:mm',
+              pickDate: true,            // disables the date picker
+              pickTime: true
+            }).data('datetimepicker');
+            picker.setDate( new Date( parseInt(this.dataset.columnvalue) ) );
+          });
+
         });
     
   });
