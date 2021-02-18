@@ -238,29 +238,33 @@ function dateTimeColumnFormatter(value, row) {
     columnValue = row.startTime;
     columnName = 'startTime';
   } else {
-    columnValue = row.endDateTime;
+    columnValue = row.endTime;
     columnName = 'endTime';
   }
   return '<button type="button" name="btnChangeDate" data-columnvalue="' + columnValue + '"  data-columnname="' + columnName + '" class="btn btn-sm btn-link">' + value + '</button>';
-  //return '<a href=\"javascript:openDateChanger(\''+columnValue+'\',\''+ columnName +'\')\">' + value + '</a>';
-
+  
 }
 
 function changeDateData(e) {
-  //http://tarruda.github.io/bootstrap-datetimepicker/
+  
   var target = e.target || e.srcElement;
-  // this.dataset.columnname
-  // this.dataset.columnvalue
   $('#dateModal').modal('show');
-  var picker = $('#datetimepicker4').datetimepicker({
-    format: 'dd/MM/yyyy hh:mm',
-    pickDate: true,            // disables the date picker
-    pickTime: true
-  }).data('datetimepicker');
-  picker.setDate(new Date(parseInt(target.dataset.columnvalue)));
-
+  //https://stackoverflow.com/questions/38369240/jquery-set-current-date-to-input-type-datetime-local
+  let x = convertUTCDateToLocalDate( new Date(parseInt(target.dataset.columnvalue))).toJSON().slice(0,19);
+  $('#txtDate').val( x );
+  
 };
 
+function convertUTCDateToLocalDate(date) {
+  var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+  var offset = date.getTimezoneOffset() / 60;
+  var hours = date.getHours();
+
+  newDate.setHours(hours - offset);
+
+  return newDate;   
+}
 
 if ($e("btnShowHistory")) {
   $e("btnShowHistory").addEventListener("click", function () {
@@ -277,9 +281,20 @@ if ($e("btnShowHistory")) {
       //https://bootstrap-table.com/docs/getting-started/introduction/
       $table.bootstrapTable({ data: data });
       $table.bootstrapTable('resetView');
-
-      $( "button[name^='btnChangeDate']" ).each(function(index){ console.log("index:" + index)  ; $(this).on("click", changeDateData) });
+      $table.on('sort.bs.table', assignClickEventsToDataTable);
+      $table.on('refresh.bs.table',assignClickEventsToDataTable);
+      $table.on('load-success.bs.table',assignClickEventsToDataTable);
+      assignClickEventsToDataTable() ;
+      
     });
+  });
+}
+
+function assignClickEventsToDataTable() {
+  console.log("assign click events");
+  $( "button[name^='btnChangeDate']" ).each(function(index){ 
+    //console.log("index:" + index); 
+    $(this).on("click", changeDateData) 
   });
 }
 
