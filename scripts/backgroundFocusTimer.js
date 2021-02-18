@@ -252,33 +252,6 @@ if ($e("btnSaveSettings")) {
   });
 }
 
-function dateTimeColumnFormatter(value, row) {
-  var columnValue, columnName;
-  if (value === row.startDateTime) {
-    columnValue = row.startTime;
-    columnName = 'startTime';
-  } else {
-    columnValue = row.endTime;
-    columnName = 'endTime';
-  }
-  return '<button type="button" name="btnChangeDate" data-columnvalue="' + columnValue + '"  data-columnname="' + columnName + '" class="btn btn-sm btn-link">' + value + '</button>';
-  
-}
-
-function openEditPage($element, row, field) {
-  
-  $('#dateModal').modal('show');
-  //https://stackoverflow.com/questions/38369240/jquery-set-current-date-to-input-type-datetime-local
-  if(row.endTime) {
-    let std = convertUTCDateToLocalDate( new Date(parseInt(row.endTime))).toJSON().slice(0,19);
-    $('#endDateTime').val( std );
-  }
-  let etd = convertUTCDateToLocalDate( new Date(parseInt(row.startTime))).toJSON().slice(0,19);
-  $('#startDateTime').val( etd );
-  $('#focusTaskName').val( row.focusTaskName );
-  $('#timerId').val( row.timerId );
-};
-
 function convertUTCDateToLocalDate(date) {
   var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
 
@@ -305,7 +278,7 @@ if ($e("btnShowHistory")) {
       //https://bootstrap-table.com/docs/getting-started/introduction/
       $table.bootstrapTable({ data: data });
       $table.bootstrapTable('resetView');
-      $table.on('click-row.bs.table', openEditPage);
+      //$table.on('click-row.bs.table', openEditPage);
       
     });
   });
@@ -327,15 +300,49 @@ if ($e("btnSaveFocusData")) {
     }
     timerRecord.startTime = new Date( $('#startDateTime').val()).getTime(); //$('#startDateTime').val();
     timerRecord.focusTaskName = $('#focusTaskName').val();
-
-    //updateTimerService(timerRecord);
+    updateTimerService(timerRecord);
     //$table.bootstrapTable('updateCellByUniqueId', {id: 3, field: 'name', value: 'Updated Name'}).
-    
-
     $('#dateModal').modal('hide');
 
   });
 }
 
+function operateFormatter(value, row, index) {
+  return [
+    '<a class="timer-edit" href="#" title="Edit">',
+    '<i class="far fa-edit"></i>',
+    '</a>&nbsp;',
+    '<a id="del'+row._id+'" data-confirm-title="My Super Title" data-confirm-content="My Super Question" class="timer-remove popconfirm" href="#" title="Remove" data-toggle="confirmation">',
+    '<i class="far fa-trash-alt"></i>',
+    '</a>'
+  ].join('');
+}
 
+window.operateEvents = {
+  'click .timer-edit': function (e, value, row, index) {
+    openEditPage(row);
+  },
+  'click .timer-remove': function (e, value, row, index) {
 
+    // $table.bootstrapTable('remove', {
+    //   field: '_id',
+    //   values: [row._id]
+    // });
+
+  }
+}
+
+function openEditPage(row) {
+  
+  $('#dateModal').modal('show');
+  //https://stackoverflow.com/questions/38369240/jquery-set-current-date-to-input-type-datetime-local
+  if(row.endTime) {
+    let std = convertUTCDateToLocalDate( new Date(parseInt(row.endTime))).toJSON().slice(0,19);
+    $('#endDateTime').val( std );
+  }
+  let etd = convertUTCDateToLocalDate( new Date(parseInt(row.startTime))).toJSON().slice(0,19);
+  $('#startDateTime').val( etd );
+  $('#focusTaskName').val( row.focusTaskName );
+  $('#timerId').val( row._id );
+  
+};
