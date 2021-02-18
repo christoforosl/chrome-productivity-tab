@@ -1,4 +1,4 @@
-/* jshint esversion: 6 */ 
+/* jshint esversion: 6 */
 
 var focusTimerVars = {};
 
@@ -31,8 +31,8 @@ window.SetCurrentFocusAndStartTimer = function () {
       startFocusTimer(record);
 
     });
-    $html('currentFocus', "[" + record.focusTaskName + "]");
-    $('#workItemModal').modal('hide');
+  $html('currentFocus', "[" + record.focusTaskName + "]");
+  $('#workItemModal').modal('hide');
 };
 
 window.startFocusTimer = function (record) {
@@ -63,8 +63,8 @@ window.checkForActiveFocusTimer = function () {
     return;
   }
 
-  $html('currentFocus',  "[" + timerRecord.focusTaskName + "]");
-  
+  $html('currentFocus', "[" + timerRecord.focusTaskName + "]");
+
   focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
   withFocusTimerUI();
 };
@@ -125,14 +125,14 @@ window.updateFocusTimer = function () {
 
   var timeStr = getElapsedTime(startTime, new Date().getTime());
   $html('currentTimerTime', timeStr);
-  document.title = "Focus:[" + timeStr+"]";
+  document.title = "Focus:[" + timeStr + "]";
   withFocusTimerUI();
 
 };
 
 function getElapsedTime(startTime, endTime) {
-  if(!startTime)return '';
-  if(!endTime)return '';
+  if (!startTime) return '';
+  if (!endTime) return '';
   var elapsedSecs = (endTime - startTime) / 1000;
   var hours = Math.floor(elapsedSecs / 3600);
   var minutes = Math.floor((elapsedSecs - (hours * 3600)) / 60);
@@ -161,7 +161,7 @@ function clearFocusTimerInterval() {
 
 function noFocusTimerUI() {
   if (window.jQuery) {
-    
+
     $('#divFocus').addClass('invisible');
     $('#divEndTimer').addClass('invisible');
     $('#btnSetWorkItem').removeClass('invisible');
@@ -204,27 +204,27 @@ function getFocusHistoryData(callback) {
 }
 
 if ($e("btnShowSettings")) {
-  $e("btnShowSettings").addEventListener("click", function(){
+  $e("btnShowSettings").addEventListener("click", function () {
     $('#settingsModal').modal('show');
   });
 }
 if ($e("btnSaveSettings")) {
-  $e("btnSaveSettings").addEventListener("click", function(){
+  $e("btnSaveSettings").addEventListener("click", function () {
 
-    if(! $('#greetingName').val()) {
-      
+    if (!$('#greetingName').val()) {
+
       return;
     }
 
     var tmp = $('#backroundImageSearchTerms').val();
-    if(!tmp){
+    if (!tmp) {
       tmp = "nature,forest,mountain,water";
     }
-    if(settings.imageKeywords !== tmp) {
+    if (settings.imageKeywords !== tmp) {
       settings.imageKeywords = tmp;
       setBackroundImage();
     }
-       
+
     settings.greetingName = $('#greetingName').val();
 
     window.localStorage.setItem("settings", JSON.stringify(settings));
@@ -232,56 +232,59 @@ if ($e("btnSaveSettings")) {
   });
 }
 
-function dateTimeColumnFormatter (value, row) {
+function dateTimeColumnFormatter(value, row) {
   var columnValue, columnName;
-  if(value===row.startDateTime) {
+  if (value === row.startDateTime) {
     columnValue = row.startTime;
     columnName = 'startTime';
   } else {
     columnValue = row.endDateTime;
     columnName = 'endTime';
   }
-  return '<button type="button" id="btnChangeDate" data-columnvalue="'+ columnValue +'"  data-columnname="'+ columnName +'" class="btn btn-sm btn-link">'+value+'</button>';
+  return '<button type="button" name="btnChangeDate" data-columnvalue="' + columnValue + '"  data-columnname="' + columnName + '" class="btn btn-sm btn-link">' + value + '</button>';
   //return '<a href=\"javascript:openDateChanger(\''+columnValue+'\',\''+ columnName +'\')\">' + value + '</a>';
-  
+
 }
 
-if($e("btnShowHistory")) {
-  $e("btnShowHistory").addEventListener("click", function(){
-        $('#listTimersModal').modal('show');
+function changeDateData(e) {
+  //http://tarruda.github.io/bootstrap-datetimepicker/
+  var target = e.target || e.srcElement;
+  // this.dataset.columnname
+  // this.dataset.columnvalue
+  $('#dateModal').modal('show');
+  var picker = $('#datetimepicker4').datetimepicker({
+    format: 'dd/MM/yyyy hh:mm',
+    pickDate: true,            // disables the date picker
+    pickTime: true
+  }).data('datetimepicker');
+  picker.setDate(new Date(parseInt(target.dataset.columnvalue)));
 
-        getFocusHistoryData(function(data){
-          var $table = $('#tblFocusTimerHistory');
-          data.forEach(function (obj) {
-            obj.endDateTime= obj.endTime  ? new Date( obj.endTime ).toLocaleString(options.language): '';
-            obj.startDateTime = obj.startTime? new Date( obj.startTime ).toLocaleString(options.language): '';
-            obj.workHours = getElapsedTime(obj.startTime, obj.endTime);
-          });
-          
-          //https://bootstrap-table.com/docs/getting-started/introduction/
-          $table.bootstrapTable({ data:data });
-          $table.bootstrapTable('resetView');
-          
-          $("#btnChangeDate").click(function( index ) {
-             //http://tarruda.github.io/bootstrap-datetimepicker/
-             // this.dataset.columnname
-            // this.dataset.columnvalue
-            $('#dateModal').modal('show');
-            var picker = $('#datetimepicker4').datetimepicker({
-              format: 'dd/MM/yyyy hh:mm',
-              pickDate: true,            // disables the date picker
-              pickTime: true
-            }).data('datetimepicker');
-            picker.setDate( new Date( parseInt(this.dataset.columnvalue) ) );
-          });
+};
 
-        });
-    
+
+if ($e("btnShowHistory")) {
+  $e("btnShowHistory").addEventListener("click", function () {
+    $('#listTimersModal').modal('show');
+
+    getFocusHistoryData(function (data) {
+      var $table = $('#tblFocusTimerHistory');
+      data.forEach(function (obj) {
+        obj.endDateTime = obj.endTime ? new Date(obj.endTime).toLocaleString(options.language) : '';
+        obj.startDateTime = obj.startTime ? new Date(obj.startTime).toLocaleString(options.language) : '';
+        obj.workHours = getElapsedTime(obj.startTime, obj.endTime);
+      });
+
+      //https://bootstrap-table.com/docs/getting-started/introduction/
+      $table.bootstrapTable({ data: data });
+      $table.bootstrapTable('resetView');
+
+      $( "button[name^='btnChangeDate']" ).each(function(index){ console.log("index:" + index)  ; $(this).on("click", changeDateData) });
+    });
   });
 }
 
-if($e("currentFocusAddNote")) {
-  $e("currentFocusAddNote").addEventListener("click", function(){
+if ($e("currentFocusAddNote")) {
+  $e("currentFocusAddNote").addEventListener("click", function () {
     $('#noteModal').modal('show');
 
   });
