@@ -83,6 +83,26 @@ window.endFocusTimer = function () {
 
 };
 
+
+window.updateTimerService = function (timerRow) {
+  if (!timerRow) {
+    throw ('Error: no timer id');
+  }
+  
+  var myRequest = new Request(options.APIDBHost + "/" + timerRow.timerId, {
+    "method": "PATCH",
+    "headers": DB_API_HEADERS,
+    body: JSON.stringify(timerRow)
+  });
+
+  fetch(myRequest)
+    .then(response => response.json())
+    .then(contents => {
+      console.log('Updated timer:' + timerId);
+    });
+
+};
+
 window.setTaskEndTime = function (timerId) {
   if (!timerId) {
     throw ('Error: no timer id');
@@ -245,14 +265,18 @@ function dateTimeColumnFormatter(value, row) {
   
 }
 
-function changeDateData(e) {
+function openEditPage($element, row, field) {
   
-  var target = e.target || e.srcElement;
   $('#dateModal').modal('show');
   //https://stackoverflow.com/questions/38369240/jquery-set-current-date-to-input-type-datetime-local
-  let x = convertUTCDateToLocalDate( new Date(parseInt(target.dataset.columnvalue))).toJSON().slice(0,19);
-  $('#txtDate').val( x );
-  
+  if(row.endTime) {
+    let std = convertUTCDateToLocalDate( new Date(parseInt(row.endTime))).toJSON().slice(0,19);
+    $('#endDateTime').val( std );
+  }
+  let etd = convertUTCDateToLocalDate( new Date(parseInt(row.startTime))).toJSON().slice(0,19);
+  $('#startDateTime').val( etd );
+  $('#focusTaskName').val( row.focusTaskName );
+  $('#timerId').val( row.timerId );
 };
 
 function convertUTCDateToLocalDate(date) {
@@ -281,20 +305,9 @@ if ($e("btnShowHistory")) {
       //https://bootstrap-table.com/docs/getting-started/introduction/
       $table.bootstrapTable({ data: data });
       $table.bootstrapTable('resetView');
-      $table.on('sort.bs.table', assignClickEventsToDataTable);
-      $table.on('refresh.bs.table',assignClickEventsToDataTable);
-      $table.on('load-success.bs.table',assignClickEventsToDataTable);
-      assignClickEventsToDataTable() ;
+      $table.on('click-row.bs.table', openEditPage);
       
     });
-  });
-}
-
-function assignClickEventsToDataTable() {
-  console.log("assign click events");
-  $( "button[name^='btnChangeDate']" ).each(function(index){ 
-    //console.log("index:" + index); 
-    $(this).on("click", changeDateData) 
   });
 }
 
@@ -304,3 +317,25 @@ if ($e("currentFocusAddNote")) {
 
   });
 }
+if ($e("btnSaveFocusData")) {
+  $e("btnSaveFocusData").addEventListener("click", function () {
+    
+    var timerRecord = {};
+    timerRecord.timerId = $('#timerId').val();
+    if($('#endDateTime').val()) {
+      timerRecord.endTime = new Date( $('#endDateTime').val()).getTime();
+    }
+    timerRecord.startTime = new Date( $('#startDateTime').val()).getTime(); //$('#startDateTime').val();
+    timerRecord.focusTaskName = $('#focusTaskName').val();
+
+    //updateTimerService(timerRecord);
+    //$table.bootstrapTable('updateCellByUniqueId', {id: 3, field: 'name', value: 'Updated Name'}).
+    
+
+    $('#dateModal').modal('hide');
+
+  });
+}
+
+
+
