@@ -295,13 +295,23 @@ if ($e("btnSaveFocusData")) {
     
     var timerRecord = {};
     timerRecord.timerId = $('#timerId').val();
+    timerRecord._id = $('#timerId').val();
     if($('#endDateTime').val()) {
       timerRecord.endTime = new Date( $('#endDateTime').val()).getTime();
     }
     timerRecord.startTime = new Date( $('#startDateTime').val()).getTime(); //$('#startDateTime').val();
     timerRecord.focusTaskName = $('#focusTaskName').val();
     updateTimerService(timerRecord);
-    //$table.bootstrapTable('updateCellByUniqueId', {id: 3, field: 'name', value: 'Updated Name'}).
+    var $table = $('#tblFocusTimerHistory');
+    $table.bootstrapTable('updateByUniqueId', {
+      id: timerRecord.timerId,
+      row: {
+        focusTaskName: timerRecord.focusTaskName,
+        endDateTime : timerRecord.endTime ? new Date(timerRecord.endTime).toLocaleString(options.language) : '',
+        startDateTime : timerRecord.startTime ? new Date(timerRecord.startTime).toLocaleString(options.language) : '',
+        workHours : getElapsedTime(timerRecord.startTime, timerRecord.endTime)
+      }
+    });
     $('#dateModal').modal('hide');
 
   });
@@ -332,6 +342,9 @@ window.operateEvents = {
   }
 }
 
+/**
+ * open edit page, fill controls with data
+ */
 function openEditPage(row) {
   
   $('#dateModal').modal('show');
