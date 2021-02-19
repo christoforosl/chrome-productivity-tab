@@ -20,7 +20,7 @@ window.SetCurrentFocusAndStartTimer = function () {
     "method": "POST",
     "headers": DB_API_HEADERS,
     "mode": 'cors',
-    "cache": 'default',
+    "cache": 'no-cache',
     body: JSON.stringify(record)
   });
 
