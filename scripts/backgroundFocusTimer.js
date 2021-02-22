@@ -11,8 +11,8 @@ const DB_API_HEADERS = new Headers({
 window.SetCurrentFocusAndStartTimer = function () {
 
   var dnowWithSecs = new Date();
-  dnowWithSecs.setSeconds(0,0);
-  var dnow = dnow.getTime();
+  dnowWithSecs = new Date( dnowWithSecs.setSeconds(0,0));
+  var dnow = dnowWithSecs.getTime();
 
   var record = {
     "user": localStorage.getItem("userInfo"),
@@ -111,9 +111,11 @@ window.setTaskEndTime = function (timerId) {
   if (!timerId) {
     throw ('Error: no timer id');
   }
+  
   var dnowWithSecs = new Date();
-  dnowWithSecs.setSeconds(0,0);
-  var dnow = dnow.getTime();
+  dnowWithSecs = new Date( dnowWithSecs.setSeconds(0,0));
+  var dnow = dnowWithSecs.getTime();
+    
   var myRequest = new Request(options.APIDBHost + "/" + timerId, {
     "method": "PATCH",
     "headers": DB_API_HEADERS,
