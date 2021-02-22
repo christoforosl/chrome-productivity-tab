@@ -81,13 +81,13 @@ function setCurrentDateTime() {
   var greeting;
 
   if (d.getHours() > 0 && d.getHours() <= 12) {
-    greeting = "Good Morning, " + settings.greetingName;
+    greeting = "Good Morning, ";
   } else if (d.getHours() > 12 && d.getHours() <= 19) {
-    greeting = "Good Afternoon, " + settings.greetingName;
+    greeting = "Good Afternoon, " ;
   } else {
-    greeting = "Good Evening, " + settings.greetingName;
+    greeting = "Good Evening, " ;
   }
-  
+  greeting = greeting + (settings.greetingName || "[Specify Name In Settings]");
   $html('btnSetWorkItem',  options.whatShallWeWorkOnQuestionText);
   $html("currentTime", t );
   $html("greeting", greeting );
@@ -99,9 +99,9 @@ function initBackground() {
   //console.log("init backround");
   if(!settings) {
     console.log("loading settings");
-    settings = JSON.parse( window.localStorage.getItem("settings") ) || {"imageKeywords":"nature,forest,mountain,water"};
-    if(!settings.greetingName){
-      settings.greetingName = "[Specify Name In Settings]";
+    settings = JSON.parse( window.localStorage.getItem("settings") ) || {"imageKeywords":"nature"};
+    if(!settings){
+      settings = {};
     }
   }
   setBackroundImage();
