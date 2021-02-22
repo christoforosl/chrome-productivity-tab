@@ -10,9 +10,13 @@ const DB_API_HEADERS = new Headers({
 
 window.SetCurrentFocusAndStartTimer = function () {
 
+  var dnowWithSecs = new Date();
+  dnowWithSecs.setSeconds(0,0);
+  var dnow = dnow.getTime();
+
   var record = {
     "user": localStorage.getItem("userInfo"),
-    "startTime": new Date().getTime(),
+    "startTime": dnow,
     "focusTaskName": $('#taskName').val()
   };
 
@@ -107,7 +111,9 @@ window.setTaskEndTime = function (timerId) {
   if (!timerId) {
     throw ('Error: no timer id');
   }
-  var dnow = new Date().getTime();
+  var dnowWithSecs = new Date();
+  dnowWithSecs.setSeconds(0,0);
+  var dnow = dnow.getTime();
   var myRequest = new Request(options.APIDBHost + "/" + timerId, {
     "method": "PATCH",
     "headers": DB_API_HEADERS,
@@ -145,7 +151,7 @@ window.updateFocusTimer = function () {
 
   var timeStr = getElapsedTime(startTime, new Date().getTime());
   $html('currentTimerTime', timeStr);
-  document.title = "Focus:[" + timeStr + "]";
+  document.title = "Focus: [" + timeStr + "]";
   withFocusTimerUI();
 
 };
