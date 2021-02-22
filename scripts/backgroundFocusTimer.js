@@ -193,6 +193,7 @@ function noFocusTimerUI() {
     $('#divFocus').addClass('invisible');
     $('#divEndTimer').addClass('invisible');
     $('#btnSetWorkItem').removeClass('invisible');
+    $('#divAskAndSetGreeting').css('display','inline');
   }
 }
 function withFocusTimerUI() {
@@ -200,6 +201,7 @@ function withFocusTimerUI() {
     $('#divFocus').removeClass('invisible');
     $('#divEndTimer').removeClass('invisible');
     $('#btnSetWorkItem').addClass('invisible');
+    $('#divAskAndSetGreeting').css('display','none');
   }
 }
 
