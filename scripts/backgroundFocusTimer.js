@@ -248,7 +248,7 @@ if ($e("btnSaveSettings")) {
     }
     if (settings.imageKeywords !== tmp) {
       settings.imageKeywords = tmp;
-      setBackroundImage();
+      fetchBackroundImage();
     }
 
     settings.greetingName = $('#greetingName').val();

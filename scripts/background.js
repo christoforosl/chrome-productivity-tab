@@ -104,7 +104,7 @@ function initBackground() {
       settings = {};
     }
   }
-  setBackroundImage();
+  checkBackroundImageOnLoad();
   noFocusTimerUI() ;
   checkForActiveFocusTimer();
   setCurrentDateTimeTimer();
@@ -119,12 +119,30 @@ function initBackground() {
   
 }
 
-function setBackroundImage(inGetImageCall) {
+function checkBackroundImageOnLoad() {
 
   if (window.jQuery) {
-    var getImageCall = inGetImageCall || settings.imageKeywords||"nature,forest,mountain,water";
     $(document).ready(function(){
-      var myRequest = new Request(options.pexelsApiQuery+getImageCall, {
+      var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
+      if (currentBackroundImage && currentBackroundImage.src ) {
+        setBackroundImageFromStorage(currentBackroundImage);
+      } else {
+        fetchBackroundImage();
+      }
+    });
+  }
+}
+
+function fetchBackroundImage(inGetImageCall) {
+
+  if (window.jQuery) {
+    
+    var getImageCall = inGetImageCall || (options.pexelsApiQuery + (settings.imageKeywords||"nature,forest,mountain,water"));
+    var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
+    if (currentBackroundImage && currentBackroundImage.src ) {
+      setBackroundImageFromStorage(currentBackroundImage);
+    } else {
+      var myRequest = new Request(getImageCall, {
         "method": "GET",
         "headers": CALL_PREXELS_HEADERS,
         "mode": 'cors'
@@ -133,20 +151,24 @@ function setBackroundImage(inGetImageCall) {
       fetch(myRequest)
         .then(response => response.json())
         .then(contents => {
+          var currentBackroundImage = {};
           var photo = contents.photos[0];
-          var photographer = photo.photographer;
-          var photographer_url = photo.photographer_url;
-          var src = photo.src;
-          
-          localStorage.setItem('nextPhotoPage',contents.next_page);
-          $("html").css("background-image", "url('"  + src.landscape +"')");
-          $html("photographer", 'Photo By <a style="color:white" target="_new" href="'+photographer_url+'">'+photographer+'</a>');
-    
+          currentBackroundImage.photographer = photo.photographer;
+          currentBackroundImage.photographerUrl = photo.photographer_url;
+          currentBackroundImage.src = photo.src.landscape;
+          currentBackroundImage.nextPhotoPage = contents.next_page;
+          localStorage.setItem('currentBackroundImage',JSON.stringify(currentBackroundImage));           
+          setBackroundImageFromStorage(currentBackroundImage);
         });
+    };
 
-      
-    });
+    
   }
+}
+
+function setBackroundImageFromStorage(currentBackroundImage) {
+  $("html").css("background-image", "url('"  + currentBackroundImage.src +"')");
+  $html("photographer", 'Photo By <a style="color:white" target="_new" href="'+currentBackroundImage.photographerUrl+'">'+currentBackroundImage.photographer+'</a>');
 }
 
 chrome.runtime.onInstalled.addListener(function () {
@@ -172,7 +194,9 @@ if($e("btnShowSettings")) {
 
 if($e("btnChangeWallpaper")) {
   $e("btnChangeWallpaper").addEventListener("click", function(){
-    var nextPhotoPage = localStorage.getItem('nextPhotoPage');
-    setBackroundImage(nextPhotoPage);
+    var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
+    localStorage.removeItem('currentBackroundImage');
+    fetchBackroundImage(currentBackroundImage.nextPhotoPage);
+
   });
 }
