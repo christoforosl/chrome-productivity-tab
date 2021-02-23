@@ -1,7 +1,7 @@
 {
   
-  "name": "New Productivity Tab",
-  "description": "Overrides the new tab page with the New Productivity Tab",
+  "name": "Focus Tab",
+  "description": "Help focus on tasks and measure time for a task",
   "version": "0.1",
 
   "chrome_url_overrides": {
@@ -14,6 +14,21 @@
                   "tabs","background", 
                   "tts","alarms", 
                   "storage", "https://quotes.rest/*", "https://chrometimertasks-879e.restdb.io/*"],
-  "background": { "scripts": ["scripts/common.js",  "scripts/backgroundFocusTimer.js","scripts/background.js"] }
+  "background": { "scripts": ["scripts/common.js",  "scripts/backgroundFocusTimer.js","scripts/background.js"] },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "/images/icon16.png",
+      "32": "/images/icon32.png",
+      "48": "/images/icon48.png",
+      "128": "/images/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "/images/icon16.png",
+    "32": "/images/icon32.png",
+    "48": "/images/icon48.png",
+    "128": "/images/icon128.png"
+  }
 
 }
