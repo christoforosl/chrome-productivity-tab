@@ -8,6 +8,12 @@ const CALL_QUOTE_HEADERS = new Headers({
   "useQueryString": true
 });
 
+const CALL_PREXELS_HEADERS = new Headers({
+  "accept": "application/json",
+  "Authorization": options.pexelsApiKey
+});
+
+
 function setCurrentDateTimeTimer() {
 
   curentDateTimeTimer = setInterval(setCurrentDateTime, 1000);
@@ -75,13 +81,13 @@ function setCurrentDateTime() {
   var greeting;
 
   if (d.getHours() > 0 && d.getHours() <= 12) {
-    greeting = "Good Morning, " + settings.greetingName;
+    greeting = "Good Morning, ";
   } else if (d.getHours() > 12 && d.getHours() <= 19) {
-    greeting = "Good Afternoon, " + settings.greetingName;
+    greeting = "Good Afternoon, " ;
   } else {
-    greeting = "Good Evening, " + settings.greetingName;
+    greeting = "Good Evening, " ;
   }
-  
+  greeting = greeting + (settings.greetingName || "[Specify Name In Settings]");
   $html('btnSetWorkItem',  options.whatShallWeWorkOnQuestionText);
   $html("currentTime", t );
   $html("greeting", greeting );
@@ -90,15 +96,15 @@ function setCurrentDateTime() {
 
 function initBackground() {
 
-  console.log("init backround");
+  //console.log("init backround");
   if(!settings) {
     console.log("loading settings");
-    settings = JSON.parse( window.localStorage.getItem("settings") ) || {"imageKeywords":"nature,forest,mountain,water"};
-    if(!settings.greetingName){
-      settings.greetingName = "[Specify Name In Settings]";
+    settings = JSON.parse( window.localStorage.getItem("settings") ) || {"imageKeywords":"nature"};
+    if(!settings){
+      settings = {};
     }
   }
-  setBackroundImage();
+  checkBackroundImageOnLoad();
   noFocusTimerUI() ;
   checkForActiveFocusTimer();
   setCurrentDateTimeTimer();
@@ -113,13 +119,56 @@ function initBackground() {
   
 }
 
-window.setBackroundImage = function() {
+function checkBackroundImageOnLoad() {
+
   if (window.jQuery) {
-    var defaultKeywords = settings.imageKeywords||"nature,forest,mountain,water";
     $(document).ready(function(){
-      $("html").css("background-image", "url('https://source.unsplash.com/daily?" + defaultKeywords +"')");
+      var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
+      if (currentBackroundImage && currentBackroundImage.src ) {
+        setBackroundImageFromStorage(currentBackroundImage);
+      } else {
+        fetchBackroundImage();
+      }
     });
   }
+}
+
+function fetchBackroundImage(inGetImageCall) {
+
+  if (window.jQuery) {
+    
+    var getImageCall = inGetImageCall || (options.pexelsApiQuery + (settings.imageKeywords||"nature,forest,mountain,water"));
+    var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
+    if (currentBackroundImage && currentBackroundImage.src ) {
+      setBackroundImageFromStorage(currentBackroundImage);
+    } else {
+      var myRequest = new Request(getImageCall, {
+        "method": "GET",
+        "headers": CALL_PREXELS_HEADERS,
+        "mode": 'cors'
+      });
+    
+      fetch(myRequest)
+        .then(response => response.json())
+        .then(contents => {
+          var currentBackroundImage = {};
+          var photo = contents.photos[0];
+          currentBackroundImage.photographer = photo.photographer;
+          currentBackroundImage.photographerUrl = photo.photographer_url;
+          currentBackroundImage.src = photo.src.landscape;
+          currentBackroundImage.nextPhotoPage = contents.next_page;
+          localStorage.setItem('currentBackroundImage',JSON.stringify(currentBackroundImage));           
+          setBackroundImageFromStorage(currentBackroundImage);
+        });
+    };
+
+    
+  }
+}
+
+function setBackroundImageFromStorage(currentBackroundImage) {
+  $("html").css("background-image", "url('"  + currentBackroundImage.src +"')");
+  $html("photographer", 'Photo By <a style="color:white" target="_new" href="'+currentBackroundImage.photographerUrl+'">'+currentBackroundImage.photographer+'</a>');
 }
 
 chrome.runtime.onInstalled.addListener(function () {
@@ -143,4 +192,11 @@ if($e("btnShowSettings")) {
   });
 }
 
+if($e("btnChangeWallpaper")) {
+  $e("btnChangeWallpaper").addEventListener("click", function(){
+    var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
+    localStorage.removeItem('currentBackroundImage');
+    fetchBackroundImage(currentBackroundImage.nextPhotoPage);
 
+  });
+}

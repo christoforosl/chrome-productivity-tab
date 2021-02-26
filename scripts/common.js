@@ -13,8 +13,7 @@ var options = {
   "whatShallWeWorkOnQuestionTextFontSizePixels": 50,
 
   "pexelsApiKey":"563492ad6f9170000100000122d321b272644f1ea47df0b35c3ff2bf",
-  "pexelsApiQuery":"https://api.pexels.com/v1/search?query=people&orientation=landscape&per_page=1&page=1",
-  "backroundImageUrl":"https://source.unsplash.com/daily?nature,forest,mountain,water",
+  "pexelsApiQuery":"https://api.pexels.com/v1/search?orientation=landscape&per_page=1&page=1&query=",
   "language" : window.navigator.userLanguage || window.navigator.language || 'en'
 };
 
