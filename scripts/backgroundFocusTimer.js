@@ -187,21 +187,34 @@ function clearFocusTimerInterval() {
 
 }
 
+function hideItem(id) {
+  $('#'+id).addClass('invisible');
+  $('#'+id).css('display','none');
+}
+
+function showItem(id) {
+  $('#'+id).removeClass('invisible');
+  $('#'+id).css('display','block');
+}
+
 function noFocusTimerUI() {
   if (window.jQuery) {
 
-    $('#divFocus').addClass('invisible');
-    $('#divEndTimer').addClass('invisible');
-    $('#btnSetWorkItem').removeClass('invisible');
-    $('#divAskAndSetGreeting').css('display','inline');
+    hideItem('divFocus');
+    hideItem('divEndTimer');
+    //showItem('btnSetWorkItem');
+    showItem('divAskAndSetGreeting');
   }
 }
 function withFocusTimerUI() {
+
   if (window.jQuery) {
-    $('#divFocus').removeClass('invisible');
-    $('#divEndTimer').removeClass('invisible');
-    $('#btnSetWorkItem').addClass('invisible');
-    $('#divAskAndSetGreeting').css('display','none');
+    showItem('divFocus');
+    showItem('divEndTimer');
+    //hideItem('btnSetWorkItem');
+    hideItem('divAskAndSetGreeting');
+
+
   }
 }
 
