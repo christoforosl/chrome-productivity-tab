@@ -187,9 +187,7 @@ if($e("btnShowSettings")) {
   $('#backroundImageSearchTerms').val(settings.imageKeywords);
   $('#greetingName').val(settings.greetingName);
   
-  $e("btnShowSettings").addEventListener("click", function(){
-
-  });
+  
 }
 
 if($e("btnChangeWallpaper")) {
