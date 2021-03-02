@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
     integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-  
+
   <script src="scripts/lib/jquery-3.5.1.slim.min.js"></script>
   <script src="scripts/lib/bootstrap.bundle.min.js"></script>
   <script src="scripts/lib/bootstrap-table.min.js"></script>
@@ -41,75 +41,74 @@
 </head>
 
 <body class="bg-transparent vh-100 border-primary" style="font-family: 'Poppins', sans-serif;">
-  <div>
-    <nav id="navbar-example2" class="navbar navbar-light bg-transparent fixed-top">
-      <ul class="nav nav-pills">
-        <li class="nav-item dropdown small">
-          <a class="nav-link dropdown-toggle" style="color: white;" data-toggle="dropdown" href="#" role="button"
-            aria-haspopup="true" aria-expanded="false"><i class="h4 fas fa-cog"></i></a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item small" id="btnShowHistory" href="#">Focus Items History</a>
+  <div id="currentTime" style="color: white;" class="small fixed-top text-center pt-4"></div>
+  <nav id="navbar-settings" class="navbar navbar-light bg-transparent fixed-top">
+    <ul class="nav nav-pills">
+      <li class="nav-item dropdown small">
+        <a class="nav-link dropdown-toggle" style="color: white;" data-toggle="dropdown" href="#" role="button"
+          aria-haspopup="true" aria-expanded="false"><em class="h4 fas fa-cog"></em></a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item small" id="btnShowHistory" href="#">Focus Items History</a>
 
-            <div role="separator" class="dropdown-divider"></div>
-            <a class="dropdown-item small" id="btnShowSettings" href="#">Settings</a>
-          </div>
-        </li>
-      </ul>
-    
-      <div id="currentTime" style="color: white;" class="small"></div>
-      <div class="text-right text-nowrap">
-        <div id="photographer" style="color: white;" class="d-inline small"></div>
+          <div role="separator" class="dropdown-divider"></div>
+          <a class="dropdown-item small" id="btnShowSettings" href="#">Settings</a>
+        </div>
+      </li>
+    </ul>
+    <div id="photoinfo" class="navbar-right">
+      <div id="photographer" style="color: white;" class="d-inline small"></div>
+      <button type="button" id="btnChangeWallpaper" class="d-inline btn btn-sm btn-outline-light"><em
+          class="fas fa-sync-alt"></em></button>
+      <button type="button" id="btnLoveWallpaper" class="d-inline btn btn-sm btn-outline-light"><em
+          class="fa fa-heart"></em></button>
+    </div>
 
-          <button type="button" id="btnChangeWallpaper" class="d-inline btn btn-sm btn-outline-light"><i class="fas fa-sync-alt"></i></button> 
-          <button type="button" id="btnLoveWallpaper" class="d-inline btn btn-sm btn-outline-light"><i class="fa fa-heart"></i></button> 
-
-      </div>
-      
-    </nav>
-  </div>
-
+  </nav>
+  
   <div class="container h-100" id="divContainer">
     <div class="row align-items-center vh-100 text-center" style="color: white" id="divContainerRow">
       <div class="w-100 mx-auto" id="divContainerRow1">
         
         <div id="greeting" class="display-4 mb-5"></div>
         <div id="divAskAndSetGreeting" class="mt-5 mb-5">
-          <button id="btnSetWorkItem" type="button" 
-            class="btn btn-outline-light w-50" data-toggle="modal"
+          <button id="btnSetWorkItem" type="button" class="btn btn-outline-light w-50" data-toggle="modal"
             data-target="#workItemModal">What shall we focus on?</button>
-          
+
         </div>
-        <div id="divFocus" class="align-items-center" 
+        <div id="divFocus" class="align-items-center"
           style="border: 2px hidden white; border-radius: 20px; background-color: rgba(0, 0, 0, 0.1);">
-        <form id="frmFocus">
-          <div id="currentFocusContainer" class="mt-5"> 
-            <input type="checkbox" class="custom-control-input" id="currentFocusCompleted" name="currentFocusCompleted" />
-            <div class="h2">We are now focusing On:</div> 
-            <div class="btn-group" role="group">
-              <div id="currentFocus" class="h1 mt-3 mb-3"></div>
-              <button type="button" class="btn bg-transparent" 
-                id="currentFocusAddNote" class="mt-3 mb-3" title="Add Note">
-                <i class="h2 fas fa-plus-circle"  style="color:white"></i></button>
+          <form id="frmFocus">
+            <div id="currentFocusContainer" class="mt-5">
+              <input type="checkbox" class="custom-control-input" id="currentFocusCompleted"
+                name="currentFocusCompleted" />
+              <div class="h2">We are now focusing On:</div>
+              <div class="btn-group" role="group">
+                <div id="currentFocus" class="h1 mt-3 mb-3"></div>
+                <button type="button" class="btn bg-transparent" id="currentFocusAddNote" class="mt-3 mb-3"
+                  title="Add Note">
+                  <i class="h2 fas fa-plus-circle" style="color:white"></i></button>
+              </div>
             </div>
-          </div>
 
 
-          <div id="divEndTimer" class="align-items-center text-center mt-5 mb-5" role="group" aria-label="Basic example">
-            <div class="h1" id="currentTimerTime">00:00:00</div>
+            <div id="divEndTimer" class="align-items-center text-center mt-5 mb-5" role="group"
+              aria-label="Basic example">
+              <div class="h1" id="currentTimerTime">00:00:00</div>
 
-            <!--
+              <!--
                 <button type="button" class="btn btn-secondary" id="btnPauseFocusTimer" value="Pause Current Focus Timer"
                   title="Pause timer measuring current task"><i class="fas fa-pause-circle"></i> Pause Current Focus Timer</button>
             -->
 
-            <button type="button" class="btn btn-danger mb-5" id="btnEndTimer" title="End timer measuring current task"><i
-                class="fas fa-stop-circle"></i> &nbsp;&nbsp; End Current Focus Timer</button>
+              <button type="button" class="btn btn-danger mb-5" id="btnEndTimer"
+                title="End timer measuring current task"><i class="fas fa-stop-circle"></i> &nbsp;&nbsp; End Current
+                Focus Timer</button>
 
-          </div>
+            </div>
 
-        </form>
+          </form>
 
-      </div>
+        </div>
         <div class="fixed-bottom" style="background-color: rgba(7, 7, 7, 0.3);" id="quoteContent">
           <div id="quote" class="small" style="display: inline;"></div> -
           <div class="small" style="display: inline;" id="quoteBy"></div>
@@ -117,7 +116,8 @@
       </div>
     </div>
 
-    <div class="modal fade w-100" id="listTimersModal" tabindex="-1" role="dialog" aria-labelledby="listTimersModal" aria-hidden="true">
+    <div class="modal fade w-100" id="listTimersModal" tabindex="-1" role="dialog" aria-labelledby="listTimersModal"
+      aria-hidden="true">
       <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -127,14 +127,14 @@
             </button>
           </div>
           <div class="modal-body" id="listTimersModalContent">
-            <table id="tblFocusTimerHistory" data-show-refresh="true" data-buttons="buttons" data-pagination="true"
-              data-show-footer="true" 
-              data-unique-id="_id"
-              data-search="true" data-sortable="true" data-sort-name="startDateTime"
-              data-sort-order="desc" class="table-striped table-sm table">
+            <table aria-describedby="Focus History Table" id="tblFocusTimerHistory" data-show-refresh="true"
+              data-buttons="buttons" data-pagination="true" data-show-footer="true" data-unique-id="_id"
+              data-search="true" data-sortable="true" data-sort-name="startDateTime" data-sort-order="desc"
+              class="table-striped table-sm table">
+              <caption>Focus History Table</caption>
               <thead>
                 <tr>
-                  
+
                   <th data-field="_id" data-formatter="operateFormatter" data-events="operateEvents"></th>
                   <th data-field="focusTaskName" data-sortable="true">Item Name</th>
                   <th data-field="startDateTime" data-sortable="true" data-sort-name="startTime">Start Date</th>
@@ -153,7 +153,8 @@
     </div>
   </div>
 
-  <div class="modal fade" id="workItemModal" tabindex="-1" role="dialog" aria-labelledby="workItemModalLabel" aria-hidden="true">
+  <div class="modal fade" id="workItemModal" tabindex="-1" role="dialog" aria-labelledby="workItemModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -192,17 +193,20 @@
         </div>
         <div class="modal-body">
           <form>
-           
+
             <div class="form-group">
-              <label for="backroundImageSearchTerms">Search Terms For Backround Image:</label> 
-              <input id="backroundImageSearchTerms" name="backroundImageSearchTerms" type="text" class="form-control" aria-describedby="backroundImageSearchTermsHelpBlock"> 
-              <span id="backroundImageSearchTermsHelpBlock" class="form-text text-muted">Specify a search term that will be used to retrieve an image from <a target="_new" href="http://www.pexels.com">pexels.com</a></span>
+              <label for="backroundImageSearchTerms">Search Terms For Backround Image:</label>
+              <input id="backroundImageSearchTerms" name="backroundImageSearchTerms" type="text" class="form-control"
+                aria-describedby="backroundImageSearchTermsHelpBlock">
+              <span id="backroundImageSearchTermsHelpBlock" class="form-text text-muted">Specify a search term that will
+                be used to retrieve an image from <a target="_new" href="http://www.pexels.com">pexels.com</a></span>
             </div>
             <div class="form-group">
-              <label for="greetingName">Your Greeting Name</label> 
-              <input id="greetingName" name="greetingName" placeholder="How shall we greet you?" type="text" required="required" class="form-control">
-            </div> 
-            
+              <label for="greetingName">Your Greeting Name</label>
+              <input id="greetingName" name="greetingName" placeholder="How shall we greet you?" type="text"
+                required="required" class="form-control">
+            </div>
+
           </form>
         </div>
         <div class="modal-footer">
@@ -214,68 +218,70 @@
   </div>
 
   <div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModal" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content panel-warning">
-      <div class="modal-header">
-        <h5 class="modal-title">Add Note for current task</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="txtNote">Note:</label> 
-            <textarea id="txtNote" name="txtNote" class="form-control" aria-describedby="Note"></textarea> 
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btnSaveNote">Save Note</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="dateModal" tabindex="-1" role="dialog" aria-labelledby="dateModal" aria-hidden="true">
-  <div class="modal-dialog modal-m" role="document">
-    <div class="modal-content panel-warning">
-      <div class="modal-header">
-        <h5 class="modal-title">Change Data</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-       
-        
-        <form>
-          <div class="form-group">
-            <label for="focusTaskName">Focus Task Name</label> 
-            <input id="focusTaskName" name="focusTaskName" placeholder="Enter Focus Task Name" type="text" class="form-control" required="required">
-          </div>
-          <div class="form-group">
-            <label for="startDateTime">Start Date/Time</label> 
-            <input id="startDateTime" name="startDateTime" type="datetime-local" class="form-control" required="required">
-          </div>
-          <div class="form-group">
-            <label for="endDateTime">End Date/Time</label> 
-            <input id="endDateTime" name="endDateTime" type="datetime-local" class="form-control" required="required">
-          </div> 
-          <div class="form-group">
-            <label for="timerId">Timer Id</label> 
-            <input id="timerId" disabled name="timerId" type="text" class="form-control" required="required">
-          </div> 
-          
-        </form>
-
-      </div>
-      <div class="modal-footer align-items-center" >
-        <button type="button" class="btn btn-primary" id="btnSaveFocusData">Save</button>
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content panel-warning">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Note for current task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="txtNote">Note:</label>
+              <textarea id="txtNote" name="txtNote" class="form-control" aria-describedby="Note"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="btnSaveNote">Save Note</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="modal fade" id="dateModal" tabindex="-1" role="dialog" aria-labelledby="dateModal" aria-hidden="true">
+    <div class="modal-dialog modal-m" role="document">
+      <div class="modal-content panel-warning">
+        <div class="modal-header">
+          <h5 class="modal-title">Change Data</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+
+          <form>
+            <div class="form-group">
+              <label for="focusTaskName">Focus Task Name</label>
+              <input id="focusTaskName" name="focusTaskName" placeholder="Enter Focus Task Name" type="text"
+                class="form-control" required="required">
+            </div>
+            <div class="form-group">
+              <label for="startDateTime">Start Date/Time</label>
+              <input id="startDateTime" name="startDateTime" type="datetime-local" class="form-control"
+                required="required">
+            </div>
+            <div class="form-group">
+              <label for="endDateTime">End Date/Time</label>
+              <input id="endDateTime" name="endDateTime" type="datetime-local" class="form-control" required="required">
+            </div>
+            <div class="form-group">
+              <label for="timerId">Timer Id</label>
+              <input id="timerId" disabled name="timerId" type="text" class="form-control" required="required">
+            </div>
+
+          </form>
+
+        </div>
+        <div class="modal-footer align-items-center">
+          <button type="button" class="btn btn-primary" id="btnSaveFocusData">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 <script src="./scripts/common.js"></script>

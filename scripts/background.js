@@ -22,14 +22,12 @@ function setCurrentDateTimeTimer() {
 
 /**
  * returns true if quote is older than 24 hours
- * @param {long} quoteTime: the quote's set time, in epoch seconds
+ * @param {long} quoteDate: the quote's set time, in epoch seconds
  */
-function getQuoteIsOld(quoteTime) {
-  if(!quoteTime)return true;
-  var elapsedSecs = (new Date().getTime() - parseInt(quoteTime)) / 1000;
-  var hours = Math.floor(elapsedSecs / 3600);
-  //console.log("quote is "+ hours + " hours old");
-  return hours > 24 ;
+function getQuoteIsOld(quoteDate) {
+  if(!quoteDate)return true;
+  var dt = new Date().toDateString();
+  return dt !== quoteDate;
 
 } 
 
@@ -67,7 +65,8 @@ function setQuoteFromService() {
       var author = contents.contents.quotes[0].author;
       $html("quote", '\"' + quote + '\"');
       $html("quoteBy", author);
-      var quoteObj = { "quote": quote, "quoteBy": author, "quoteDate": new Date().getTime() };
+      var dt = new Date().toDateString();
+      var quoteObj = { "quote": quote, "quoteBy": author, "quoteDate": dt };
       chrome.storage.local.set(quoteObj, function () {
         console.log('set quote in storage' + JSON.stringify(quoteObj));
       });
@@ -124,46 +123,40 @@ function checkBackroundImageOnLoad() {
   if (window.jQuery) {
     $(document).ready(function(){
       var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
-      if (currentBackroundImage && currentBackroundImage.src ) {
+      var setImageFromStorage = currentBackroundImage.src && (currentBackroundImage.setDate === new Date().toDateString());
+      if ( setImageFromStorage ) {
         setBackroundImageFromStorage(currentBackroundImage);
       } else {
-        fetchBackroundImage();
+        fetchImageFromApiService();
       }
     });
   }
 }
 
-function fetchBackroundImage(inGetImageCall) {
-
-  if (window.jQuery) {
+function fetchImageFromApiService(inImageApiUrl) {
+  var imageApiUrl = inImageApiUrl || (options.pexelsApiQuery + settings.imageKeywords);
     
-    var getImageCall = inGetImageCall || (options.pexelsApiQuery + (settings.imageKeywords||"nature,forest,mountain,water"));
-    var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
-    if (currentBackroundImage && currentBackroundImage.src ) {
+  var myRequest = new Request(imageApiUrl, {
+    "method": "GET",
+    "headers": CALL_PREXELS_HEADERS,
+    "mode": 'cors'
+  });
+
+  fetch(myRequest)
+    .then(response => response.json())
+    .then(contents => {
+      var currentBackroundImage = {};
+      var photo = contents.photos[0];
+      currentBackroundImage.photographer = photo.photographer;
+      currentBackroundImage.photographerUrl = photo.photographer_url;
+      currentBackroundImage.src = photo.src.landscape;
+      currentBackroundImage.nextPhotoPage = contents.next_page;
+      currentBackroundImage.setDate = new Date().toDateString();
+
+      localStorage.setItem('currentBackroundImage', JSON.stringify(currentBackroundImage));
       setBackroundImageFromStorage(currentBackroundImage);
-    } else {
-      var myRequest = new Request(getImageCall, {
-        "method": "GET",
-        "headers": CALL_PREXELS_HEADERS,
-        "mode": 'cors'
-      });
-    
-      fetch(myRequest)
-        .then(response => response.json())
-        .then(contents => {
-          var currentBackroundImage = {};
-          var photo = contents.photos[0];
-          currentBackroundImage.photographer = photo.photographer;
-          currentBackroundImage.photographerUrl = photo.photographer_url;
-          currentBackroundImage.src = photo.src.landscape;
-          currentBackroundImage.nextPhotoPage = contents.next_page;
-          localStorage.setItem('currentBackroundImage',JSON.stringify(currentBackroundImage));           
-          setBackroundImageFromStorage(currentBackroundImage);
-        });
-    };
-
-    
-  }
+    });
+  
 }
 
 function setBackroundImageFromStorage(currentBackroundImage) {
@@ -194,7 +187,7 @@ if($e("btnChangeWallpaper")) {
   $e("btnChangeWallpaper").addEventListener("click", function(){
     var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
     localStorage.removeItem('currentBackroundImage');
-    fetchBackroundImage(currentBackroundImage.nextPhotoPage);
+    fetchImageFromApiService(currentBackroundImage.nextPhotoPage);
 
   });
 }
