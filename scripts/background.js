@@ -133,7 +133,9 @@ function checkBackroundImageOnLoad() {
   }
 }
 
-function fetchImageFromApiService(imageApiUrl) {
+function fetchImageFromApiService(inImageApiUrl) {
+  var imageApiUrl = inImageApiUrl || (options.pexelsApiQuery + settings.imageKeywords);
+    
   var myRequest = new Request(imageApiUrl, {
     "method": "GET",
     "headers": CALL_PREXELS_HEADERS,
