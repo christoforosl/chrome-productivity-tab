@@ -37,7 +37,6 @@
     }
   </style>
 
-
 </head>
 
 <body class="bg-transparent vh-100 border-primary" style="font-family: 'Poppins', sans-serif;">
@@ -86,7 +85,7 @@
                 <div id="currentFocus" class="h1 mt-3 mb-3"></div>
                 <button type="button" class="btn bg-transparent" id="currentFocusAddNote" class="mt-3 mb-3"
                   title="Add Note">
-                  <i class="h2 fas fa-plus-circle" style="color:white"></i></button>
+                  <em class="h2 fas fa-plus-circle" style="color:white"></em></button>
               </div>
             </div>
 
@@ -135,11 +134,11 @@
               <thead>
                 <tr>
 
-                  <th data-field="_id" data-formatter="operateFormatter" data-events="operateEvents"></th>
-                  <th data-field="focusTaskName" data-sortable="true">Item Name</th>
-                  <th data-field="startDateTime" data-sortable="true" data-sort-name="startTime">Start Date</th>
-                  <th data-field="endDateTime" data-sortable="true" data-sort-name="endTime">End Date</th>
-                  <th data-field="workHours" data-sortable="false">Work Hours</th>
+                  <th id="colid" data-field="_id" data-formatter="operateFormatter" data-events="operateEvents"></th>
+                  <th id="colfocusTaskName" data-field="focusTaskName" data-sortable="true">Item Name</th>
+                  <th id="colstartDateTime" data-field="startDateTime" data-sortable="true" data-sort-name="startTime">Start Date</th>
+                  <th id="colendDateTime" data-field="endDateTime" data-sortable="true" data-sort-name="endTime">End Date</th>
+                  <th id="colworkHours" data-field="workHours" data-sortable="false">Work Hours</th>
 
                 </tr>
               </thead>
@@ -251,8 +250,6 @@
           </button>
         </div>
         <div class="modal-body">
-
-
           <form>
             <div class="form-group">
               <label for="focusTaskName">Focus Task Name</label>
