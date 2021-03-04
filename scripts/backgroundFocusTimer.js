@@ -153,7 +153,7 @@ window.updateFocusTimer = function () {
 
   var timeStr = getElapsedTime(startTime, new Date().getTime());
   $html('currentTimerTime', timeStr);
-  document.title = "Focus: [" + timeStr + "]";
+  document.title = "Solid Focus [" + timeStr + "]";
   withFocusTimerUI();
 
 };
@@ -202,8 +202,8 @@ function noFocusTimerUI() {
 
     hideItem('divFocus');
     hideItem('divEndTimer');
-    //showItem('btnSetWorkItem');
     showItem('divAskAndSetGreeting');
+    document.title = "Solid Focus";
   }
 }
 function withFocusTimerUI() {
