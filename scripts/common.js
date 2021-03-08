@@ -12,8 +12,9 @@ var options = {
   "whatShallWeWorkOnQuestionText": "What is our focus now?",
   "whatShallWeWorkOnQuestionTextFontSizePixels": 50,
 
-  "pexelsApiKey":"563492ad6f9170000100000122d321b272644f1ea47df0b35c3ff2bf",
-  "pexelsApiQuery":"https://api.pexels.com/v1/search?orientation=landscape&per_page=1&page=1&query=",
+  "imageApiKey":"SidraH8wDMI92Y_bXxn2Tg1PLJWt24RI310YYUHJ1xY",
+  "imageApiQuery":"https://api.unsplash.com/photos/random?query=",
+  
   "language" : window.navigator.userLanguage || window.navigator.language || 'en'
 };
 
