@@ -152,7 +152,9 @@ function fetchImageFromApiService() {
       currentBackroundImage.src = photo.urls.full;
       //currentBackroundImage.nextPhotoPage = contents.next_page;
       currentBackroundImage.setDate = new Date().toDateString();
-      currentBackroundImage.description = photo.location ? arrayOfItems( photo.location.city , photo.location.country) : '';
+      currentBackroundImage.location = photo.location ? photo.location.title : '';
+      currentBackroundImage.description = photo.alt_description ? photo.alt_description : photo.description;
+      
       localStorage.setItem('currentBackroundImage', JSON.stringify(currentBackroundImage));
       setBackroundImageFromStorage(currentBackroundImage);
     });
@@ -173,8 +175,14 @@ function arrayOfItems() {
 
 function setBackroundImageFromStorage(currentBackroundImage) {
   $("html").css("background-image", "url('"  + currentBackroundImage.src +"')");
-  var photoInfo = 'Photo By <a style="color:white" target="_new" href="'+currentBackroundImage.photographerUrl+'">'+currentBackroundImage.photographer+'</a>';
-  photoInfo = photoInfo + (currentBackroundImage.description  ? ',' + currentBackroundImage.description : '');
+  var photoInfo = 'Photo By ';
+  if (currentBackroundImage.photographerUrl) {
+    photoInfo += '<a style="color:white" target="_new" href="'+currentBackroundImage.photographerUrl+'">'+currentBackroundImage.photographer+'</a>';
+  } else {
+    photoInfo += currentBackroundImage.photographer;
+  }
+  photoInfo += (currentBackroundImage.location ? ', ' + currentBackroundImage.location : '');
+  $('#photoinfo').attr('title', currentBackroundImage.description);
   $html("photographer", photoInfo);
 }
 
