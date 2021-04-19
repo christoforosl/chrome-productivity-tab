@@ -289,8 +289,7 @@ function convertUTCDateToLocalDate(date) {
 
 if ($e("btnShowHistory")) {
   $e("btnShowHistory").addEventListener("click", function () {
-    $('#listTimersModal').modal('show');
-
+    
     getFocusHistoryData(function (data) {
       var $table = $('#tblFocusTimerHistory');
       data.forEach(function (obj) {
@@ -301,8 +300,8 @@ if ($e("btnShowHistory")) {
 
       //https://bootstrap-table.com/docs/getting-started/introduction/
       $table.bootstrapTable({ data: data });
-      $table.bootstrapTable('resetView');
-      //$table.on('click-row.bs.table', openEditPage);
+      $table.bootstrapTable('load', data);
+      $('#listTimersModal').modal('show');
       
     });
   });
@@ -343,7 +342,7 @@ if ($e("btnSaveFocusData")) {
 
 function operateFormatter(value, row, index) {
   return [
-    '<a class="timer-edit" href="#" title="Edit">',
+    '<a class="timer-edit" href="#" title="Edit" id="edit'+row._id+'" data-toggle="modal" data-target="#dateModal" data-rowid="'+row._id+'">',
     '<i class="far fa-edit"></i>',
     '</a>&nbsp;',
     '<a id="del'+row._id+'" data-confirm-title="My Super Title" data-confirm-content="My Super Question" class="timer-remove popconfirm" href="#" title="Remove" data-toggle="confirmation">',
@@ -354,14 +353,9 @@ function operateFormatter(value, row, index) {
 
 window.operateEvents = {
   'click .timer-edit': function (e, value, row, index) {
-    openEditPage(row);
+    // leave here. if removed, javascript error appears in cosole
   },
-  'click .timer-remove': function (e, value, row, index) {
-
-    // $table.bootstrapTable('remove', {
-    //   field: '_id',
-    //   values: [row._id]
-    // });
+  'click .timer-remove': function (e, value, row, index) {;
 
   }
 }
@@ -369,9 +363,11 @@ window.operateEvents = {
 /**
  * open edit page, fill controls with data
  */
-function openEditPage(row) {
+ $('#dateModal').on('show.bs.modal', function (event) {
   
-  $('#dateModal').modal('show');
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
+
   //https://stackoverflow.com/questions/38369240/jquery-set-current-date-to-input-type-datetime-local
   if(row.endTime) {
     let std = convertUTCDateToLocalDate( new Date(parseInt(row.endTime))).toJSON().slice(0,19);
@@ -382,4 +378,4 @@ function openEditPage(row) {
   $('#focusTaskName').val( row.focusTaskName );
   $('#timerId').val( row._id );
   
-};
+});
