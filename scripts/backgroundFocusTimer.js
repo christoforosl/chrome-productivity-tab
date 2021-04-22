@@ -13,6 +13,12 @@ window.SetCurrentFocusAndStartTimer = function () {
   var dnowWithSecs = new Date();
   dnowWithSecs = new Date( dnowWithSecs.setSeconds(0,0));
   var dnow = dnowWithSecs.getTime();
+  var form = $e("frmEnterTaskName");
+  form.classList.add('was-validated');
+  if (form.checkValidity() === false) {
+    return;
+  }
+  
 
   var record = {
     "user": localStorage.getItem("userInfo"),
@@ -290,7 +296,7 @@ function convertUTCDateToLocalDate(date) {
 if ($e("btnShowHistory")) {
   $e("btnShowHistory").addEventListener("click", function () {
     $('#listTimersModal').modal('show');
-
+    
     getFocusHistoryData(function (data) {
       var $table = $('#tblFocusTimerHistory');
       data.forEach(function (obj) {
@@ -357,11 +363,6 @@ window.operateEvents = {
     openEditPage(row);
   },
   'click .timer-remove': function (e, value, row, index) {
-
-    // $table.bootstrapTable('remove', {
-    //   field: '_id',
-    //   values: [row._id]
-    // });
 
   }
 }
