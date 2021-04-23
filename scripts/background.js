@@ -197,6 +197,15 @@ if($e("btnEndTimer")) {
 }
 if($e("btnSetCurrentFocusAndStartTimer")) {
   $e("btnSetCurrentFocusAndStartTimer").addEventListener("click", SetCurrentFocusAndStartTimer);
+
+  $e("frmEnterTaskName").addEventListener('submit', function(event) {
+    if ($e("frmEnterTaskName").checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  }, false);
+
 }
 if($e("btnShowSettings")) {
   $('#backroundImageSearchTerms').val(settings.imageKeywords);
