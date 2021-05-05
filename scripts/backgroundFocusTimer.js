@@ -20,7 +20,7 @@ window.SetCurrentFocusAndStartTimer = function () {
     "focusTaskName": $('#taskName').val()
   };
 
-  var myRequest = new Request(options.APIDBHost, {
+  var myRequest = new Request(options.APIDBHostTasks, {
     "method": "POST",
     "headers": DB_API_HEADERS,
     "mode": 'cors',
@@ -81,19 +81,82 @@ window.endFocusTimer = function () {
     console.log("will end timer:" + timerRecord.timerId);
     setTaskEndTime(timerRecord.timerId);
     localStorage.removeItem("focusTimer");
-
   }
-
-
 };
 
+window.togglePauseStatus= function () {
+
+  var timerRecord = getTimerRecordFromStorage();
+  if(!timerRecord){
+    return;
+  }
+  var dnowWithSecs = new Date();
+  dnowWithSecs = new Date( dnowWithSecs.setSeconds(0,0));
+  var dnow = dnowWithSecs.getTime();
+
+  if(timerRecord.status === 'PAUSED') {
+    
+    var pauseRecord = getRecordFromStorage("pause");
+    pauseRecord.pauseEnd = dnow;
+    var myRequest = new Request(options.APIDBHostPauses + "/" + pauseRecord._id, {
+      "method": "PATCH",
+      "headers": DB_API_HEADERS,
+      body: JSON.stringify(pauseRecord)
+    });
+
+    fetch(myRequest)
+      .then(response => response.json())
+      .then(contents => {
+        timerRecord.status = 'NOT_PAUSED';
+        localStorage.setItem("focusTimer", JSON.stringify(record));
+        localStorage.removeItem ("pause");
+        setNotPausedTimerUI();
+      });
+
+
+  } else {
+
+    var newPauseRecord = {
+      "timerId":timerRecord.timerId,
+      "pauseStart": dnow,
+      
+    };
+
+    var newPauseRequest = new Request(options.APIDBHostPauses, {
+      "method": "POST",
+      "headers": DB_API_HEADERS,
+      "mode": 'cors',
+      "cache": 'no-cache',
+      body: JSON.stringify(newPauseRecord)
+    });
+
+    fetch(newPauseRequest)
+      .then(response => response.json())
+      .then(contents => {
+        newPauseRecord.pauseId = contents._id;
+        startPauseTimer(newPauseRecord);
+        
+        timerRecord.status = 'PAUSED';
+        localStorage.setItem("focusTimer", JSON.stringify(timerRecord));
+        localStorage.setItem("pause", JSON.stringify(newPauseRecord));
+
+        setPausedTimerUI(timerRecord);
+
+      });
+  }
+  
+};
+
+window.startPauseTimer = function (timerRow) {
+
+};
 
 window.updateTimerService = function (timerRow) {
   if (!timerRow) {
     throw ('Error: no timer id');
   }
   
-  var myRequest = new Request(options.APIDBHost + "/" + timerRow.timerId, {
+  var myRequest = new Request(options.APIDBHostTasks + "/" + timerRow.timerId, {
     "method": "PATCH",
     "headers": DB_API_HEADERS,
     body: JSON.stringify(timerRow)
@@ -116,7 +179,7 @@ window.setTaskEndTime = function (timerId) {
   dnowWithSecs = new Date( dnowWithSecs.setSeconds(0,0));
   var dnow = dnowWithSecs.getTime();
     
-  var myRequest = new Request(options.APIDBHost + "/" + timerId, {
+  var myRequest = new Request(options.APIDBHostTasks + "/" + timerId, {
     "method": "PATCH",
     "headers": DB_API_HEADERS,
 
@@ -206,6 +269,19 @@ function noFocusTimerUI() {
     document.title = "Solid Focus";
   }
 }
+function setNotPausedTimerUI (timerRecord) {
+  $html('currentFocus', "[" + timerRecord.focusTaskName +"]");
+  $('#btnPauseFocusTimer').value ="Pause";
+  $('#btnPauseFocusTimer').title = "Pause Current Focus Timer";
+}
+
+function setPausedTimerUI(timerRecord) {
+  $html('currentFocus', "[" + timerRecord.focusTaskName + " PAUSED ]");
+  $('#btnPauseFocusTimer').value = "Continue";
+  $('#btnPauseFocusTimer').title = "Continue Task Timer";
+}
+
+
 function withFocusTimerUI() {
 
   if (window.jQuery) {
@@ -218,21 +294,30 @@ function withFocusTimerUI() {
   }
 }
 
+/**
+ * retrieve a record from storage and parse it and return it as object
+ * @param {string} key 
+ * @returns json object
+ */
+function getRecordFromStorage(key) {
+
+  var recordStr = localStorage.getItem(key);
+  if (!recordStr) return null;
+
+  var record = JSON.parse(recordStr);
+  if (!record) return null;
+  return record;
+
+}
+
 function getTimerRecordFromStorage() {
-
-  var timerRecordStr = localStorage.getItem("focusTimer");
-  if (!timerRecordStr) return null;
-
-  var timerRecord = JSON.parse(timerRecordStr);
-  if (!timerRecord) return null;
-  return timerRecord;
-
+  return getRecordFromStorage("focusTimer");
 }
 
 function getFocusHistoryData(callback) {
   var user = localStorage.getItem("userInfo");
   var query = "max=20&h={\"$orderby\":{\"startTime\":-1}}&q={\"user\":\"" + user + "\"}&d=" + new Date().getTime();
-  var myRequest = new Request(options.APIDBHost + "?" + query, {
+  var myRequest = new Request(options.APIDBHostTasks + "?" + query, {
     "method": "GET",
     "headers": DB_API_HEADERS,
     "cache": "no-cache"

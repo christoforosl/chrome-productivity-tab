@@ -3,7 +3,8 @@
 
 var options = {
   
-  "APIDBHost": "https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks",
+  "APIDBHostTasks": "https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks",
+  "APIDBHostPauses": "https://chrometimertasks-879e.restdb.io/rest/task-pause",
   "APIQuoteOfTheDayApiHost": "https://quotes.rest/qod?language=en",
   "focusTimerAlarmName": "focusTimerAlarm",
   "username": "christoforosl@netu.com.cy",
