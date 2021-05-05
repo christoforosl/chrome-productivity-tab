@@ -440,17 +440,17 @@ window.operateEvents = {
   'click .timer-edit': function (e, value, row, index) {
     // leave here. if removed, javascript error appears in cosole
   },
-  'click .timer-remove': function (e, value, row, index) {;
+  'click .timer-remove': function (e, value, row, index) {
 
   }
-}
+};
 
 /**
  * open edit page, fill controls with data
  */
  $('#dateModal').on('show.bs.modal', function (event) {
   
-  var button = $(event.relatedTarget) // Button that triggered the modal
+  var button = $(event.relatedTarget); 
   var row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
 
   //https://stackoverflow.com/questions/38369240/jquery-set-current-date-to-input-type-datetime-local
