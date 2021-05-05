@@ -231,7 +231,7 @@ function getTimerRecordFromStorage() {
 
 function getFocusHistoryData(callback) {
   var user = localStorage.getItem("userInfo");
-  var query = "max=20&h={\"$orderby\":{\"startTime\":-1}}&q={\"user\":\"" + user + "\"}&d=" + new Date().getTime();
+  var query = "max=200&h={\"$orderby\":{\"startTime\":-1}}&q={\"user\":\"" + user + "\"}&d=" + new Date().getTime();
   var myRequest = new Request(options.APIDBHost + "?" + query, {
     "method": "GET",
     "headers": DB_API_HEADERS,
