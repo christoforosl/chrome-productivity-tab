@@ -392,12 +392,6 @@ if ($e("btnShowHistory")) {
   });
 }
 
-if ($e("currentFocusAddNote")) {
-  $e("currentFocusAddNote").addEventListener("click", function () {
-    $('#noteModal').modal('show');
-
-  });
-}
 if ($e("btnSaveFocusData")) {
   $e("btnSaveFocusData").addEventListener("click", function () {
     
