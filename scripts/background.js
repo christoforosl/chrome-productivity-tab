@@ -150,13 +150,22 @@ function fetchImageFromApiService() {
       currentBackroundImage.photographer = photo.user.name;
       currentBackroundImage.photographerUrl = photo.user.portfolio_url;
       currentBackroundImage.src = photo.urls.full;
-      //currentBackroundImage.nextPhotoPage = contents.next_page;
       currentBackroundImage.setDate = new Date().toDateString();
       currentBackroundImage.location = photo.location ? photo.location.title : '';
       currentBackroundImage.description = photo.alt_description ? photo.alt_description : photo.description;
       
       localStorage.setItem('currentBackroundImage', JSON.stringify(currentBackroundImage));
       setBackroundImageFromStorage(currentBackroundImage);
+    })
+    .catch(() =>{
+      var defaultBackroundImage = {};
+      defaultBackroundImage.photographer = "blogenium";
+      defaultBackroundImage.photographerUrl = "https://www.blogenium.com/20-beautiful-hd-nature-wallpapers/";
+      defaultBackroundImage.src = "https://www.blogenium.com/wp-content/uploads/2019/08/blogenium-nature-wallpapers-1-1024x576.jpg";
+      defaultBackroundImage.setDate = new Date().toDateString();
+      defaultBackroundImage.location = '';
+      defaultBackroundImage.description = '';
+      setBackroundImageFromStorage(defaultBackroundImage);
     });
   
 }
