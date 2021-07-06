@@ -2,7 +2,17 @@
 // note: JQuery is not available to this backround js script
 var curentDateTimeTimer = null;
 var settings;
+const randomImages = [
+  {title:"Three Men Standing Near Waterfalls", url:"https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&dpr=3"},
+  {title:"blogenium", url:"https://www.blogenium.com/wp-content/uploads/2019/08/blogenium-nature-wallpapers-1-1024x576.jpg"},
+  {title:"1586298", url:"https://images.pexels.com/photos/1586298/pexels-photo-1586298.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
+  {title:"3244513", url:"https://images.pexels.com/photos/3244513/pexels-photo-3244513.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
+  {title:"3512848", url:"https://images.pexels.com/photos/3512848/pexels-photo-3512848.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
+  {title:"1144687", url:"https://images.pexels.com/photos/1144687/pexels-photo-1144687.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
+  {title:"1428277", url:"https://images.pexels.com/photos/1428277/pexels-photo-1428277.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
+  {title:"2754200", url:"https://images.pexels.com/photos/2754200/pexels-photo-2754200.jpeg?auto=compress&cs=tinysrgb&dpr=1"}
 
+];
 const CALL_QUOTE_HEADERS = new Headers({
   "accept": "application/json",
   "useQueryString": true
@@ -145,29 +155,37 @@ function fetchImageFromApiService() {
   fetch(myRequest)
     .then(response => response.json())
     .then(contents => {
-      var currentBackroundImage = {};
+      
       var photo = contents;
+      var currentBackroundImage = {};
       currentBackroundImage.photographer = photo.user.name;
       currentBackroundImage.photographerUrl = photo.user.portfolio_url;
       currentBackroundImage.src = photo.urls.full;
       currentBackroundImage.setDate = new Date().toDateString();
       currentBackroundImage.location = photo.location ? photo.location.title : '';
       currentBackroundImage.description = photo.alt_description ? photo.alt_description : photo.description;
-      
+     
       localStorage.setItem('currentBackroundImage', JSON.stringify(currentBackroundImage));
       setBackroundImageFromStorage(currentBackroundImage);
+
     })
     .catch(() =>{
-      var defaultBackroundImage = {};
-      defaultBackroundImage.photographer = "blogenium";
-      defaultBackroundImage.photographerUrl = "https://www.blogenium.com/20-beautiful-hd-nature-wallpapers/";
-      defaultBackroundImage.src = "https://www.blogenium.com/wp-content/uploads/2019/08/blogenium-nature-wallpapers-1-1024x576.jpg";
-      defaultBackroundImage.setDate = new Date().toDateString();
-      defaultBackroundImage.location = '';
-      defaultBackroundImage.description = '';
-      setBackroundImageFromStorage(defaultBackroundImage);
+      const currentImageIndexParsed =  (parseInt( localStorage.getItem('currentBackroundImageIndex')) || -1) + 1 ;
+      const currentImageIndex = currentImageIndexParsed > randomImages.length-1 ? 0 :currentImageIndexParsed ;
+
+      var currentBackroundImage = {};
+      currentBackroundImage.photographer = "Unknown";
+      currentBackroundImage.src = randomImages[currentImageIndex].url;
+      currentBackroundImage.setDate = new Date().toDateString();
+      currentBackroundImage.location =  `${randomImages[currentImageIndex].title}, Image index: ${currentImageIndex}`;
+      currentBackroundImage.description = '';
+      
+      localStorage.setItem('currentBackroundImage', JSON.stringify(currentBackroundImage));
+      localStorage.setItem('currentBackroundImageIndex', currentImageIndex.toString());
+      setBackroundImageFromStorage(currentBackroundImage);
+
     });
-  
+    
 }
 
 function arrayOfItems() {

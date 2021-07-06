@@ -13,6 +13,8 @@ var options = {
   "whatShallWeWorkOnQuestionText": "What is our focus now?",
   "whatShallWeWorkOnQuestionTextFontSizePixels": 50,
 
+   "imageApiKeyPexels":"563492ad6f917000010000013f1e4531d3454bb2a13e4cfc11f4e189",
+
   "imageApiKey":"SidraH8wDMI92Y_bXxn2Tg1PLJWt24RI310YYUHJ1xY",
   "imageApiQuery":"https://api.unsplash.com/photos/random?query=",
   
