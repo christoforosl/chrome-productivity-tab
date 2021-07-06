@@ -10,7 +10,12 @@ const randomImages = [
   {title:"3512848", url:"https://images.pexels.com/photos/3512848/pexels-photo-3512848.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
   {title:"1144687", url:"https://images.pexels.com/photos/1144687/pexels-photo-1144687.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
   {title:"1428277", url:"https://images.pexels.com/photos/1428277/pexels-photo-1428277.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
-  {title:"2754200", url:"https://images.pexels.com/photos/2754200/pexels-photo-2754200.jpeg?auto=compress&cs=tinysrgb&dpr=1"}
+  {title:"2754200", url:"https://images.pexels.com/photos/2754200/pexels-photo-2754200.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
+  {title:"1612559", url:"https://images.pexels.com/photos/1612559/pexels-photo-1612559.jpeg?auto=compress&cs=tinysrgb"},
+  {title:"Grey Coupe on Road", url:"https://images.pexels.com/photos/3136673/pexels-photo-3136673.jpeg?cs=srgb&dl=pexels-sourav-mishra-3136673.jpg&fm=jpg"},
+  {title:"Huangpu Qu, China", url:"https://images.pexels.com/photos/842654/pexels-photo-842654.jpeg?cs=srgb&dl=pexels-zhang-kaiyv-842654.jpg&fm=jpg"},
+  {title:"3225517", url:"https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?cs=srgb&dl=pexels-michael-block-3225517.jpg&fm=jpg"},
+  {title:"Batang Kali, Malaysia", url:"https://images.pexels.com/photos/1173777/pexels-photo-1173777.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"},
 
 ];
 const CALL_QUOTE_HEADERS = new Headers({
@@ -170,7 +175,10 @@ function fetchImageFromApiService() {
 
     })
     .catch(() =>{
-      const currentImageIndexParsed =  (parseInt( localStorage.getItem('currentBackroundImageIndex')) || -1) + 1 ;
+      const currentImageIndexParsed =  isPositiveInteger(localStorage.getItem('currentBackroundImageIndex')) 
+            ? parseInt(localStorage.getItem('currentBackroundImageIndex')) + 1 
+            : 0;
+      
       const currentImageIndex = currentImageIndexParsed > randomImages.length-1 ? 0 :currentImageIndexParsed ;
 
       var currentBackroundImage = {};
@@ -186,6 +194,10 @@ function fetchImageFromApiService() {
 
     });
     
+}
+
+function isPositiveInteger(n) {
+  return n >>> 0 === parseFloat(n);
 }
 
 function arrayOfItems() {
