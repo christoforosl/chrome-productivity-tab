@@ -16,8 +16,10 @@ const randomImages = [
   {title:"Huangpu Qu, China", url:"https://images.pexels.com/photos/842654/pexels-photo-842654.jpeg?cs=srgb&dl=pexels-zhang-kaiyv-842654.jpg&fm=jpg"},
   {title:"3225517", url:"https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?cs=srgb&dl=pexels-michael-block-3225517.jpg&fm=jpg"},
   {title:"Batang Kali, Malaysia", url:"https://images.pexels.com/photos/1173777/pexels-photo-1173777.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"},
+  {title:"Susan Yin", url:"https://miro.medium.com/max/2400/1*Yp19IQrDozHRZMG1OYxAOQ.jpeg"}
 
 ];
+
 const CALL_QUOTE_HEADERS = new Headers({
   "accept": "application/json",
   "useQueryString": true
