@@ -51,7 +51,7 @@ function setQuote() {
   chrome.storage.local.get(["quote","quoteDate","quoteBy"],function(value) {
     
     var oldq = getQuoteIsOld(value ? value.quoteDate: null);
-    //console.log('oldq xxx' +  oldq);
+    
     if (!value || value.length ===0  || value.quote==='' || oldq) {
       setQuoteFromService();
     } else {
@@ -110,7 +110,7 @@ function setCurrentDateTime() {
 
 function initBackground() {
 
-  //console.log("init backround");
+  
   if(!settings) {
     console.log("loading settings");
     settings = JSON.parse( window.localStorage.getItem("settings") ) || {"imageKeywords":"nature"};
@@ -261,7 +261,7 @@ if($e("btnShowSettings")) {
 
 if($e("btnChangeWallpaper")) {
   $e("btnChangeWallpaper").addEventListener("click", function(){
-    var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
+    
     localStorage.removeItem('currentBackroundImage');
     fetchImageFromApiService();
 
