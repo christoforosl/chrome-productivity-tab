@@ -235,14 +235,9 @@ chrome.runtime.onInstalled.addListener(function () {
 
 initBackground();
 
-if($e("btnEndTimer")) {
-  $e("btnEndTimer").addEventListener("click", endFocusTimer);
-}
-if($e("btnPauseFocusTimer")) {
-  $e("btnPauseFocusTimer").addEventListener("click", togglePauseStatus);
-}
-
-
+// if($e("btnEndTimer")) {
+//   $e("btnEndTimer").addEventListener("click", endFocusTimer);
+// }
 
 if($e("btnSetCurrentFocusAndStartTimer")) {
   $e("btnSetCurrentFocusAndStartTimer").addEventListener("click", SetCurrentFocusAndStartTimer);

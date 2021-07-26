@@ -11,7 +11,7 @@ const DB_API_HEADERS = new Headers({
 window.SetCurrentFocusAndStartTimer = function () {
 
   var dnowWithSecs = new Date();
-  dnowWithSecs = new Date( dnowWithSecs.setSeconds(0,0));
+  dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
   var dnow = dnowWithSecs.getTime();
 
   var record = {
@@ -73,29 +73,18 @@ window.checkForActiveFocusTimer = function () {
   withFocusTimerUI();
 };
 
-window.endFocusTimer = function () {
+window.togglePauseStatus = function () {
 
   var timerRecord = getTimerRecordFromStorage();
-
-  if (timerRecord) {
-    console.log("will end timer:" + timerRecord.timerId);
-    setTaskEndTime(timerRecord.timerId);
-    localStorage.removeItem("focusTimer");
-  }
-};
-
-window.togglePauseStatus= function () {
-
-  var timerRecord = getTimerRecordFromStorage();
-  if(!timerRecord){
+  if (!timerRecord) {
     return;
   }
   var dnowWithSecs = new Date();
-  dnowWithSecs = new Date( dnowWithSecs.setSeconds(0,0));
+  dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
   var dnow = dnowWithSecs.getTime();
 
-  if(timerRecord.status === 'PAUSED') {
-    
+  if (timerRecord.status === 'PAUSED') {
+
     var pauseRecord = getRecordFromStorage("pause");
     pauseRecord.pauseEnd = dnow;
     var myRequest = new Request(options.APIDBHostPauses + "/" + pauseRecord._id, {
@@ -109,7 +98,7 @@ window.togglePauseStatus= function () {
       .then(contents => {
         timerRecord.status = 'NOT_PAUSED';
         localStorage.setItem("focusTimer", JSON.stringify(record));
-        localStorage.removeItem ("pause");
+        localStorage.removeItem("pause");
         setNotPausedTimerUI();
       });
 
@@ -117,9 +106,9 @@ window.togglePauseStatus= function () {
   } else {
 
     var newPauseRecord = {
-      "timerId":timerRecord.timerId,
+      "timerId": timerRecord.timerId,
       "pauseStart": dnow,
-      
+
     };
 
     var newPauseRequest = new Request(options.APIDBHostPauses, {
@@ -135,7 +124,7 @@ window.togglePauseStatus= function () {
       .then(contents => {
         newPauseRecord.pauseId = contents._id;
         startPauseTimer(newPauseRecord);
-        
+
         timerRecord.status = 'PAUSED';
         localStorage.setItem("focusTimer", JSON.stringify(timerRecord));
         localStorage.setItem("pause", JSON.stringify(newPauseRecord));
@@ -144,18 +133,14 @@ window.togglePauseStatus= function () {
 
       });
   }
-  
-};
-
-window.startPauseTimer = function (timerRow) {
 
 };
 
 window.updateTimerService = function (timerRow) {
   if (!timerRow) {
-    throw ('Error: no timer id');
+    throw new Error('Error: no timer id');
   }
-  
+
   var myRequest = new Request(options.APIDBHostTasks + "/" + timerRow.timerId, {
     "method": "PATCH",
     "headers": DB_API_HEADERS,
@@ -172,13 +157,13 @@ window.updateTimerService = function (timerRow) {
 
 window.setTaskEndTime = function (timerId) {
   if (!timerId) {
-    throw ('Error: no timer id');
+    throw new Error('Error: no timer id');
   }
-  
+
   var dnowWithSecs = new Date();
-  dnowWithSecs = new Date( dnowWithSecs.setSeconds(0,0));
+  dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
   var dnow = dnowWithSecs.getTime();
-    
+
   var myRequest = new Request(options.APIDBHostTasks + "/" + timerId, {
     "method": "PATCH",
     "headers": DB_API_HEADERS,
@@ -211,7 +196,7 @@ window.updateFocusTimer = function () {
   var startTime = timerRecord.startTime;
 
   if (!startTime) {
-    throw ('updateFocusTimer Error: no startTime');
+    throw new Error('updateFocusTimer Error: no startTime');
   }
 
   var timeStr = getElapsedTime(startTime, new Date().getTime());
@@ -251,13 +236,13 @@ function clearFocusTimerInterval() {
 }
 
 function hideItem(id) {
-  $('#'+id).addClass('invisible');
-  $('#'+id).css('display','none');
+  $('#' + id).addClass('invisible');
+  $('#' + id).css('display', 'none');
 }
 
 function showItem(id) {
-  $('#'+id).removeClass('invisible');
-  $('#'+id).css('display','block');
+  $('#' + id).removeClass('invisible');
+  $('#' + id).css('display', 'block');
 }
 
 function noFocusTimerUI() {
@@ -269,9 +254,9 @@ function noFocusTimerUI() {
     document.title = "Solid Focus";
   }
 }
-function setNotPausedTimerUI (timerRecord) {
-  $html('currentFocus', "[" + timerRecord.focusTaskName +"]");
-  $('#btnPauseFocusTimer').value ="Pause";
+function setNotPausedTimerUI(timerRecord) {
+  $html('currentFocus', "[" + timerRecord.focusTaskName + "]");
+  $('#btnPauseFocusTimer').value = "Pause";
   $('#btnPauseFocusTimer').title = "Pause Current Focus Timer";
 }
 
@@ -362,19 +347,19 @@ if ($e("btnSaveSettings")) {
 }
 
 function convertUTCDateToLocalDate(date) {
-  var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+  var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
 
   var offset = date.getTimezoneOffset() / 60;
   var hours = date.getHours();
 
   newDate.setHours(hours - offset);
 
-  return newDate;   
+  return newDate;
 }
 
 if ($e("btnShowHistory")) {
   $e("btnShowHistory").addEventListener("click", function () {
-    
+
     getFocusHistoryData(function (data) {
       var $table = $('#tblFocusTimerHistory');
       data.forEach(function (obj) {
@@ -387,33 +372,42 @@ if ($e("btnShowHistory")) {
       $table.bootstrapTable({ data: data });
       $table.bootstrapTable('load', data);
       $('#listTimersModal').modal('show');
-      
+
     });
   });
 }
 
 if ($e("btnSaveFocusData")) {
   $e("btnSaveFocusData").addEventListener("click", function () {
-    
+
     var timerRecord = {};
+
     timerRecord.timerId = $('#timerId').val();
     timerRecord._id = $('#timerId').val();
-    if($('#endDateTime').val()) {
-      timerRecord.endTime = new Date( $('#endDateTime').val()).getTime();
+
+    if ($('#endDateTime').val()) {
+      timerRecord.endTime = new Date($('#endDateTime').val()).getTime();
     }
-    timerRecord.startTime = new Date( $('#startDateTime').val()).getTime(); //$('#startDateTime').val();
+    timerRecord.startTime = new Date($('#startDateTime').val()).getTime();
     timerRecord.focusTaskName = $('#focusTaskName').val();
     updateTimerService(timerRecord);
-    var $table = $('#tblFocusTimerHistory');
-    $table.bootstrapTable('updateByUniqueId', {
-      id: timerRecord.timerId,
-      row: {
-        focusTaskName: timerRecord.focusTaskName,
-        endDateTime : timerRecord.endTime ? new Date(timerRecord.endTime).toLocaleString(options.language) : '',
-        startDateTime : timerRecord.startTime ? new Date(timerRecord.startTime).toLocaleString(options.language) : '',
-        workHours : getElapsedTime(timerRecord.startTime, timerRecord.endTime)
-      }
-    });
+
+    const mode = $('#modal-mode').val();
+    if (mode === "table-edit") {
+      var $table = $('#tblFocusTimerHistory');
+      $table.bootstrapTable('updateByUniqueId', {
+        id: timerRecord.timerId,
+        row: {
+          focusTaskName: timerRecord.focusTaskName,
+          endDateTime: timerRecord.endTime ? new Date(timerRecord.endTime).toLocaleString(options.language) : '',
+          startDateTime: timerRecord.startTime ? new Date(timerRecord.startTime).toLocaleString(options.language) : '',
+          workHours: getElapsedTime(timerRecord.startTime, timerRecord.endTime)
+        }
+      });
+    } else if (mode === "stop-timer-edit") {
+      localStorage.removeItem("focusTimer");
+    }
+
     $('#dateModal').modal('hide');
 
   });
@@ -421,10 +415,10 @@ if ($e("btnSaveFocusData")) {
 
 function operateFormatter(value, row, index) {
   return [
-    '<a class="timer-edit" href="#" title="Edit" id="edit'+row._id+'" data-toggle="modal" data-target="#dateModal" data-rowid="'+row._id+'">',
+    '<a class="timer-edit" href="#" title="Edit" id="edit' + row._id + '" data-toggle="modal" data-target="#dateModal" data-modal-mode="table-edit" data-rowid="' + row._id + '">',
     '<i class="far fa-edit"></i>',
     '</a>&nbsp;',
-    '<a id="del'+row._id+'" data-confirm-title="My Super Title" data-confirm-content="My Super Question" class="timer-remove popconfirm" href="#" title="Remove" data-toggle="confirmation">',
+    '<a id="del' + row._id + '" data-confirm-title="My Super Title" data-confirm-content="My Super Question" class="timer-remove popconfirm" href="#" title="Remove" data-toggle="confirmation">',
     '<i class="far fa-trash-alt"></i>',
     '</a>'
   ].join('');
@@ -434,7 +428,8 @@ window.operateEvents = {
   'click .timer-edit': function (e, value, row, index) {
     // leave here. if removed, javascript error appears in cosole
   },
-  'click .timer-remove': function (e, value, row, index) {;
+  'click .timer-remove': function (e, value, row, index) {
+    ;
 
   }
 }
@@ -442,19 +437,44 @@ window.operateEvents = {
 /**
  * open edit page, fill controls with data
  */
- $('#dateModal').on('show.bs.modal', function (event) {
-  
+$('#dateModal').on('show.bs.modal', function (event) {
+
   var button = $(event.relatedTarget) // Button that triggered the modal
-  var row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
+  $('#modal-mode').val(button.data("modal-mode"));
+  if (button.data("modal-mode") === "table-edit") {
+    var row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
+    showTimerData(row);
+
+  } else if (button.data("modal-mode") === "stop-timer-edit") {
+    // means we came from the stop timer button
+    // var row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
+    console.log("caling endFocusTimer from dateModal");
+    var timerRecord = getTimerRecordFromStorage();
+    if (!timerRecord) {
+      throw new Error('Error: no timer id');
+    }
+    var dnowWithSecs = new Date();
+    dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
+    var dnow = dnowWithSecs.getTime();
+    timerRecord.endTime = dnow;
+    showTimerData(timerRecord)
+    //localStorage.removeItem("focusTimer");
+  }
+
+
+
+});
+
+function showTimerData(row) {
 
   //https://stackoverflow.com/questions/38369240/jquery-set-current-date-to-input-type-datetime-local
-  if(row.endTime) {
-    let std = convertUTCDateToLocalDate( new Date(parseInt(row.endTime))).toJSON().slice(0,19);
-    $('#endDateTime').val( std );
+  if (row.endTime) {
+    let std = convertUTCDateToLocalDate(new Date(parseInt(row.endTime))).toJSON().slice(0, 19);
+    $('#endDateTime').val(std);
   }
-  let etd = convertUTCDateToLocalDate( new Date(parseInt(row.startTime))).toJSON().slice(0,19);
-  $('#startDateTime').val( etd );
-  $('#focusTaskName').val( row.focusTaskName );
-  $('#timerId').val( row._id );
-  
-});
+  let etd = convertUTCDateToLocalDate(new Date(parseInt(row.startTime))).toJSON().slice(0, 19);
+  $('#startDateTime').val(etd);
+  $('#focusTaskName').val(row.focusTaskName);
+  $('#timerId').val(row._id || row.timerId);
+
+}

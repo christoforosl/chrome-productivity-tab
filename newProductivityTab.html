@@ -87,15 +87,17 @@
             </div>
 
 
-            <div id="divEndTimer" class="align-items-center text-center mt-5 mb-5" role="group"
-              aria-label="Basic example">
+            <div id="divEndTimer" class="align-items-center text-center mt-5 mb-5" role="group">
               <div class="h1" id="currentTimerTime">00:00:00</div>
 
                 <div> 
                
-              <button type="button" class="btn btn-danger mb-2 mt-2" id="btnEndTimer"
-                title="End timer measuring current task"><i class="fas fa-stop-circle"></i> &nbsp;&nbsp; End Current
-                Focus Timer</button>
+              <button type="button" class="btn btn-danger mb-2 mt-2" id="btnEndTimer" 
+                aria-label="Click to End Timer" 
+                data-toggle="modal"
+                data-target="#dateModal" 
+                data-modal-mode="stop-timer-edit"
+                title="End timer measuring current task"><i class="fas fa-stop-circle"></i> &nbsp;&nbsp; End Current Focus Timer</button>
                 </div>  
 
             </div>
@@ -213,8 +215,6 @@
     </div>
   </div>
 
-
-
   <div class="modal fade" id="dateModal" tabindex="-1" role="dialog" aria-labelledby="dateModal" aria-hidden="true">
     <div class="modal-dialog modal-m" role="document">
       <div class="modal-content panel-warning">
@@ -244,7 +244,7 @@
               <label for="timerId">Timer Id</label>
               <input id="timerId" disabled name="timerId" type="text" class="form-control" required="required">
             </div>
-
+            <input id="modal-mode" name="modal-mode" type="hidden">
           </form>
 
         </div>
