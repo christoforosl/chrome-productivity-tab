@@ -418,7 +418,7 @@ function operateFormatter(value, row, index) {
     '<a class="timer-edit" href="#" title="Edit" id="edit' + row._id + '" data-toggle="modal" data-target="#dateModal" data-modal-mode="table-edit" data-rowid="' + row._id + '">',
     '<i class="far fa-edit"></i>',
     '</a>&nbsp;',
-    '<a id="del' + row._id + '" data-confirm-title="My Super Title" data-confirm-content="My Super Question" class="timer-remove popconfirm" href="#" title="Remove" data-toggle="confirmation">',
+    '<a class="timer-edit" href="#" title="Delete" id="edit' + row._id + '" data-toggle="modal" data-target="#deleteEntryModal" data-rowid="' + row._id + '">',
     '<i class="far fa-trash-alt"></i>',
     '</a>'
   ].join('');
@@ -432,6 +432,39 @@ window.operateEvents = {
     ;
 
   }
+}
+
+$('#deleteEntryModal').on('show.bs.modal', function (event) {
+
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
+  $('#DelfocusTaskName').html(row.focusTaskName);
+  $('#DelEndDateTime').html(new Date(row.endTime).toLocaleString(options.language));
+  $('#DelStartDateTime').html(new Date(row.startTime).toLocaleString(options.language));
+  $('#DelTimerId').val(row._id);
+});
+
+
+if ($e("btnDeleteFocusData")) {
+  $e("btnDeleteFocusData").addEventListener("click", function () {
+
+    const delTimerId = $('#DelTimerId').val();
+    var deleteRequest = new Request(options.APIDBHostTasks + "/" + delTimerId, {
+      "method": "DELETE",
+      "headers": DB_API_HEADERS
+    });
+
+    fetch(deleteRequest)
+      .then(response => response.json())
+      .then(contents => {
+        $('#tblFocusTimerHistory').bootstrapTable('remove', {
+          field: '_id',
+          values: [delTimerId]
+        })
+        $('#deleteEntryModal').hide();
+      });
+
+  });
 }
 
 /**
@@ -458,7 +491,7 @@ $('#dateModal').on('show.bs.modal', function (event) {
     var dnow = dnowWithSecs.getTime();
     timerRecord.endTime = dnow;
     showTimerData(timerRecord)
-    //localStorage.removeItem("focusTimer");
+
   }
 
 
