@@ -4,20 +4,22 @@ var curentDateTimeTimer = null;
 var settings;
 const randomImages = [
   {title:"Three Men Standing Near Waterfalls", url:"https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&dpr=3"},
-  {title:"blogenium", url:"https://www.blogenium.com/wp-content/uploads/2019/08/blogenium-nature-wallpapers-1-1024x576.jpg"},
-  {title:"1586298", url:"https://images.pexels.com/photos/1586298/pexels-photo-1586298.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
-  {title:"3244513", url:"https://images.pexels.com/photos/3244513/pexels-photo-3244513.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
-  {title:"3512848", url:"https://images.pexels.com/photos/3512848/pexels-photo-3512848.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
-  {title:"1144687", url:"https://images.pexels.com/photos/1144687/pexels-photo-1144687.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
-  {title:"1428277", url:"https://images.pexels.com/photos/1428277/pexels-photo-1428277.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
-  {title:"2754200", url:"https://images.pexels.com/photos/2754200/pexels-photo-2754200.jpeg?auto=compress&cs=tinysrgb&dpr=1"},
-  {title:"1612559", url:"https://images.pexels.com/photos/1612559/pexels-photo-1612559.jpeg?auto=compress&cs=tinysrgb"},
+  {title:"Body of Water Near Brown Sand", url:"https://images.pexels.com/photos/7999461/pexels-photo-7999461.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  {title:"Brown Mountain", url:"https://images.pexels.com/photos/3308741/pexels-photo-3308741.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  {title:"Porto, Portugal", url:"https://images.pexels.com/photos/2549156/pexels-photo-2549156.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  {title:"Yosemite Valley, United States", url:"https://images.pexels.com/photos/1571108/pexels-photo-1571108.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  {title:"Torres del Paine, Chile", url:"https://images.pexels.com/photos/3739624/pexels-photo-3739624.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  {title:"Florence, Italy", url:"https://images.pexels.com/photos/4015473/pexels-photo-4015473.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  {title:"Hlavní město Praha, Czechia", url:"https://images.pexels.com/photos/783739/pexels-photo-783739.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  {title:"New York", url:"https://images.pexels.com/photos/3875821/pexels-photo-3875821.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
   {title:"Grey Coupe on Road", url:"https://images.pexels.com/photos/3136673/pexels-photo-3136673.jpeg?cs=srgb&dl=pexels-sourav-mishra-3136673.jpg&fm=jpg"},
   {title:"Huangpu Qu, China", url:"https://images.pexels.com/photos/842654/pexels-photo-842654.jpeg?cs=srgb&dl=pexels-zhang-kaiyv-842654.jpg&fm=jpg"},
-  {title:"3225517", url:"https://images.pexels.com/photos/3225517/pexels-photo-3225517.jpeg?cs=srgb&dl=pexels-michael-block-3225517.jpg&fm=jpg"},
+  {title:"Guatemala", url:"https://images.pexels.com/photos/2661176/pexels-photo-2661176.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
   {title:"Batang Kali, Malaysia", url:"https://images.pexels.com/photos/1173777/pexels-photo-1173777.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"},
-  {title:"Susan Yin", url:"https://miro.medium.com/max/2400/1*Yp19IQrDozHRZMG1OYxAOQ.jpeg"}
-
+  {title:"Maldives", url:"https://images.pexels.com/photos/2775196/pexels-photo-2775196.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  {"title":"Ulubat Lake, Turkey","url":"https://st4.depositphotos.com/19554348/i/600/depositphotos_311518100-stock-photo-beautiful-spectacular-sunset-view-uluabat.jpg"},
+  {"title":"Morskie Oko, Sea Eye, Tatra National Park, Poland","url":"https://st3.depositphotos.com/14847044/i/600/depositphotos_178404276-stock-photo-view-rocky-shore-stones-water.jpg"},
+  {"title":"Serpentine","url":"https://st4.depositphotos.com/18241762/i/600/depositphotos_202584372-stock-photo-serpentine.jpg"},
 ];
 
 const CALL_QUOTE_HEADERS = new Headers({
