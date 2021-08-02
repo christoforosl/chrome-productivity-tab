@@ -10,6 +10,11 @@ const DB_API_HEADERS = new Headers({
 
 window.SetCurrentFocusAndStartTimer = function () {
 
+  $e("frmEnterTaskName").classList.add('was-validated');
+  if ($e("frmEnterTaskName").checkValidity() === false) {
+    return;
+  }
+    
   var dnowWithSecs = new Date();
   dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
   var dnow = dnowWithSecs.getTime();
@@ -433,7 +438,7 @@ window.operateEvents = {
 }
 
 $('#workItemModal').on('show.bs.modal', function (event) {
-  let etd = convertUTCDateToLocalDate(new Date()).toJSON().slice(0, 19);
+  let etd = convertUTCDateToLocalDate(new Date()).toJSON().slice(0, 16);
   $('#taskStartDateTime').val(etd);
 });
 
@@ -506,10 +511,10 @@ function showTimerData(row) {
 
   //https://stackoverflow.com/questions/38369240/jquery-set-current-date-to-input-type-datetime-local
   if (row.endTime) {
-    let std = convertUTCDateToLocalDate(new Date(parseInt(row.endTime))).toJSON().slice(0, 19);
+    let std = convertUTCDateToLocalDate(new Date(parseInt(row.endTime))).toJSON().slice(0, 16);
     $('#endDateTime').val(std);
   }
-  let etd = convertUTCDateToLocalDate(new Date(parseInt(row.startTime))).toJSON().slice(0, 19);
+  let etd = convertUTCDateToLocalDate(new Date(parseInt(row.startTime))).toJSON().slice(0, 16);
   $('#startDateTime').val(etd);
   $('#focusTaskName').val(row.focusTaskName);
   $('#timerId').val(row._id || row.timerId);

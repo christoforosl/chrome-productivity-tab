@@ -4,17 +4,17 @@
 			"path": "scripts/backgroundFocusTimer.js",
 			"bookmarks": [
 				{
-					"line": 18,
+					"line": 24,
 					"column": 61,
 					"label": ""
 				},
 				{
-					"line": 392,
+					"line": 398,
 					"column": 33,
 					"label": ""
 				},
 				{
-					"line": 440,
+					"line": 446,
 					"column": 37,
 					"label": ""
 				}
@@ -26,6 +26,16 @@
 				{
 					"line": 259,
 					"column": 51,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "scripts/background.js",
+			"bookmarks": [
+				{
+					"line": 249,
+					"column": 46,
 					"label": ""
 				}
 			]
