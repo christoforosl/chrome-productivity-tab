@@ -4,12 +4,17 @@
 			"path": "scripts/backgroundFocusTimer.js",
 			"bookmarks": [
 				{
+					"line": 18,
+					"column": 61,
+					"label": ""
+				},
+				{
 					"line": 394,
 					"column": 33,
 					"label": ""
 				},
 				{
-					"line": 436,
+					"line": 442,
 					"column": 37,
 					"label": ""
 				}
@@ -19,7 +24,7 @@
 			"path": "newProductivityTab.html",
 			"bookmarks": [
 				{
-					"line": 257,
+					"line": 259,
 					"column": 51,
 					"label": ""
 				}

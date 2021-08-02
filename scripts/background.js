@@ -20,6 +20,14 @@ const randomImages = [
   {"title":"Cyprus coast","url":"https://images.pexels.com/photos/6860099/pexels-photo-6860099.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
   {"title":"Morskie Oko, Sea Eye, Tatra National Park, Poland","url":"https://st3.depositphotos.com/14847044/i/600/depositphotos_178404276-stock-photo-view-rocky-shore-stones-water.jpg"},
   {"title":"Serpentine","url":"https://st4.depositphotos.com/18241762/i/600/depositphotos_202584372-stock-photo-serpentine.jpg"},
+  {"title":"Green Fields Near Brown Mountain","url":"https://images.pexels.com/photos/210243/pexels-photo-210243.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  {"photographer":"Brett Sayles","title":"White Mountains Under White and Gray Sky","url":"https://images.pexels.com/photos/1701188/pexels-photo-1701188.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+  { "photographer":"Olga Lioncat",
+    "title":"Cathedral and Ferris wheel in London",
+    "url":"https://images.pexels.com/photos/7245352/pexels-photo-7245352.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
+    { "photographer":"Rachel Claire",
+    "title":"Rome",
+    "url":"https://images.pexels.com/photos/4819654/pexels-photo-4819654.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"},
 ];
 
 const CALL_QUOTE_HEADERS = new Headers({
@@ -188,6 +196,7 @@ function fetchImageFromApiService() {
       var currentBackroundImage = {};
       currentBackroundImage.photographer = "Unknown";
       currentBackroundImage.src = randomImages[currentImageIndex].url;
+      currentBackroundImage.photographer = randomImages[currentImageIndex].photographer;
       currentBackroundImage.setDate = new Date().toDateString();
       currentBackroundImage.location =  `${randomImages[currentImageIndex].title}, Image index: ${currentImageIndex}`;
       currentBackroundImage.description = '';
