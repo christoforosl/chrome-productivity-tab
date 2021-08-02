@@ -440,6 +440,8 @@ window.operateEvents = {
 $('#workItemModal').on('show.bs.modal', function (event) {
   let etd = convertUTCDateToLocalDate(new Date()).toJSON().slice(0, 16);
   $('#taskStartDateTime').val(etd);
+  $('#taskName').val("");
+  
 });
 
 
