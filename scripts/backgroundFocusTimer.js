@@ -272,9 +272,7 @@ function withFocusTimerUI() {
   if (window.jQuery) {
     showItem('divFocus');
     showItem('divEndTimer');
-    //hideItem('btnSetWorkItem');
     hideItem('divAskAndSetGreeting');
-
 
   }
 }
@@ -323,10 +321,9 @@ if ($e("btnShowSettings")) {
   });
 }
 if ($e("btnSaveSettings")) {
-  $e("btnSaveSettings").addEventListener("click", function () {
+    $e("btnSaveSettings").addEventListener("click", function () {
 
     if (!$('#greetingName').val()) {
-
       return;
     }
 
@@ -334,6 +331,7 @@ if ($e("btnSaveSettings")) {
     if (!tmp) {
       tmp = "nature,forest,mountain,water";
     }
+
     if (settings.imageKeywords !== tmp) {
       settings.imageKeywords = tmp;
       fetchImageFromApiService();
@@ -429,7 +427,7 @@ window.operateEvents = {
     // leave here. if removed, javascript error appears in cosole
   },
   'click .timer-remove': function (e, value, row, index) {
-    ;
+    
 
   }
 }
