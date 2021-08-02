@@ -16,7 +16,7 @@ window.SetCurrentFocusAndStartTimer = function () {
 
   var record = {
     "user": localStorage.getItem("userInfo"),
-    "startTime":  $('#startDateTime').val() ?  new Date($('#startDateTime').val()).getTime() : dnow,
+    "startTime":  $('#taskStartDateTime').val() ?  new Date($('#taskStartDateTime').val()).getTime() : dnow,
     "focusTaskName": $('#taskName').val()
   };
 
@@ -436,7 +436,7 @@ window.operateEvents = {
 
 $('#workItemModal').on('show.bs.modal', function (event) {
   let etd = convertUTCDateToLocalDate(new Date()).toJSON().slice(0, 19);
-  $('#startDateTime').val(etd);
+  $('#taskStartDateTime').val(etd);
 });
 
 
