@@ -1,0 +1,44 @@
+{
+	"files": [
+		{
+			"path": "scripts/backgroundFocusTimer.js",
+			"bookmarks": [
+				{
+					"line": 24,
+					"column": 61,
+					"label": ""
+				},
+				{
+					"line": 398,
+					"column": 33,
+					"label": ""
+				},
+				{
+					"line": 448,
+					"column": 37,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "newProductivityTab.html",
+			"bookmarks": [
+				{
+					"line": 249,
+					"column": 51,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "scripts/background.js",
+			"bookmarks": [
+				{
+					"line": 249,
+					"column": 46,
+					"label": ""
+				}
+			]
+		}
+	]
+}
