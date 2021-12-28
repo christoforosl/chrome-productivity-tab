@@ -107,7 +107,7 @@ function setQuoteFromService() {
 
 function setCurrentDateTime() {
   var d = new Date();
-  var t = d.toDateString() + ', ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  var centeredText = d.toDateString() + ', ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   var greeting;
 
   if (d.getHours() > 0 && d.getHours() <= 12) {
@@ -119,7 +119,7 @@ function setCurrentDateTime() {
   }
   greeting = greeting + (settings.greetingName || "[Specify Name In Settings]");
   $html('btnSetWorkItem', options.whatShallWeWorkOnQuestionText);
-  $html("currentTime", t);
+  $html("currentTime", centeredText + "<br>" + "Solid Focus, version " + options.version );
   $html("greeting", greeting);
 
 }
