@@ -263,8 +263,6 @@ if ($e("btnSetCurrentFocusAndStartTimer")) {
 if ($e("btnShowSettings")) {
   $('#backroundImageSearchTerms').val(settings.imageKeywords);
   $('#greetingName').val(settings.greetingName);
-
-
 }
 
 if ($e("btnChangeWallpaper")) {
