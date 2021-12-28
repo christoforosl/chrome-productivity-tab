@@ -14,14 +14,14 @@ window.SetCurrentFocusAndStartTimer = function () {
   if ($e("frmEnterTaskName").checkValidity() === false) {
     return;
   }
-    
+
   var dnowWithSecs = new Date();
   dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
   var dnow = dnowWithSecs.getTime();
 
   var record = {
     "user": localStorage.getItem("userInfo"),
-    "startTime":  $('#taskStartDateTime').val() ?  new Date($('#taskStartDateTime').val()).getTime() : dnow,
+    "startTime": $('#taskStartDateTime').val() ? new Date($('#taskStartDateTime').val()).getTime() : dnow,
     "focusTaskName": $('#taskName').val()
   };
 
@@ -326,7 +326,7 @@ if ($e("btnShowSettings")) {
   });
 }
 if ($e("btnSaveSettings")) {
-    $e("btnSaveSettings").addEventListener("click", function () {
+  $e("btnSaveSettings").addEventListener("click", function () {
 
     if (!$('#greetingName').val()) {
       return;
@@ -432,16 +432,44 @@ window.operateEvents = {
     // leave here. if removed, javascript error appears in cosole
   },
   'click .timer-remove': function (e, value, row, index) {
-    
+
 
   }
 }
 
 $('#workItemModal').on('show.bs.modal', function (event) {
-  let etd = convertUTCDateToLocalDate(new Date()).toJSON().slice(0, 16);
-  $('#taskStartDateTime').val(etd);
-  $('#taskName').val("");
+
+  const fillFields = function () {
+    let etd = convertUTCDateToLocalDate(new Date()).toJSON().slice(0, 16);
+    $('#taskStartDateTime').val(etd);
+    $('#taskName').val("");
+  }
   
+  const lastretreived = $("#taskNamesList").attr('data-lastretreived') || 0;
+  if (lastretreived < new Date().getTime()-1000*60*60 ) {
+    var user = localStorage.getItem("userInfo");
+    var query = "max=50&h={\"$orderby\":{\"startTime\":-1}}&q={\"$distinct\":\"focusTaskName\",\"user\":\"" + user + "\"}&d=" + new Date().getTime();
+    const getTaskNamesListRequest = new Request(options.APIDBHostTasks+ "?" + query, {
+      "method": "GET",
+      "headers": DB_API_HEADERS
+    });
+  
+    fetch(getTaskNamesListRequest)
+      .then(response => response.json())
+      .then(contents => {
+  
+        for (var i = 0; i < contents.length; ++i) {
+          $("#taskNamesList").append($("<option>").text(contents[i]));
+          if(i > 30)break;
+        }
+        $("#taskNamesList").attr('data-lastretreived', new Date().getTime());
+        fillFields();
+      });
+  } else {
+    fillFields();
+  }
+  
+
 });
 
 
