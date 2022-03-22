@@ -67,15 +67,33 @@ window.checkForActiveFocusTimer = function () {
 
   var timerRecord = getTimerRecordFromStorage();
 
-  if (!timerRecord) {
+  if (timerRecord) {
+    // is timer record active ? 
+    var myRequest = new Request(options.APIDBHostTasks + "/" + timerRecord.timerId, {
+      "method": "GET",
+      "headers": DB_API_HEADERS
+    });
+
+    fetch(myRequest)
+      .then(response => response.json())
+      .then(contents => {
+        
+        if (contents.endTime) {
+          localStorage.removeItem("focusTimer");
+          noFocusTimerUI();
+        } else {
+          $html('currentFocus', "[" + timerRecord.focusTaskName + "]");
+          focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
+          withFocusTimerUI();
+        }
+
+      });
+  } else {
     noFocusTimerUI();
-    return;
+
   }
 
-  $html('currentFocus', "[" + timerRecord.focusTaskName + "]");
 
-  focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
-  withFocusTimerUI();
 };
 
 window.togglePauseStatus = function () {
@@ -444,23 +462,23 @@ $('#workItemModal').on('show.bs.modal', function (event) {
     $('#taskStartDateTime').val(etd);
     $('#taskName').val("");
   }
-  
+
   const lastretreived = $("#taskNamesList").attr('data-lastretreived') || 0;
-  if (lastretreived < new Date().getTime()-1000*60*60 ) {
+  if (lastretreived < new Date().getTime() - 1000 * 60 * 60) {
     var user = localStorage.getItem("userInfo");
     var query = "max=50&h={\"$orderby\":{\"startTime\":-1}}&q={\"$distinct\":\"focusTaskName\",\"user\":\"" + user + "\"}&d=" + new Date().getTime();
-    const getTaskNamesListRequest = new Request(options.APIDBHostTasks+ "?" + query, {
+    const getTaskNamesListRequest = new Request(options.APIDBHostTasks + "?" + query, {
       "method": "GET",
       "headers": DB_API_HEADERS
     });
-  
+
     fetch(getTaskNamesListRequest)
       .then(response => response.json())
       .then(contents => {
-  
+
         for (var i = 0; i < contents.length; ++i) {
           $("#taskNamesList").append($("<option>").text(contents[i]));
-          if(i > 30)break;
+          if (i > 30) break;
         }
         $("#taskNamesList").attr('data-lastretreived', new Date().getTime());
         fillFields();
@@ -468,7 +486,7 @@ $('#workItemModal').on('show.bs.modal', function (event) {
   } else {
     fillFields();
   }
-  
+
 
 });
 

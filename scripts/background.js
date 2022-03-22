@@ -124,11 +124,11 @@ function setCurrentDateTime() {
 
 }
 
-function initBackground() {
-
-
+function pageLoadActions() {
+  console.log("----------------- pageLoadActions")
+  
   if (!settings) {
-    console.log("loading settings");
+    
     settings = JSON.parse(window.localStorage.getItem("settings")) || { "imageKeywords": "nature" };
     if (!settings) {
       settings = {};
@@ -243,10 +243,10 @@ function setBackroundImageFromStorage(currentBackroundImage) {
 }
 
 chrome.runtime.onInstalled.addListener(function () {
-  initBackground();
+  pageLoadActions();
 });
 
-initBackground();
+pageLoadActions();
 
 if ($e("btnSetCurrentFocusAndStartTimer")) {
   $e("btnSetCurrentFocusAndStartTimer").addEventListener("click", SetCurrentFocusAndStartTimer);
