@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 // note: JQuery is not available to this backround js script
-var curentDateTimeTimer = null;
-var settings;
+let curentDateTimeTimer = null;
+let settings;
 const randomImages = [
   { title: "Three Men Standing Near Waterfalls", url: "https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&dpr=3" },
   { title: "Body of Water Near Brown Sand", url: "https://images.pexels.com/photos/7999461/pexels-photo-7999461.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
@@ -57,7 +57,7 @@ function setCurrentDateTimeTimer() {
  */
 function getQuoteIsOld(quoteDate) {
   if (!quoteDate) return true;
-  var dt = new Date().toDateString();
+  const dt = new Date().toDateString();
   return dt !== quoteDate;
 
 }
@@ -66,7 +66,7 @@ function setQuote() {
 
   chrome.storage.local.get(["quote", "quoteDate", "quoteBy"], function (value) {
 
-    var oldq = getQuoteIsOld(value ? value.quoteDate : null);
+    const oldq = getQuoteIsOld(value ? value.quoteDate : null);
 
     if (!value || value.length === 0 || value.quote === '' || oldq) {
       setQuoteFromService();
@@ -82,7 +82,7 @@ function setQuote() {
 
 function setQuoteFromService() {
 
-  var myRequest = new Request(options.APIQuoteOfTheDayApiHost, {
+  const myRequest = new Request(options.APIQuoteOfTheDayApiHost, {
     "method": "GET",
     "headers": CALL_QUOTE_HEADERS,
     "mode": 'cors',
@@ -92,12 +92,12 @@ function setQuoteFromService() {
   fetch(myRequest)
     .then(response => response.json())
     .then(contents => {
-      var quote = contents.contents.quotes[0].quote;
-      var author = contents.contents.quotes[0].author;
+      const quote = contents.contents.quotes[0].quote;
+      const author = contents.contents.quotes[0].author;
       $html("quote", '\"' + quote + '\"');
       $html("quoteBy", author);
-      var dt = new Date().toDateString();
-      var quoteObj = { "quote": quote, "quoteBy": author, "quoteDate": dt };
+      const dt = new Date().toDateString();
+      const quoteObj = { "quote": quote, "quoteBy": author, "quoteDate": dt };
       chrome.storage.local.set(quoteObj, function () {
         console.log('set quote in storage' + JSON.stringify(quoteObj));
       });
@@ -106,9 +106,9 @@ function setQuoteFromService() {
 }
 
 function setCurrentDateTime() {
-  var d = new Date();
-  var centeredText = d.toDateString() + ', ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  var greeting;
+  const d = new Date();
+  const centeredText = d.toDateString() + ', ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  let greeting;
 
   if (d.getHours() > 0 && d.getHours() <= 12) {
     greeting = "Good Morning, ";
@@ -125,7 +125,6 @@ function setCurrentDateTime() {
 }
 
 function pageLoadActions() {
-  console.log("----------------- pageLoadActions")
   
   if (!settings) {
     
@@ -153,8 +152,8 @@ function checkBackroundImageOnLoad() {
 
   if (window.jQuery) {
     $(document).ready(function () {
-      var currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
-      var setImageFromStorage = currentBackroundImage.src && (currentBackroundImage.setDate === new Date().toDateString());
+      const currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
+      const setImageFromStorage = currentBackroundImage.src && (currentBackroundImage.setDate === new Date().toDateString());
       if (setImageFromStorage) {
         setBackroundImageFromStorage(currentBackroundImage);
       } else {
@@ -166,8 +165,8 @@ function checkBackroundImageOnLoad() {
 
 function fetchImageFromApiService() {
 
-  var imageApiUrl = options.imageApiQuery + settings.imageKeywords;
-  var myRequest = new Request(imageApiUrl, {
+  const imageApiUrl = options.imageApiQuery + settings.imageKeywords;
+  const myRequest = new Request(imageApiUrl, {
     "method": "GET",
     "headers": CALL_IMAGE_API_HEADERS,
     "mode": 'cors'
@@ -177,8 +176,8 @@ function fetchImageFromApiService() {
     .then(response => response.json())
     .then(contents => {
 
-      var photo = contents;
-      var currentBackroundImage = {};
+      const photo = contents;
+      const currentBackroundImage = {};
       currentBackroundImage.photographer = photo.user.name;
       currentBackroundImage.photographerUrl = photo.user.portfolio_url;
       currentBackroundImage.src = photo.urls.full;
@@ -197,7 +196,7 @@ function fetchImageFromApiService() {
 
       const currentImageIndex = currentImageIndexParsed > randomImages.length - 1 ? 0 : currentImageIndexParsed;
 
-      var currentBackroundImage = {};
+      const currentBackroundImage = {};
       currentBackroundImage.photographer = "Unknown";
       currentBackroundImage.src = randomImages[currentImageIndex].url;
       currentBackroundImage.photographer = randomImages[currentImageIndex].photographer;
@@ -219,9 +218,9 @@ function isPositiveInteger(n) {
 
 function arrayOfItems() {
 
-  var finalArr = [];
+  const finalArr = [];
 
-  for (var i = 0; i < arguments.length; i++) {
+  for (let i = 0; i < arguments.length; i++) {
     if (arguments[i]) {
       finalArr.push(arguments[i]);
     }
@@ -231,7 +230,7 @@ function arrayOfItems() {
 
 function setBackroundImageFromStorage(currentBackroundImage) {
   $("html").css("background-image", "url('" + currentBackroundImage.src + "')");
-  var photoInfo = 'Photo By ';
+  let photoInfo = 'Photo By ';
   if (currentBackroundImage.photographerUrl) {
     photoInfo += '<a style="color:white" target="_new" href="' + currentBackroundImage.photographerUrl + '">' + currentBackroundImage.photographer + '</a>';
   } else {

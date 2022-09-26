@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-var focusTimerVars = {};
+const focusTimerVars = {};
 
 const DB_API_HEADERS = new Headers({
   "Accept": "application/json",
@@ -15,17 +15,17 @@ window.SetCurrentFocusAndStartTimer = function () {
     return;
   }
 
-  var dnowWithSecs = new Date();
+  let dnowWithSecs = new Date();
   dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
-  var dnow = dnowWithSecs.getTime();
+  const dnow = dnowWithSecs.getTime();
 
-  var record = {
+  const record = {
     "user": localStorage.getItem("userInfo"),
     "startTime": $('#taskStartDateTime').val() ? new Date($('#taskStartDateTime').val()).getTime() : dnow,
     "focusTaskName": $('#taskName').val()
   };
 
-  var myRequest = new Request(options.APIDBHostTasks, {
+  const myRequest = new Request(options.APIDBHostTasks, {
     "method": "POST",
     "headers": DB_API_HEADERS,
     "mode": 'cors',
@@ -65,11 +65,11 @@ window.startFocusTimer = function (record) {
  */
 window.checkForActiveFocusTimer = function () {
 
-  var timerRecord = getTimerRecordFromStorage();
+  const timerRecord = getTimerRecordFromStorage();
 
   if (timerRecord) {
     // is timer record active ? 
-    var myRequest = new Request(options.APIDBHostTasks + "/" + timerRecord.timerId, {
+    const myRequest = new Request(options.APIDBHostTasks + "/" + timerRecord.timerId, {
       "method": "GET",
       "headers": DB_API_HEADERS
     });
@@ -98,19 +98,19 @@ window.checkForActiveFocusTimer = function () {
 
 window.togglePauseStatus = function () {
 
-  var timerRecord = getTimerRecordFromStorage();
+  const timerRecord = getTimerRecordFromStorage();
   if (!timerRecord) {
     return;
   }
-  var dnowWithSecs = new Date();
+  let dnowWithSecs = new Date();
   dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
-  var dnow = dnowWithSecs.getTime();
+  const dnow = dnowWithSecs.getTime();
 
   if (timerRecord.status === 'PAUSED') {
 
-    var pauseRecord = getRecordFromStorage("pause");
+    const pauseRecord = getRecordFromStorage("pause");
     pauseRecord.pauseEnd = dnow;
-    var myRequest = new Request(options.APIDBHostPauses + "/" + pauseRecord._id, {
+    const myRequest = new Request(options.APIDBHostPauses + "/" + pauseRecord._id, {
       "method": "PATCH",
       "headers": DB_API_HEADERS,
       body: JSON.stringify(pauseRecord)
@@ -128,13 +128,13 @@ window.togglePauseStatus = function () {
 
   } else {
 
-    var newPauseRecord = {
+    const newPauseRecord = {
       "timerId": timerRecord.timerId,
       "pauseStart": dnow,
 
     };
 
-    var newPauseRequest = new Request(options.APIDBHostPauses, {
+    const newPauseRequest = new Request(options.APIDBHostPauses, {
       "method": "POST",
       "headers": DB_API_HEADERS,
       "mode": 'cors',
@@ -164,7 +164,7 @@ window.updateTimerService = function (timerRow) {
     throw new Error('Error: no timer id');
   }
 
-  var myRequest = new Request(options.APIDBHostTasks + "/" + timerRow.timerId, {
+  const myRequest = new Request(options.APIDBHostTasks + "/" + timerRow.timerId, {
     "method": "PATCH",
     "headers": DB_API_HEADERS,
     body: JSON.stringify(timerRow)
@@ -183,11 +183,11 @@ window.setTaskEndTime = function (timerId) {
     throw new Error('Error: no timer id');
   }
 
-  var dnowWithSecs = new Date();
+  let dnowWithSecs = new Date();
   dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
-  var dnow = dnowWithSecs.getTime();
+  const dnow = dnowWithSecs.getTime();
 
-  var myRequest = new Request(options.APIDBHostTasks + "/" + timerId, {
+  const myRequest = new Request(options.APIDBHostTasks + "/" + timerId, {
     "method": "PATCH",
     "headers": DB_API_HEADERS,
 
@@ -208,7 +208,7 @@ window.setTaskEndTime = function (timerId) {
 
 window.updateFocusTimer = function () {
 
-  var timerRecord = getTimerRecordFromStorage();
+  const timerRecord = getTimerRecordFromStorage();
   if (!timerRecord) {
     console.warn("I am in updateFocusTimer but there is no timerRecord. I am resetting the timer!");
     clearFocusTimerInterval();
@@ -216,13 +216,13 @@ window.updateFocusTimer = function () {
     return;
   }
 
-  var startTime = timerRecord.startTime;
+  const startTime = timerRecord.startTime;
 
   if (!startTime) {
     throw new Error('updateFocusTimer Error: no startTime');
   }
 
-  var timeStr = getElapsedTime(startTime, new Date().getTime());
+  const timeStr = getElapsedTime(startTime, new Date().getTime());
   $html('currentTimerTime', timeStr);
   document.title = "Solid Focus [" + timeStr + "]";
   withFocusTimerUI();
@@ -232,10 +232,10 @@ window.updateFocusTimer = function () {
 function getElapsedTime(startTime, endTime) {
   if (!startTime) return '';
   if (!endTime) return '';
-  var elapsedSecs = (endTime - startTime) / 1000;
-  var hours = Math.floor(elapsedSecs / 3600);
-  var minutes = Math.floor((elapsedSecs - (hours * 3600)) / 60);
-  var seconds = Math.round(elapsedSecs - (hours * 3600) - (minutes * 60), 0);
+  const elapsedSecs = (endTime - startTime) / 1000;
+  let hours = Math.floor(elapsedSecs / 3600);
+  let minutes = Math.floor((elapsedSecs - (hours * 3600)) / 60);
+  let seconds = Math.round(elapsedSecs - (hours * 3600) - (minutes * 60), 0);
 
   if (hours < 10) {
     hours = "0" + hours;
@@ -307,10 +307,10 @@ function withFocusTimerUI() {
  */
 function getRecordFromStorage(key) {
 
-  var recordStr = localStorage.getItem(key);
+  const recordStr = localStorage.getItem(key);
   if (!recordStr) return null;
 
-  var record = JSON.parse(recordStr);
+  const record = JSON.parse(recordStr);
   if (!record) return null;
   return record;
 
@@ -321,9 +321,9 @@ function getTimerRecordFromStorage() {
 }
 
 function getFocusHistoryData(callback) {
-  var user = localStorage.getItem("userInfo");
-  var query = "max=200&h={\"$orderby\":{\"startTime\":-1}}&q={\"user\":\"" + user + "\"}&d=" + new Date().getTime();
-  var myRequest = new Request(options.APIDBHostTasks + "?" + query, {
+  const user = localStorage.getItem("userInfo");
+  const query = "max=200&h={\"$orderby\":{\"startTime\":-1}}&q={\"user\":\"" + user + "\"}&d=" + new Date().getTime();
+  const myRequest = new Request(options.APIDBHostTasks + "?" + query, {
     "method": "GET",
     "headers": DB_API_HEADERS,
     "cache": "no-cache"
@@ -350,7 +350,7 @@ if ($e("btnSaveSettings")) {
       return;
     }
 
-    var tmp = $('#backroundImageSearchTerms').val();
+    const tmp = $('#backroundImageSearchTerms').val();
     if (!tmp) {
       tmp = "nature,forest,mountain,water";
     }
@@ -368,10 +368,10 @@ if ($e("btnSaveSettings")) {
 }
 
 function convertUTCDateToLocalDate(date) {
-  var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+  const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
 
-  var offset = date.getTimezoneOffset() / 60;
-  var hours = date.getHours();
+  const offset = date.getTimezoneOffset() / 60;
+  const hours = date.getHours();
 
   newDate.setHours(hours - offset);
 
@@ -382,7 +382,7 @@ if ($e("btnShowHistory")) {
   $e("btnShowHistory").addEventListener("click", function () {
 
     getFocusHistoryData(function (data) {
-      var $table = $('#tblFocusTimerHistory');
+      const $table = $('#tblFocusTimerHistory');
       data.forEach(function (obj) {
         obj.endDateTime = obj.endTime ? new Date(obj.endTime).toLocaleString(options.language) : '';
         obj.startDateTime = obj.startTime ? new Date(obj.startTime).toLocaleString(options.language) : '';
@@ -401,7 +401,7 @@ if ($e("btnShowHistory")) {
 if ($e("btnSaveFocusData")) {
   $e("btnSaveFocusData").addEventListener("click", function () {
 
-    var timerRecord = {};
+    const timerRecord = {};
 
     timerRecord.timerId = $('#timerId').val();
     timerRecord._id = $('#timerId').val();
@@ -415,7 +415,7 @@ if ($e("btnSaveFocusData")) {
 
     const mode = $('#modal-mode').val();
     if (mode === "table-edit") {
-      var $table = $('#tblFocusTimerHistory');
+      const $table = $('#tblFocusTimerHistory');
       $table.bootstrapTable('updateByUniqueId', {
         id: timerRecord.timerId,
         row: {
@@ -465,24 +465,31 @@ $('#workItemModal').on('show.bs.modal', function (event) {
 
   const lastretreived = $("#taskNamesList").attr('data-lastretreived') || 0;
   if (lastretreived < new Date().getTime() - 1000 * 60 * 60) {
-    var user = localStorage.getItem("userInfo");
-    var query = "max=50&h={\"$orderby\":{\"startTime\":-1}}&q={\"$distinct\":\"focusTaskName\",\"user\":\"" + user + "\"}&d=" + new Date().getTime();
+    const user = localStorage.getItem("userInfo");
+    const query = "max=50&h={\"$orderby\":{\"startTime\":-1}}&q={\"$distinct\":\"focusTaskName\",\"user\":\"" + user + "\"}&d=" + new Date().getTime();
     const getTaskNamesListRequest = new Request(options.APIDBHostTasks + "?" + query, {
       "method": "GET",
       "headers": DB_API_HEADERS
     });
 
     fetch(getTaskNamesListRequest)
-      .then(response => response.json())
+      .then(response =>  {
+        return response.json();
+      })
       .then(contents => {
 
-        for (var i = 0; i < contents.length; ++i) {
-          $("#taskNamesList").append($("<option>").text(contents[i]));
+        for (let i = 0; i < contents.length; ++i) {
+          
+          $('#taskNamesList').prepend($('<option>', {text: contents[i]}));
           if (i > 30) break;
         }
         $("#taskNamesList").attr('data-lastretreived', new Date().getTime());
-        fillFields();
+        
+      }).catch((error) => {
+        alert('Error in getTaskNamesListRequest:', error);
       });
+      fillFields();
+
   } else {
     fillFields();
   }
@@ -493,8 +500,8 @@ $('#workItemModal').on('show.bs.modal', function (event) {
 
 $('#deleteEntryModal').on('show.bs.modal', function (event) {
 
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
+  const button = $(event.relatedTarget) // Button that triggered the modal
+  const row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
   $('#DelfocusTaskName').html(row.focusTaskName);
   $('#DelEndDateTime').html(new Date(row.endTime).toLocaleString(options.language));
   $('#DelStartDateTime').html(new Date(row.startTime).toLocaleString(options.language));
@@ -506,7 +513,7 @@ if ($e("btnDeleteFocusData")) {
   $e("btnDeleteFocusData").addEventListener("click", function () {
 
     const delTimerId = $('#DelTimerId').val();
-    var deleteRequest = new Request(options.APIDBHostTasks + "/" + delTimerId, {
+    const deleteRequest = new Request(options.APIDBHostTasks + "/" + delTimerId, {
       "method": "DELETE",
       "headers": DB_API_HEADERS
     });
@@ -529,23 +536,23 @@ if ($e("btnDeleteFocusData")) {
  */
 $('#dateModal').on('show.bs.modal', function (event) {
 
-  var button = $(event.relatedTarget) // Button that triggered the modal
+  const button = $(event.relatedTarget) // Button that triggered the modal
   $('#modal-mode').val(button.data("modal-mode"));
   if (button.data("modal-mode") === "table-edit") {
-    var row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
+    const row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
     showTimerData(row);
 
   } else if (button.data("modal-mode") === "stop-timer-edit") {
     // means we came from the stop timer button
     // var row = $('#tblFocusTimerHistory').bootstrapTable('getRowByUniqueId', button.data('rowid')); // Extract info from data-* attributes
     console.log("caling endFocusTimer from dateModal");
-    var timerRecord = getTimerRecordFromStorage();
+    const timerRecord = getTimerRecordFromStorage();
     if (!timerRecord) {
       throw new Error('Error: no timer id');
     }
-    var dnowWithSecs = new Date();
+    let dnowWithSecs = new Date();
     dnowWithSecs = new Date(dnowWithSecs.setSeconds(0, 0));
-    var dnow = dnowWithSecs.getTime();
+    const dnow = dnowWithSecs.getTime();
     timerRecord.endTime = dnow;
     showTimerData(timerRecord)
 
