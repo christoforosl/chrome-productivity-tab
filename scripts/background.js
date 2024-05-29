@@ -90,8 +90,17 @@ function setQuoteFromService() {
   });
 
   fetch(myRequest)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        console.log('QuoteFromService:Network response was not ok ' + response?.statusText);
+        $html("quote", `Failed to fetch quote: status:  ${response?.status} ${response?.statusText}`);
+        $html("quoteBy", '');
+        return {};
+      }
+      return response.json();
+    })
     .then(contents => {
+      if(contents?.contents?.quotes) {
       const quote = contents.contents.quotes[0].quote;
       const author = contents.contents.quotes[0].author;
       $html("quote", '\"' + quote + '\"');
@@ -101,8 +110,14 @@ function setQuoteFromService() {
       chrome.storage.local.set(quoteObj, function () {
         console.log('set quote in storage' + JSON.stringify(quoteObj));
       });
+      }
 
+    }).catch(error => {
+      console.warn('Fetch error:', error);
+      $html("quote", 'Failed to fetch quote.');
+      $html("quoteBy", '');
     });
+
 }
 
 function setCurrentDateTime() {
@@ -119,15 +134,15 @@ function setCurrentDateTime() {
   }
   greeting = greeting + (settings.greetingName || "[Specify Name In Settings]");
   $html('btnSetWorkItem', options.whatShallWeWorkOnQuestionText);
-  $html("currentTime", centeredText + "<br>" + "Solid Focus, version " + options.version );
+  $html("currentTime", centeredText + "<br>" + "Solid Focus, version " + options.version);
   $html("greeting", greeting);
 
 }
 
 function pageLoadActions() {
-  
+
   if (!settings) {
-    
+
     settings = JSON.parse(window.localStorage.getItem("settings")) || { "imageKeywords": "nature" };
     if (!settings) {
       settings = {};
@@ -295,7 +310,7 @@ const inactivityTime = function () {
 
     if (lastActiveTime - previousActiveTime > 30 * 60 * 1000) {
       potentialEndTimeDueToInactivity = previousActiveTime;
-      $('#potentialEndTimeDueToInactivity').html( new Date(potentialEndTimeDueToInactivity).toDateString() );
+      $('#potentialEndTimeDueToInactivity').html(new Date(potentialEndTimeDueToInactivity).toDateString());
     } else {
       potentialEndTimeDueToInactivity = 0;
     }
