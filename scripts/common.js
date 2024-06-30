@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
 //"APITaskDescriptionList":"https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks?q=%7B%22%24distinct%22%3A%20%22focusTaskName%22%7D&h=%7B%22%24max%22%3A10%2C%22%24orderby%22%3A%7B%22startTime%22%3A-1%7D%7D",
-var options = {
+const options = {
   "version":"1.10",
   "APIDBHostTasks": "https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks",
   "APIDBHostPauses": "https://chrometimertasks-879e.restdb.io/rest/task-pause",

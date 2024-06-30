@@ -292,6 +292,7 @@ function getTimerRecordFromStorage() {
 
 function getFocusHistoryData(callback) {
     const user = localStorage.getItem("userInfo");
+    // see https://restdb.io/docs/querying-with-the-api#restdb
     const query = 'max=200&h={"$orderby":{"startTime":-1}}&q={"user":"' + user + '"}&d=' + new Date().getTime();
     const myRequest = new Request(options.APIDBHostTasks + "?" + query, {
         method: "GET",
@@ -404,17 +405,17 @@ if ($e("btnSaveFocusData")) {
 function operateFormatter(value, row, index) {
     return [
         '<a class="timer-edit" href="#" title="Edit" id="edit' +
-            row._id +
-            '" data-toggle="modal" data-target="#dateModal" data-modal-mode="table-edit" data-rowid="' +
-            row._id +
-            '">',
+        row._id +
+        '" data-toggle="modal" data-target="#dateModal" data-modal-mode="table-edit" data-rowid="' +
+        row._id +
+        '">',
         '<i class="far fa-edit"></i>',
         "</a>&nbsp;",
         '<a class="timer-edit" href="#" title="Delete" id="edit' +
-            row._id +
-            '" data-toggle="modal" data-target="#deleteEntryModal" data-rowid="' +
-            row._id +
-            '">',
+        row._id +
+        '" data-toggle="modal" data-target="#deleteEntryModal" data-rowid="' +
+        row._id +
+        '">',
         '<i class="far fa-trash-alt"></i>',
         "</a>"
     ].join("");
@@ -424,7 +425,7 @@ window.operateEvents = {
     "click .timer-edit": function (e, value, row, index) {
         // leave here. if removed, javascript error appears in cosole
     },
-    "click .timer-remove": function (e, value, row, index) {}
+    "click .timer-remove": function (e, value, row, index) { }
 };
 
 $("#workItemModal").on("show.bs.modal", function (event) {
@@ -437,15 +438,16 @@ $("#workItemModal").on("show.bs.modal", function (event) {
     const lastretreived = $("#taskNamesList").attr("data-lastretreived") || 0;
     if (lastretreived < new Date().getTime() - 1000 * 60 * 60) {
         const user = localStorage.getItem("userInfo");
-        const query =`q={"user": "${user}"}&max=30&h={"$orderby": {"endTime": -1}}&d=${new Date().getTime()}`;
+        // see https://restdb.io/docs/querying-with-the-api#restdb
+        const query = `q={"user": "${user}"}&max=30&h={"$orderby": {"endTime": -1}}&d=${new Date().getTime()}`;
 
         const dbQueryUrl = options.APIDBHostTasks + "?" + query;
-        console.log(dbQueryUrl);
+        //console.log(dbQueryUrl);
         const getTaskNamesListRequest = new Request(dbQueryUrl, {
             method: "GET",
             headers: DB_API_HEADERS
         });
-       
+
         fetch(getTaskNamesListRequest)
             .then((response) => response.text())
             .then((responseText) => {
@@ -453,9 +455,13 @@ $("#workItemModal").on("show.bs.modal", function (event) {
             })
             .then((contents) => {
 
-                const taskList = contents.sort((a, b) => {return a.focusTaskName.localeCompare(b.focusTaskName); });
 
-                for (let i = 0; i < taskList.length; ++i) {
+                const uniqueByFocusTaskName = (array) => {
+                    const uniqueNames = getUniqueFocusTaskNames(array);
+                    return uniqueNames.map(name => findItemByFocusTaskName(array, name));
+                };
+
+                for (let i = 0; i < uniqueByFocusTaskName.length; ++i) {
                     $("#taskNamesList").prepend($("<option>", { text: contents[i].focusTaskName }));
                     if (i > 30) break;
                 }
@@ -469,6 +475,16 @@ $("#workItemModal").on("show.bs.modal", function (event) {
         fillFields();
     }
 });
+
+const getUniqueFocusTaskNames = (array) => {
+    return Array.from(new Set(array.map(item => item.focusTaskName)));
+};
+
+const findItemByFocusTaskName = (array, focusTaskName) => {
+    return array.find(item => item.focusTaskName === focusTaskName);
+};
+
+
 
 $("#deleteEntryModal").on("show.bs.modal", function (event) {
     const button = $(event.relatedTarget); // Button that triggered the modal
