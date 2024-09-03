@@ -101,16 +101,16 @@ function setQuoteFromService() {
     })
     .then(contents => {
 
-      if(contents?.contents?.quotes) {
-      const quote = contents[0].content;
-      const author =contents[0].author;
-      $html("quote", '\"' + quote + '\"');
-      $html("quoteBy", author);
-      const dt = new Date().toDateString();
-      const quoteObj = { "quote": quote, "quoteBy": author, "quoteDate": dt };
-      chrome.storage.local.set(quoteObj, function () {
-        console.log('set quote in storage' + JSON.stringify(quoteObj));
-      });
+      if(contents[0]) {
+        const quote = contents[0].content;
+        const author =contents[0].author;
+        $html("quote", '\"' + quote + '\"');
+        $html("quoteBy", author);
+        const dt = new Date().toDateString();
+        const quoteObj = { "quote": quote, "quoteBy": author, "quoteDate": dt };
+        chrome.storage.local.set(quoteObj, function () {
+          console.log('set quote in storage' + JSON.stringify(quoteObj));
+        });
       }
 
     }).catch(error => {
