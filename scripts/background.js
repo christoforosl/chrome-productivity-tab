@@ -104,7 +104,7 @@ function setQuoteFromService() {
       if(contents[0]) {
         const quote = contents[0].content;
         const author =contents[0].author;
-        $html("quote", '\"' + quote + '\"');
+        $html("quote", `"${quote}"`);
         $html("quoteBy", author);
         const dt = new Date().toDateString();
         const quoteObj = { "quote": quote, "quoteBy": author, "quoteDate": dt };
@@ -238,9 +238,9 @@ function arrayOfItems() {
 
   const finalArr = [];
 
-  for (let i = 0; i < arguments.length; i++) {
-    if (arguments[i]) {
-      finalArr.push(arguments[i]);
+  for (const argument of arguments) {
+    if (argument) {
+      finalArr.push(argument);
     }
   }
   return finalArr.join(',');
