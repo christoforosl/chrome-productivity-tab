@@ -329,7 +329,7 @@ if ($e("btnSaveSettings")) {
         }
 
         settings.greetingName = $("#greetingName").val();
-
+        settings.daysToKeepImage = $("#daysToKeepImage").val();
         window.localStorage.setItem("settings", JSON.stringify(settings));
         $("#settingsModal").modal("hide");
     });

@@ -1,5 +1,5 @@
 {
-  
+
   "name": "Solid Focus",
   "description": "Help focus on tasks and measure time for a task",
   "version": "0.1",
@@ -11,9 +11,9 @@
   "manifest_version": 2,
   "permissions":[  "identity",
                   "identity.email",
-                  "tabs","background", 
-                  "tts","alarms", 
-                  "storage", "https://quotes.rest/*", "https://chrometimertasks-879e.restdb.io/*"],
+                  "tabs","background",
+                  "tts","alarms",
+                  "storage", "https://quotes.rest/*", "https://api.quotable.io/quotes/*", "https://chrometimertasks-879e.restdb.io/*"],
   "background": { "scripts": ["scripts/common.js",  "scripts/backgroundFocusTimer.js","scripts/background.js"] },
   "action": {
     "default_popup": "popup.html",

@@ -59,15 +59,15 @@
       <div id="photographer" style="color: white;" class="d-inline small"></div>
       <button type="button" id="btnChangeWallpaper" title="Change Backround" class="d-inline btn btn-sm btn-outline-light"><em
           class="fas fa-sync-alt"></em></button>
-      
+
     </div>
 
   </nav>
-  
+
   <div class="container h-100" id="divContainer">
     <div class="row align-items-center vh-100 text-center" style="color: white" id="divContainerRow">
       <div class="w-100 mx-auto" id="divContainerRow1">
-        
+
         <div id="greeting" class="display-4 mb-5"></div>
         <div id="divAskAndSetGreeting" class="mt-5 mb-5">
           <button id="btnSetWorkItem" type="button" class="btn btn-outline-light w-50" data-toggle="modal"
@@ -78,11 +78,11 @@
           style="border: 2px hidden white; border-radius: 20px">
           <form id="frmFocus">
             <div id="currentFocusContainer" class="mt-5">
-              
+
               <div class="h2">We are now focusing On:</div>
               <div class="btn-group" role="group">
                 <div id="currentFocus" class="h1 mt-3 mb-3"></div>
-                
+
               </div>
             </div>
 
@@ -90,15 +90,15 @@
             <div id="divEndTimer" class="align-items-center text-center mt-5 mb-5" role="group">
               <div class="h1" id="currentTimerTime">00:00:00</div>
 
-                <div> 
-               
-              <button type="button" class="btn btn-danger mb-2 mt-2" id="btnEndTimer" 
-                aria-label="Click to End Timer" 
+                <div>
+
+              <button type="button" class="btn btn-danger mb-2 mt-2" id="btnEndTimer"
+                aria-label="Click to End Timer"
                 data-toggle="modal"
-                data-target="#dateModal" 
+                data-target="#dateModal"
                 data-modal-mode="stop-timer-edit"
                 title="End timer measuring current task"><i class="fas fa-stop-circle"></i> &nbsp;&nbsp; End Current Focus Timer</button>
-                </div>  
+                </div>
 
             </div>
 
@@ -151,7 +151,7 @@
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="workItemModalLabel">Set New Work Item</h5>
+          <h5 class="modal-title" id="workItemModalLabel">Set New Focus</h5>
           <button id="btnCloseWorkItemModal" type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -173,7 +173,7 @@
               <div class="valid-feedback">Looks good!</div>
               <div class="invalid-feedback">This field is required</div>
             </div>
-            
+
           </form>
         </div>
         <div class="modal-footer">
@@ -206,6 +206,12 @@
             <div class="form-group">
               <label for="greetingName">Your Greeting Name</label>
               <input id="greetingName" name="greetingName" placeholder="How shall we greet you?" type="text"
+                required="required" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label for="daysToKeepImage">Days to keep same image</label>
+              <input id="daysToKeepImage" name="daysToKeepImage" placeholder="Days to keep same image" type="number"
                 required="required" class="form-control">
             </div>
 
@@ -267,22 +273,22 @@
         <div class="modal-body">
           <form>
             <div class="form-group align-items-center">
-              <div align-items-center" >Delete Entry with Focus Task Name 
+              <div align-items-center" >Delete Entry with Focus Task Name
                 <h4>[<span id="DelfocusTaskName"></span>] ?</h4>
-                
+
                 [<span id="DelStartDateTime"></span>] - [<span id="DelEndDateTime"></span>]
 
               Click the X button to cancel out
             </div>
             <input id="DelTimerId" name="DelTimerId" type="hidden">
-            
+
 
           </form>
-          
+
         </div>
         <div class="modal-footer align-items-center">
           <button type="button" class="btn btn-danger" id="btnDeleteFocusData">Yes</button>
-          
+
         </div>
       </div>
     </div>

@@ -100,9 +100,10 @@ function setQuoteFromService() {
       return response.json();
     })
     .then(contents => {
+
       if(contents?.contents?.quotes) {
-      const quote = contents.contents.quotes[0].quote;
-      const author = contents.contents.quotes[0].author;
+      const quote = contents[0].content;
+      const author =contents[0].author;
       $html("quote", '\"' + quote + '\"');
       $html("quoteBy", author);
       const dt = new Date().toDateString();
@@ -168,7 +169,8 @@ function checkBackroundImageOnLoad() {
   if (window.jQuery) {
     $(document).ready(function () {
       const currentBackroundImage = JSON.parse(localStorage.getItem('currentBackroundImage')) || {};
-      const setImageFromStorage = currentBackroundImage.src && (currentBackroundImage.setDate === new Date().toDateString());
+
+      const setImageFromStorage = currentBackroundImage.src && !( isOlderThanXDays( new Date(currentBackroundImage.setDate) , ( parseInt(settings.daysToKeepImage)??30)));
       if (setImageFromStorage) {
         setBackroundImageFromStorage(currentBackroundImage);
       } else {
@@ -205,6 +207,7 @@ function fetchImageFromApiService() {
 
     })
     .catch(() => {
+      console.error('Failed to fetch image from API, using random image');
       const currentImageIndexParsed = isPositiveInteger(localStorage.getItem('currentBackroundImageIndex'))
         ? parseInt(localStorage.getItem('currentBackroundImageIndex')) + 1
         : 0;
@@ -323,3 +326,11 @@ const inactivityTime = function () {
   }
 };
 
+
+function isOlderThanXDays(date, days) {
+  const now = new Date();
+  const diffTime = now - date.getTime();
+  const diffDays = Math.floor(diffTime / (24 * 60 * 60 * 1000 ));
+
+  return diffDays > days;
+}
