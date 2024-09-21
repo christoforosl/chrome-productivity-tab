@@ -1,20 +1,22 @@
 {
-
   "name": "Solid Focus",
   "description": "Help focus on tasks and measure time for a task",
   "version": "0.1",
-
-  "chrome_url_overrides": {
-    "newtab": "newProductivityTab.html"
+  "manifest_version": 3,
+  "permissions": [
+    "identity",
+    "tabs",
+    "alarms",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://quotes.rest/*",
+    "https://api.quotable.io/quotes/*",
+    "https://chrometimertasks-879e.restdb.io/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
   },
-
-  "manifest_version": 2,
-  "permissions":[  "identity",
-                  "identity.email",
-                  "tabs","background",
-                  "tts","alarms",
-                  "storage", "https://quotes.rest/*", "https://api.quotable.io/quotes/*", "https://chrometimertasks-879e.restdb.io/*"],
-  "background": { "scripts": ["scripts/common.js",  "scripts/backgroundFocusTimer.js","scripts/background.js"] },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -29,6 +31,11 @@
     "32": "/images/icon32.png",
     "48": "/images/icon48.png",
     "128": "/images/icon128.png"
+  },
+  "chrome_url_overrides": {
+    "newtab": "newProductivityTab.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://images.pexels.com https://*.unsplash.com data:; connect-src 'self' https://quotes.rest https://api.quotable.io https://chrometimertasks-879e.restdb.io https://api.unsplash.com"
   }
-
 }

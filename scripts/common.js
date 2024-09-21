@@ -2,7 +2,7 @@
 
 //"APITaskDescriptionList":"https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks?q=%7B%22%24distinct%22%3A%20%22focusTaskName%22%7D&h=%7B%22%24max%22%3A10%2C%22%24orderby%22%3A%7B%22startTime%22%3A-1%7D%7D",
 const options = {
-  "version":"1.11",
+  "version":"3.11",
   "APIDBHostTasks": "https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks",
   "APIDBHostPauses": "https://chrometimertasks-879e.restdb.io/rest/task-pause",
   "APIQuoteOfTheDayApiHost-old": "https://quotes.rest/qod?language=en",
@@ -58,8 +58,3 @@ if (!window.localStorage.getItem("userInfo")) {
 function randomIntFromInterval(min, max) { // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-
-
-
-
