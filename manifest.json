@@ -1,13 +1,14 @@
 {
   "name": "Solid Focus",
   "description": "Help focus on tasks and measure time for a task",
-  "version": "0.1",
+  "version": "3.1",
   "manifest_version": 3,
   "permissions": [
     "identity",
     "tabs",
     "alarms",
-    "storage"
+    "storage",
+    "notifications"
   ],
   "host_permissions": [
     "https://quotes.rest/*",
@@ -27,6 +28,26 @@
       "128": "/images/icon128.png"
     }
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "scripts/lib/jquery-3.5.1.slim.min.js",
+        "scripts/lib/bootstrap.bundle.min.js",
+        "scripts/lib/bootstrap-table.min.js",
+        "scripts/lib/jquery.popconfirm.js"
+      ],
+      "css": [
+        "scripts/lib/bootstrap-table.min.css"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["images/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "icons": {
     "16": "/images/icon16.png",
     "32": "/images/icon32.png",
@@ -37,6 +58,6 @@
     "newtab": "newProductivityTab.html"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://images.pexels.com https://*.unsplash.com data:; connect-src 'self' https://quotes.rest https://api.quotable.io https://chrometimertasks-879e.restdb.io https://api.unsplash.com"
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://use.fontawesome.com; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com https://fonts.googleapis.com; img-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net https://images.pexels.com https://*.unsplash.com data:; connect-src 'self' https://quotes.rest https://api.quotable.io https://chrometimertasks-879e.restdb.io https://api.unsplash.com"
   }
 }

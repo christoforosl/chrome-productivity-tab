@@ -1,0 +1,12 @@
+{
+  "name": "chrome-productivity-tab",
+  "version": "3.0.1",
+  "description": "A chrome extension to increase your productivity",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Christopher Lambrou",
+  "license": "ISC"
+}
