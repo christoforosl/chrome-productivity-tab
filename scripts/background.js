@@ -1,7 +1,13 @@
+
 /* jshint esversion: 6 */
 // note: JQuery is not available to this backround js script
+
+import { options, $e, $html, randomIntFromInterval } from './common.js';
+import { startFocusTimer, checkForActiveFocusTimer } from './backgroundFocusTimer.js';
+
 let curentDateTimeTimer = null;
 let settings;
+
 const randomImages = [
   { title: "Three Men Standing Near Waterfalls", url: "https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&dpr=3" },
   { title: "Body of Water Near Brown Sand", url: "https://images.pexels.com/photos/7999461/pexels-photo-7999461.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" },
@@ -45,7 +51,7 @@ const CALL_IMAGE_API_HEADERS = new Headers({
 });
 
 
-function setCurrentDateTimeTimer() {
+export function setCurrentDateTimeTimer() {
 
   curentDateTimeTimer = setInterval(setCurrentDateTime, 1000);
 
@@ -164,7 +170,7 @@ function pageLoadActions() {
 
 }
 
-function checkBackroundImageOnLoad() {
+export function checkBackroundImageOnLoad() {
 
   if (window.jQuery) {
     $(document).ready(function () {
@@ -180,7 +186,7 @@ function checkBackroundImageOnLoad() {
   }
 }
 
-function fetchImageFromApiService() {
+export function fetchImageFromApiService() {
 
   const imageApiUrl = options.imageApiQuery + settings.imageKeywords;
   const myRequest = new Request(imageApiUrl, {
