@@ -1,5 +1,5 @@
 import { options, $e, getLanguage } from "./common.js";
-import $ from "./lib/jquery-3.5.1.slim.min";
+import $ from "./lib/jquery-3.5.1.slim.min.js";
 
 import {
   getFocusHistoryData,

@@ -3,15 +3,25 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  mode: 'development', // Change to 'production' for production build
+  mode: 'development',
   entry: {
-    background: './src/background.js',
-    popup: './src/popup.js',
-    // Add other entry points as needed
+    background: './src/scripts/background.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|ts)$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.ts', '.js'],
   },
   plugins: [
     new CleanWebpackPlugin(),
