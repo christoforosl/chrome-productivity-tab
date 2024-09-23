@@ -1,14 +1,11 @@
-import { options, $e, $html } from './common.js';
+import { options, $e } from './common.js';
 import {
-    SetCurrentFocusAndStartTimer,
     getFocusHistoryData,
     updateTimerService,
     getElapsedTime,
     convertUTCDateToLocalDate,
-    operateFormatter,
     showTimerData,
-    getTimerRecordFromStorage,
-    fetchImageFromApiService
+    getTimerRecordFromStorage
 } from './backgroundFocusTimer.js';
 
 export function initializeEventHandlers() {

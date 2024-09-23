@@ -13,6 +13,8 @@ export const options = {
   "language" : window.navigator.userLanguage || window.navigator.language || 'en'
 };
 
+export const settings = {};
+
 export function $e(id) {
   return document.getElementById(id);
 }
@@ -45,4 +47,8 @@ if (!window.localStorage.getItem("userInfo")) {
       window.localStorage.setItem("userInfo", randomIntFromInterval(1000000,9999999));
     }
   });
+}
+
+export function isPositiveInteger(n) {
+  return n >>> 0 === parseFloat(n);
 }
