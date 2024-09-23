@@ -1,12 +1,7 @@
-import { options, $e } from './common.js';
-import {
-    getFocusHistoryData,
-    updateTimerService,
-    getElapsedTime,
-    convertUTCDateToLocalDate,
-    showTimerData,
-    getTimerRecordFromStorage
-} from './backgroundFocusTimer.js';
+
+import { fetchImageFromApiService } from "./backgroundImage.js";
+import { getFocusHistoryData, updateTimerService } from "./backgroundFocusTimer.js";
+import { getElapsedTime, showTimerData, getTimerRecordFromStorage,options, settings } from "./common.js";
 
 export function initializeEventHandlers() {
     if ($e("btnShowSettings")) {
