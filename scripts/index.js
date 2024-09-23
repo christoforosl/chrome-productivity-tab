@@ -4,11 +4,6 @@ import { setQuote } from "./getQuote.js";
 import { checkForActiveFocusTimer, setCurrentFocusAndStartTimer } from "./backgroundFocusTimer.js";
 import { checkBackroundImageOnLoad, fetchImageFromApiService } from "./backgroundImage.js";
 
-let curentDateTimeTimer = null;
-
-function setCurrentDateTimeTimer() {
-    curentDateTimeTimer = setInterval(setCurrentDateTime, 1000);
-}
 
 function loadSettings() {
 
@@ -32,7 +27,7 @@ function setCurrentDateTime() {
     }
     greeting = greeting + (settings.greetingName || "[Specify Name In Settings]");
     $html("btnSetWorkItem", options.whatShallWeWorkOnQuestionText);
-    $html("currentTime", centeredText + "<br>" + "Solid Focus, version " + options.version + "<br>" + "User: " + options.user);
+    $html("currentTime", `${centeredText}<br>Solid Focus, version ${options.version}<br>${options.profileUserEmail} [Id:${options.profileUserId}]`);
     $html("greeting", greeting);
 }
 
@@ -41,7 +36,8 @@ $(document).ready(() => {
     chrome.identity.getProfileUserInfo(function (userInfo) {
       debugger;
         if (userInfo.email) {
-            options.user = userInfo.email;
+            options.profileUserEmail = userInfo.email;
+            options.profileUserId = userInfo.id;
 
             checkBackroundImageOnLoad();
             checkForActiveFocusTimer();
@@ -79,3 +75,5 @@ $(document).ready(() => {
         }
     });
 });
+
+

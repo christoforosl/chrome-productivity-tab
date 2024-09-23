@@ -8,7 +8,8 @@ export const options = {
     imageApiKey: "SidraH8wDMI92Y_bXxn2Tg1PLJWt24RI310YYUHJ1xY",
     imageApiQuery: "https://api.unsplash.com/photos/random?query=",
     language: window.navigator.userLanguage || window.navigator.language || "en",
-    user:null
+    profileUserEmail:null,
+    profileUserId:null
 };
 
 export const settings = {};

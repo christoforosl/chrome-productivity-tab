@@ -33,7 +33,7 @@ export const onShowDSModal = function () {
 
     const lastretreived = $("#taskNamesList").attr("data-lastretreived") || 0;
     if (lastretreived < new Date().getTime() - 1000 * 60 * 60) {
-        const user = options.user;
+        const user = options.profileUserEmail;
         const query = `q={"user": "${user}"}&max=30&h={"$orderby": {"endTime": -1}}&d=${new Date().getTime()}`;
 
         const dbQueryUrl = options.APIDBHostTasks + "?" + query;
@@ -93,7 +93,7 @@ export const setCurrentFocusAndStartTimer = function () {
     const dnow = dnowWithSecs.getTime();
 
     const record = {
-        user: options.user,
+        user: options.profileUserEmail,
         startTime: $("#taskStartDateTime").val() ? new Date($("#taskStartDateTime").val()).getTime() : dnow,
         focusTaskName: $("#taskName").val(),
     };
@@ -297,7 +297,7 @@ export function getTimerRecordFromStorage() {
 }
 
 export function getFocusHistoryData(callback) {
-    const user = options.user;
+    const user = options.profileUserEmail;
     const query = 'max=200&h={"$orderby":{"startTime":-1}}&q={"user":"' + user + '"}&d=' + new Date().getTime();
     const myRequest = new Request(options.APIDBHostTasks + "?" + query, {
         method: "GET",
@@ -321,17 +321,6 @@ export function convertUTCDateToLocalDate(date) {
     newDate.setHours(hours - offset);
 
     return newDate;
-}
-
-export function operateFormatter(value, row, index) {
-    return [
-        '<a class="timer-edit" href="#" title="Edit" id="edit' + row._id + '" data-toggle="modal" data-target="#dateModal" data-modal-mode="table-edit" data-rowid="' + row._id + '">',
-        '<i class="far fa-edit"></i>',
-        "</a>&nbsp;",
-        '<a class="timer-edit" href="#" title="Delete" id="edit' + row._id + '" data-toggle="modal" data-target="#deleteEntryModal" data-rowid="' + row._id + '">',
-        '<i class="far fa-trash-alt"></i>',
-        "</a>",
-    ].join("");
 }
 
 export function showTimerData(row) {
