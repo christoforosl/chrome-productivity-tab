@@ -2,6 +2,7 @@
 
 import { options, $e, $html } from './common.js';
 import { initializeEventHandlers, operateEvents } from './eventHandling.js';
+import {noFocusTimerUI} from './pageUI.js';
 
 const focusTimerVars = {};
 
@@ -11,7 +12,7 @@ const DB_API_HEADERS = new Headers({
     "x-apikey": "602510f75ad3610fb5bb5ec5"
 });
 
-export const SetCurrentFocusAndStartTimer = function () {
+export const setCurrentFocusAndStartTimer = function () {
     $e("frmEnterTaskName").classList.add("was-validated");
     if ($e("frmEnterTaskName").checkValidity() === false) {
         return;
@@ -229,45 +230,6 @@ export function clearFocusTimerInterval() {
         console.log("clearInterval " + focusTimerVars.focusTimerClientId);
         clearInterval(focusTimerVars.focusTimerClientId);
         focusTimerVars.focusTimerClientId = null;
-    }
-}
-
-export function hideItem(id) {
-    $("#" + id).addClass("invisible");
-    $("#" + id).css("display", "none");
-}
-
-export function showItem(id) {
-    $("#" + id).removeClass("invisible");
-    $("#" + id).css("display", "block");
-}
-
-export function noFocusTimerUI() {
-    if (window.jQuery) {
-        hideItem("divFocus");
-        hideItem("divEndTimer");
-        showItem("divAskAndSetGreeting");
-        document.title = "Solid Focus";
-    }
-}
-
-export function setNotPausedTimerUI(timerRecord) {
-    $html("currentFocus", "[" + timerRecord.focusTaskName + "]");
-    $("#btnPauseFocusTimer").value = "Pause";
-    $("#btnPauseFocusTimer").title = "Pause Current Focus Timer";
-}
-
-export function setPausedTimerUI(timerRecord) {
-    $html("currentFocus", "[" + timerRecord.focusTaskName + " PAUSED ]");
-    $("#btnPauseFocusTimer").value = "Continue";
-    $("#btnPauseFocusTimer").title = "Continue Task Timer";
-}
-
-export function withFocusTimerUI() {
-    if (window.jQuery) {
-        showItem("divFocus");
-        showItem("divEndTimer");
-        hideItem("divAskAndSetGreeting");
     }
 }
 

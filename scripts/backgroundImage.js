@@ -1,4 +1,4 @@
-import { $html, options, isPositiveInteger,settings } from "./common.js";
+import { $html, options, isPositiveInteger, settings } from "./common.js";
 
 const randomImages = [
     {
@@ -90,11 +90,10 @@ const randomImages = [
     },
 ];
 
-
 const CALL_IMAGE_API_HEADERS = new Headers({
-    "accept": "application/json",
-    "Authorization": "Client-ID " + options.imageApiKey
-  });
+    accept: "application/json",
+    Authorization: "Client-ID " + options.imageApiKey,
+});
 
 function setBackroundImageFromStorage(currentBackroundImage) {
     $("html").css(
@@ -119,7 +118,7 @@ function setBackroundImageFromStorage(currentBackroundImage) {
     $html("photographer", photoInfo);
 }
 
-export function fetchImageFromApiService() {
+function fetchImageFromApiService() {
     const imageApiUrl = options.imageApiQuery + settings.imageKeywords;
     const myRequest = new Request(imageApiUrl, {
         method: "GET",
@@ -182,4 +181,28 @@ export function fetchImageFromApiService() {
             );
             setBackroundImageFromStorage(currentBackroundImage);
         });
+}
+
+function isOlderThanXDays(date, days) {
+    const now = new Date();
+    const diffTime = now - date.getTime();
+    const diffDays = Math.floor(diffTime / (24 * 60 * 60 * 1000 ));
+
+    return diffDays > days;
+  }
+
+export function checkBackroundImageOnLoad() {
+    const currentBackroundImage = JSON.parse(localStorage.getItem("currentBackroundImage")) || {};
+
+    const setImageFromStorage =
+        currentBackroundImage.src &&
+        !isOlderThanXDays(
+            new Date(currentBackroundImage.setDate),
+            parseInt(settings.daysToKeepImage) ?? 30
+        );
+    if (setImageFromStorage) {
+        setBackroundImageFromStorage(currentBackroundImage);
+    } else {
+        fetchImageFromApiService();
+    }
 }
