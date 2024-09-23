@@ -1,7 +1,7 @@
 {
   "name": "Solid Focus",
   "description": "Help focus on tasks and measure time for a task",
-  "version": "0.1",
+  "version": "3.0.0",
   "manifest_version": 3,
   "permissions": [
     "identity",
@@ -15,7 +15,7 @@
     "https://chrometimertasks-879e.restdb.io/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "scripts/background.js"
   },
   "action": {
     "default_popup": "popup.html",

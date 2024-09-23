@@ -34,16 +34,6 @@ const randomImages = [
   },
 ];
 
-const CALL_QUOTE_HEADERS = new Headers({
-  "accept": "application/json",
-  "useQueryString": true
-});
-
-const CALL_IMAGE_API_HEADERS = new Headers({
-  "accept": "application/json",
-  "Authorization": "Client-ID " + options.imageApiKey
-});
-
 
 function setCurrentDateTimeTimer() {
 
