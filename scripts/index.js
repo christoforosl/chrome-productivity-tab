@@ -2,7 +2,7 @@ import {settings,options,$html,$e} from './common.js';
 
 import {setQuote} from './getQuote.js';
 import {checkForActiveFocusTimer,setCurrentFocusAndStartTimer} from './backgroundFocusTimer.js';
-import {checkBackroundImageOnLoad} from './backgroundImage.js';
+import {checkBackroundImageOnLoad, fetchImageFromApiService} from './backgroundImage.js';
 
 let curentDateTimeTimer = null;
 

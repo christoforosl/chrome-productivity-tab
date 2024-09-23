@@ -118,7 +118,7 @@ function setBackroundImageFromStorage(currentBackroundImage) {
     $html("photographer", photoInfo);
 }
 
-function fetchImageFromApiService() {
+export function fetchImageFromApiService() {
     const imageApiUrl = options.imageApiQuery + settings.imageKeywords;
     const myRequest = new Request(imageApiUrl, {
         method: "GET",

@@ -1,16 +1,82 @@
 /* jshint esversion: 6 */
 
-import { options, $e, $html } from './common.js';
-import { initializeEventHandlers, operateEvents } from './eventHandling.js';
-import {noFocusTimerUI} from './pageUI.js';
+import { options, $e, $html } from "./common.js";
+import { initializeEventHandlers, operateEvents } from "./eventHandling.js";
+import { noFocusTimerUI } from "./pageUI.js";
 
 const focusTimerVars = {};
 
 const DB_API_HEADERS = new Headers({
     Accept: "application/json",
     "content-type": "application/json",
-    "x-apikey": "602510f75ad3610fb5bb5ec5"
+    "x-apikey": "602510f75ad3610fb5bb5ec5",
 });
+
+export const onShowDSModal = function () {
+
+    const fillFields = function () {
+        let etd = convertUTCDateToLocalDate(new Date()).toJSON().slice(0, 16);
+        $("#taskStartDateTime").val(etd);
+        $("#taskName").val("");
+    };
+
+    const lastretreived = $("#taskNamesList").attr("data-lastretreived") || 0;
+    if (lastretreived < new Date().getTime() - 1000 * 60 * 60) {
+        const user = localStorage.getItem("userInfo");
+        const query = `q={"user": "${user}"}&max=30&h={"$orderby": {"endTime": -1}}&d=${new Date().getTime()}`;
+
+        const dbQueryUrl = options.APIDBHostTasks + "?" + query;
+        const getTaskNamesListRequest = new Request(dbQueryUrl, {
+            method: "GET",
+            headers: DB_API_HEADERS
+        });
+
+        fetch(getTaskNamesListRequest)
+            .then((response) => response.text())
+            .then((responseText) => {
+                return JSON.parse(responseText);
+            })
+            .then((contents) => {
+                const uniqueByFocusTaskName = (array) => {
+                    const uniqueNames = getUniqueFocusTaskNames(array);
+                    return uniqueNames.map(name => findItemByFocusTaskName(array, name));
+                };
+
+                for (let i = 0; i < uniqueByFocusTaskName.length; ++i) {
+                    $("#taskNamesList").prepend($("<option>", { text: contents[i].focusTaskName }));
+                    if (i > 30) break;
+                }
+                $("#taskNamesList").attr("data-lastretreived", new Date().getTime());
+            })
+            .catch((error) => {
+                alert("Error in getTaskNamesListRequest:" + error.message);
+            });
+        fillFields();
+    } else {
+        fillFields();
+    }
+}
+
+export const deleteFocusData = function () {
+    const delTimerId = $("#DelTimerId").val();
+    const deleteRequest = new Request(
+        options.APIDBHostTasks + "/" + delTimerId,
+        {
+            method: "DELETE",
+            headers: DB_API_HEADERS,
+        }
+    );
+
+    fetch(deleteRequest)
+        .then((response) => response.json())
+        .then((contents) => {
+            $("#tblFocusTimerHistory").bootstrapTable("remove", {
+                field: "_id",
+                values: [delTimerId],
+            });
+            $("#deleteEntryModal").hide();
+        });
+};
 
 export const setCurrentFocusAndStartTimer = function () {
     $e("frmEnterTaskName").classList.add("was-validated");
@@ -24,8 +90,10 @@ export const setCurrentFocusAndStartTimer = function () {
 
     const record = {
         user: localStorage.getItem("userInfo"),
-        startTime: $("#taskStartDateTime").val() ? new Date($("#taskStartDateTime").val()).getTime() : dnow,
-        focusTaskName: $("#taskName").val()
+        startTime: $("#taskStartDateTime").val()
+            ? new Date($("#taskStartDateTime").val()).getTime()
+            : dnow,
+        focusTaskName: $("#taskName").val(),
     };
 
     const myRequest = new Request(options.APIDBHostTasks, {
@@ -33,7 +101,7 @@ export const setCurrentFocusAndStartTimer = function () {
         headers: DB_API_HEADERS,
         mode: "cors",
         cache: "no-cache",
-        body: JSON.stringify(record)
+        body: JSON.stringify(record),
     });
 
     fetch(myRequest)
@@ -48,13 +116,20 @@ export const setCurrentFocusAndStartTimer = function () {
 
 export const startFocusTimer = function (record) {
     if (focusTimerVars.focusTimerClientId) {
-        console.log("clear existing timer: " + focusTimerVars.focusTimerClientId);
+        console.log(
+            "clear existing timer: " + focusTimerVars.focusTimerClientId
+        );
         clearInterval(focusTimerVars.focusTimerClientId);
         focusTimerVars.focusTimerClientId = null;
     }
 
     localStorage.setItem("focusTimer", JSON.stringify(record));
-    console.log("Start Timer set to " + record.startTime + ", server timerId: " + record.timerId);
+    console.log(
+        "Start Timer set to " +
+            record.startTime +
+            ", server timerId: " +
+            record.timerId
+    );
 
     withFocusTimerUI();
     focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
@@ -64,10 +139,13 @@ export const checkForActiveFocusTimer = function () {
     const timerRecord = getTimerRecordFromStorage();
 
     if (timerRecord) {
-        const myRequest = new Request(options.APIDBHostTasks + "/" + timerRecord.timerId, {
-            method: "GET",
-            headers: DB_API_HEADERS
-        });
+        const myRequest = new Request(
+            options.APIDBHostTasks + "/" + timerRecord.timerId,
+            {
+                method: "GET",
+                headers: DB_API_HEADERS,
+            }
+        );
 
         fetch(myRequest)
             .then((response) => response.json())
@@ -76,8 +154,14 @@ export const checkForActiveFocusTimer = function () {
                     localStorage.removeItem("focusTimer");
                     noFocusTimerUI();
                 } else {
-                    $html("currentFocus", "[" + timerRecord.focusTaskName + "]");
-                    focusTimerVars.focusTimerClientId = setInterval(updateFocusTimer, 1000);
+                    $html(
+                        "currentFocus",
+                        "[" + timerRecord.focusTaskName + "]"
+                    );
+                    focusTimerVars.focusTimerClientId = setInterval(
+                        updateFocusTimer,
+                        1000
+                    );
                     withFocusTimerUI();
                 }
             });
@@ -98,11 +182,14 @@ export const togglePauseStatus = function () {
     if (timerRecord.status === "PAUSED") {
         const pauseRecord = getRecordFromStorage("pause");
         pauseRecord.pauseEnd = dnow;
-        const myRequest = new Request(options.APIDBHostPauses + "/" + pauseRecord._id, {
-            method: "PATCH",
-            headers: DB_API_HEADERS,
-            body: JSON.stringify(pauseRecord)
-        });
+        const myRequest = new Request(
+            options.APIDBHostPauses + "/" + pauseRecord._id,
+            {
+                method: "PATCH",
+                headers: DB_API_HEADERS,
+                body: JSON.stringify(pauseRecord),
+            }
+        );
 
         fetch(myRequest)
             .then((response) => response.json())
@@ -115,7 +202,7 @@ export const togglePauseStatus = function () {
     } else {
         const newPauseRecord = {
             timerId: timerRecord.timerId,
-            pauseStart: dnow
+            pauseStart: dnow,
         };
 
         const newPauseRequest = new Request(options.APIDBHostPauses, {
@@ -123,7 +210,7 @@ export const togglePauseStatus = function () {
             headers: DB_API_HEADERS,
             mode: "cors",
             cache: "no-cache",
-            body: JSON.stringify(newPauseRecord)
+            body: JSON.stringify(newPauseRecord),
         });
 
         fetch(newPauseRequest)
@@ -146,11 +233,14 @@ export const updateTimerService = function (timerRow) {
         throw new Error("Error: no timer id");
     }
 
-    const myRequest = new Request(options.APIDBHostTasks + "/" + timerRow.timerId, {
-        method: "PATCH",
-        headers: DB_API_HEADERS,
-        body: JSON.stringify(timerRow)
-    });
+    const myRequest = new Request(
+        options.APIDBHostTasks + "/" + timerRow.timerId,
+        {
+            method: "PATCH",
+            headers: DB_API_HEADERS,
+            body: JSON.stringify(timerRow),
+        }
+    );
 
     fetch(myRequest)
         .then((response) => response.json())
@@ -173,8 +263,8 @@ export const setTaskEndTime = function (timerId) {
         headers: DB_API_HEADERS,
         body: JSON.stringify({
             endTime: dnow,
-            lastHeartbeat: dnow
-        })
+            lastHeartbeat: dnow,
+        }),
     });
 
     fetch(myRequest)
@@ -187,7 +277,9 @@ export const setTaskEndTime = function (timerId) {
 export const updateFocusTimer = function () {
     const timerRecord = getTimerRecordFromStorage();
     if (!timerRecord) {
-        console.warn("I am in updateFocusTimer but there is no timerRecord. I am resetting the timer!");
+        console.warn(
+            "I am in updateFocusTimer but there is no timerRecord. I am resetting the timer!"
+        );
         clearFocusTimerInterval();
         noFocusTimerUI();
         return;
@@ -204,26 +296,6 @@ export const updateFocusTimer = function () {
     document.title = "Solid Focus [" + timeStr + "]";
     withFocusTimerUI();
 };
-
-export function getElapsedTime(startTime, endTime) {
-    if (!startTime) return "";
-    if (!endTime) return "";
-    const elapsedSecs = (endTime - startTime) / 1000;
-    let hours = Math.floor(elapsedSecs / 3600);
-    let minutes = Math.floor((elapsedSecs - hours * 3600) / 60);
-    let seconds = Math.round(elapsedSecs - hours * 3600 - minutes * 60, 0);
-
-    if (hours < 10) {
-        hours = "0" + hours;
-    }
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
-    if (seconds < 10) {
-        seconds = "0" + seconds;
-    }
-    return hours + ":" + minutes + ":" + seconds;
-}
 
 export function clearFocusTimerInterval() {
     if (focusTimerVars.focusTimerClientId) {
@@ -248,11 +320,15 @@ export function getTimerRecordFromStorage() {
 
 export function getFocusHistoryData(callback) {
     const user = localStorage.getItem("userInfo");
-    const query = 'max=200&h={"$orderby":{"startTime":-1}}&q={"user":"' + user + '"}&d=' + new Date().getTime();
+    const query =
+        'max=200&h={"$orderby":{"startTime":-1}}&q={"user":"' +
+        user +
+        '"}&d=' +
+        new Date().getTime();
     const myRequest = new Request(options.APIDBHostTasks + "?" + query, {
         method: "GET",
         headers: DB_API_HEADERS,
-        cache: "no-cache"
+        cache: "no-cache",
     });
 
     fetch(myRequest)
@@ -263,7 +339,9 @@ export function getFocusHistoryData(callback) {
 }
 
 export function convertUTCDateToLocalDate(date) {
-    const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+    const newDate = new Date(
+        date.getTime() + date.getTimezoneOffset() * 60 * 1000
+    );
 
     const offset = date.getTimezoneOffset() / 60;
     const hours = date.getHours();
@@ -275,19 +353,20 @@ export function convertUTCDateToLocalDate(date) {
 
 export function operateFormatter(value, row, index) {
     return [
-        '<a class="timer-edit" href="#" title="Edit" id="edit' + row._id +
-        '" data-toggle="modal" data-target="#dateModal" data-modal-mode="table-edit" data-rowid="' +
-        row._id +
-        '">',
+        '<a class="timer-edit" href="#" title="Edit" id="edit' +
+            row._id +
+            '" data-toggle="modal" data-target="#dateModal" data-modal-mode="table-edit" data-rowid="' +
+            row._id +
+            '">',
         '<i class="far fa-edit"></i>',
         "</a>&nbsp;",
         '<a class="timer-edit" href="#" title="Delete" id="edit' +
-        row._id +
-        '" data-toggle="modal" data-target="#deleteEntryModal" data-rowid="' +
-        row._id +
-        '">',
+            row._id +
+            '" data-toggle="modal" data-target="#deleteEntryModal" data-rowid="' +
+            row._id +
+            '">',
         '<i class="far fa-trash-alt"></i>',
-        "</a>"
+        "</a>",
     ].join("");
 }
 

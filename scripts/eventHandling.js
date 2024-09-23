@@ -1,7 +1,7 @@
 
+import { getFocusHistoryData, showTimerData, updateTimerService, getTimerRecordFromStorage,onShowDSModal, deleteFocusData } from "./backgroundFocusTimer.js";
+import { getElapsedTime, options, settings, $e } from "./common.js";
 import { fetchImageFromApiService } from "./backgroundImage.js";
-import { getFocusHistoryData, updateTimerService } from "./backgroundFocusTimer.js";
-import { getElapsedTime, showTimerData, getTimerRecordFromStorage,options, settings } from "./common.js";
 
 export function initializeEventHandlers() {
     if ($e("btnShowSettings")) {
@@ -90,66 +90,12 @@ export function initializeEventHandlers() {
 
     if ($e("btnDeleteFocusData")) {
         $e("btnDeleteFocusData").addEventListener("click", function () {
-            const delTimerId = $("#DelTimerId").val();
-            const deleteRequest = new Request(options.APIDBHostTasks + "/" + delTimerId, {
-                method: "DELETE",
-                headers: DB_API_HEADERS
-            });
-
-            fetch(deleteRequest)
-                .then((response) => response.json())
-                .then((contents) => {
-                    $("#tblFocusTimerHistory").bootstrapTable("remove", {
-                        field: "_id",
-                        values: [delTimerId]
-                    });
-                    $("#deleteEntryModal").hide();
-                });
+            deleteFocusData();
         });
     }
 
     $("#workItemModal").on("show.bs.modal", function (event) {
-        const fillFields = function () {
-            let etd = convertUTCDateToLocalDate(new Date()).toJSON().slice(0, 16);
-            $("#taskStartDateTime").val(etd);
-            $("#taskName").val("");
-        };
-
-        const lastretreived = $("#taskNamesList").attr("data-lastretreived") || 0;
-        if (lastretreived < new Date().getTime() - 1000 * 60 * 60) {
-            const user = localStorage.getItem("userInfo");
-            const query = `q={"user": "${user}"}&max=30&h={"$orderby": {"endTime": -1}}&d=${new Date().getTime()}`;
-
-            const dbQueryUrl = options.APIDBHostTasks + "?" + query;
-            const getTaskNamesListRequest = new Request(dbQueryUrl, {
-                method: "GET",
-                headers: DB_API_HEADERS
-            });
-
-            fetch(getTaskNamesListRequest)
-                .then((response) => response.text())
-                .then((responseText) => {
-                    return JSON.parse(responseText);
-                })
-                .then((contents) => {
-                    const uniqueByFocusTaskName = (array) => {
-                        const uniqueNames = getUniqueFocusTaskNames(array);
-                        return uniqueNames.map(name => findItemByFocusTaskName(array, name));
-                    };
-
-                    for (let i = 0; i < uniqueByFocusTaskName.length; ++i) {
-                        $("#taskNamesList").prepend($("<option>", { text: contents[i].focusTaskName }));
-                        if (i > 30) break;
-                    }
-                    $("#taskNamesList").attr("data-lastretreived", new Date().getTime());
-                })
-                .catch((error) => {
-                    alert("Error in getTaskNamesListRequest:" + error.message);
-                });
-            fillFields();
-        } else {
-            fillFields();
-        }
+        onShowDSModal();
     });
 
     $("#deleteEntryModal").on("show.bs.modal", function (event) {
