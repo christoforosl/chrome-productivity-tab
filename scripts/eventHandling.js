@@ -135,10 +135,6 @@ export const operateEvents = {
     "click .timer-remove": function (e, value, row, index) { }
 };
 
-const getUniqueFocusTaskNames = (array) => {
-    return Array.from(new Set(array.map(item => item.focusTaskName)));
-};
-
 const findItemByFocusTaskName = (array, focusTaskName) => {
     return array.find(item => item.focusTaskName === focusTaskName);
 };
