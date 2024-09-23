@@ -4,8 +4,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',
+  devtool: false,
   entry: {
-    background: './src/scripts/background.js'
+    background: './src/scripts/background.js',
+    newTab: './src/scripts/newTab.js', // Add newTab.js as an entry point
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -29,6 +31,10 @@ module.exports = {
       patterns: [
         { from: "public", to: "." },
         { from: "src/manifest.json", to: "manifest.json" },
+        {
+          from: "src/scripts/lib",
+          to: "scripts/lib"
+        },
       ],
     }),
   ],
