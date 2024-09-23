@@ -8,19 +8,6 @@ chrome.tabs.onRemoved.addListener(function () {
   }
 });
 
-
-function arrayOfItems() {
-
-  const finalArr = [];
-
-  for (const argument of arguments) {
-    if (argument) {
-      finalArr.push(argument);
-    }
-  }
-  return finalArr.join(',');
-}
-
 chrome.runtime.onInstalled.addListener(function () {
   console.log("onInstalled");
 
