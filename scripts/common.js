@@ -2,7 +2,6 @@ export const options = {
     version: "1.11",
     APIDBHostTasks: "https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks",
     APIDBHostPauses: "https://chrometimertasks-879e.restdb.io/rest/task-pause",
-    APIQuoteOfTheDayApiHost: "https://api.quotable.io/quotes/random",
     greetingNameFontSizePixels: 70,
     whatShallWeWorkOnQuestionText: "What is our focus now?",
     imageApiKey: "SidraH8wDMI92Y_bXxn2Tg1PLJWt24RI310YYUHJ1xY",

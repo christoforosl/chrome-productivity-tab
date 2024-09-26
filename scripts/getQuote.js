@@ -1,9 +1,9 @@
 import { $html, options } from "./common.js";
 
 const CALL_QUOTE_HEADERS = new Headers({
-    "accept": "application/json",
-    "useQueryString": true
-  });
+    accept: "application/json",
+    useQueryString: true,
+});
 
 /**
  * returns true if quote is older than 24 hours
@@ -16,33 +16,15 @@ function getQuoteIsOld(quoteDate) {
 }
 
 function setQuoteFromService() {
-    const myRequest = new Request(options.APIQuoteOfTheDayApiHost, {
-        method: "GET",
-        headers: CALL_QUOTE_HEADERS,
-        mode: "cors",
-        cache: "default",
-    });
-
-    fetch(myRequest)
+    fetch("https://stoic.tekloon.net/stoic-quote",{mode: 'no-cors'})
         .then((response) => {
-            if (!response.ok) {
-                console.log(
-                    "QuoteFromService:Network response was not ok " +
-                        response?.statusText
-                );
-                $html(
-                    "quote",
-                    `Failed to fetch quote: status:  ${response?.status} ${response?.statusText}`
-                );
-                $html("quoteBy", "");
-                return {};
-            }
-            return response.json();
+           return response.text();
         })
         .then((contents) => {
-            if (contents[0]) {
-                const quote = contents[0].content;
-                const author = contents[0].author;
+            if (contents) {
+                const quote = contents.data.quote;
+                const author = contents.data.author;
+
                 $html("quote", `"${quote}"`);
                 $html("quoteBy", author);
                 const dt = new Date().toDateString();
@@ -52,9 +34,7 @@ function setQuoteFromService() {
                     quoteDate: dt,
                 };
                 chrome.storage.local.set(quoteObj, function () {
-                    console.log(
-                        "set quote in storage" + JSON.stringify(quoteObj)
-                    );
+                    console.log("set quote in storage" + JSON.stringify(quoteObj));
                 });
             }
         })
@@ -66,18 +46,15 @@ function setQuoteFromService() {
 }
 
 export function setQuote() {
-    chrome.storage.local.get(
-        ["quote", "quoteDate", "quoteBy"],
-        function (value) {
-            const oldq = getQuoteIsOld(value ? value.quoteDate : null);
+    chrome.storage.local.get(["quote", "quoteDate", "quoteBy"], function (value) {
+        const oldq = getQuoteIsOld(value ? value.quoteDate : null);
 
-            if (!value || value.length === 0 || value.quote === "" || oldq) {
-                setQuoteFromService();
-            } else {
-                console.log("Set quote from storage :-)");
-                $html("quote", '"' + value.quote + '"');
-                $html("quoteBy", value.quoteBy);
-            }
+        if (!value || value.length === 0 || value.quote === "" || oldq) {
+            setQuoteFromService();
+        } else {
+            console.log("Set quote from storage :-)");
+            $html("quote", '"' + value.quote + '"');
+            $html("quoteBy", value.quoteBy);
         }
-    );
+    });
 }
