@@ -4,6 +4,18 @@ import { setQuote } from "./getQuote.js";
 import { checkForActiveFocusTimer, setCurrentFocusAndStartTimer } from "./backgroundFocusTimer.js";
 import { checkBackroundImageOnLoad, fetchImageFromApiService } from "./backgroundImage.js";
 
+let curentDateTimeTimer = null;
+
+function setCurrentDateTimeTimer() {
+    curentDateTimeTimer = setInterval(setCurrentDateTime, 1000);
+}
+
+chrome.tabs.onRemoved.addListener(function () {
+  if (curentDateTimeTimer) {
+    console.log("Clearing Interval");
+    clearInterval(curentDateTimeTimer);
+  }
+});
 
 function loadSettings() {
 
@@ -34,7 +46,7 @@ function setCurrentDateTime() {
 $(document).ready(() => {
     loadSettings();
     chrome.identity.getProfileUserInfo(function (userInfo) {
-      debugger;
+
         if (userInfo.email) {
             options.profileUserEmail = userInfo.email;
             options.profileUserId = userInfo.id;
