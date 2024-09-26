@@ -6,6 +6,7 @@ import { checkBackroundImageOnLoad, fetchImageFromApiService } from "./backgroun
 
 let curentDateTimeTimer = null;
 
+
 function setCurrentDateTimeTimer() {
     curentDateTimeTimer = setInterval(setCurrentDateTime, 1000);
 }
