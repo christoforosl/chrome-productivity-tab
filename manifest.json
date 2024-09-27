@@ -11,6 +11,7 @@
     "storage"
   ],
   "host_permissions": [
+    "https://stoic.tekloon.net/*",
     "https://quotes.rest/*",
     "https://api.quotable.io/quotes/*",
     "https://chrometimertasks-879e.restdb.io/*"
@@ -38,6 +39,6 @@
     "newtab": "newProductivityTab.html"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://use.fontawesome.com; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com https://fonts.googleapis.com; img-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net https://images.pexels.com https://*.unsplash.com data:; connect-src 'self' https://quotes.rest https://api.quotable.io https://chrometimertasks-879e.restdb.io https://api.unsplash.com"
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://use.fontawesome.com; font-src 'self' https://use.fontawesome.com https://fonts.gstatic.com https://fonts.googleapis.com; img-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net https://images.pexels.com https://*.unsplash.com data:; connect-src 'self' https://stoic.tekloon.net https://chrometimertasks-879e.restdb.io https://api.unsplash.com"
   }
 }
