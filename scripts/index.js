@@ -1,11 +1,9 @@
 import { settings, options, $html, $e } from "./common.js";
-
+import { checkForActiveFocusTimer,setCurrentFocusAndStartTimer } from "./newTab.js";
 import { setQuote } from "./getQuote.js";
-import { checkForActiveFocusTimer, setCurrentFocusAndStartTimer } from "./backgroundFocusTimer.js";
 import { checkBackroundImageOnLoad, fetchImageFromApiService } from "./backgroundImage.js";
 
 let curentDateTimeTimer = null;
-
 
 function setCurrentDateTimeTimer() {
     curentDateTimeTimer = setInterval(setCurrentDateTime, 1000);

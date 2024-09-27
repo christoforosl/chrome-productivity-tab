@@ -19,6 +19,10 @@ const getUniqueFocusTaskNames = function (array) {
     return Array.from(new Set(array.map((item) => item.focusTaskName)));
 };
 
+const findItemByFocusTaskName = (array, focusTaskName) => {
+    return array.find(item => item.focusTaskName === focusTaskName);
+};
+
 const uniqueByFocusTaskName = function (array) {
     const uniqueNames = getUniqueFocusTaskNames(array);
     return uniqueNames.map((name) => findItemByFocusTaskName(array, name));

@@ -1,7 +1,7 @@
 
-import { getFocusHistoryData, showTimerData, updateTimerService, getTimerRecordFromStorage,onShowDSModal, deleteFocusData } from "./backgroundFocusTimer.js";
 import { getElapsedTime, options, settings, $e } from "./common.js";
 import { fetchImageFromApiService } from "./backgroundImage.js";
+import { getFocusHistoryData, showTimerData, updateTimerService, getTimerRecordFromStorage,onShowDSModal, deleteFocusData } from "./newTab.js";
 
 export function initializeEventHandlers() {
     if ($e("btnShowSettings")) {
@@ -135,6 +135,4 @@ export const operateEvents = {
     "click .timer-remove": function (e, value, row, index) { }
 };
 
-const findItemByFocusTaskName = (array, focusTaskName) => {
-    return array.find(item => item.focusTaskName === focusTaskName);
-};
+
