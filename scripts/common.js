@@ -1,5 +1,5 @@
 export const options = {
-    version: "1.11",
+    version: "3.0.1",
     APIDBHostTasks: "https://chrometimertasks-879e.restdb.io/rest/chrome-timer-tasks",
     APIDBHostPauses: "https://chrometimertasks-879e.restdb.io/rest/task-pause",
     greetingNameFontSizePixels: 70,

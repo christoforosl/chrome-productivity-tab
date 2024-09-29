@@ -1,4 +1,4 @@
-import { $html } from "./common.js";
+import {$html, settings} from './common.js';
 
 
 /**
@@ -6,13 +6,14 @@ import { $html } from "./common.js";
  * @param {quote} quote: the quote object
  */
 function getQuoteIsOld(quote) {
+
     if(!quote) return true;
     if(Object.keys(quote).length==0) return true;
     if(!quote.quoteDate) return true;
 
     const quoteDate = quote.quoteDate;
-    const dt = new Date().toDateString();
-    return dt !== quoteDate;
+    const dt = new Date().getTime();
+    return dt - quoteDate > (24*60*60);
 }
 
 function setQuoteFromService() {
@@ -20,9 +21,8 @@ function setQuoteFromService() {
     chrome.runtime.sendMessage({action: "fetchQuote"}, response => {
         if (response.success) {
             const quote = { "quoteDate": new Date().getTime(), ...response.data.data };
-            chrome.storage.local.set({ "quote":quote }, function() {
-                setQuoteUI(quote);
-            });
+            window.localStorage.setItem("quote", JSON.stringify(quote));
+            setQuoteUI(quote);
 
         } else {
             console.error('Error:', response.error);
@@ -32,15 +32,15 @@ function setQuoteFromService() {
 }
 
 export function setQuote() {
-    chrome.storage.local.get("quote", function (quote) {
-        const oldq = getQuoteIsOld(quote ? quote.quoteDate : null);
+    const quote = JSON.parse(window.localStorage.getItem("quote")) || {};
+    const oldq = getQuoteIsOld(quote);
 
-        if (!quote || Object.keys(quote).length === 0 || quote.quote === "" || oldq) {
-            setQuoteFromService();
-        } else {
-            setQuoteUI(quote);
-        }
-    });
+    if (!quote || Object.keys(quote).length === 0 || quote.quote === "" || oldq) {
+        setQuoteFromService();
+    } else {
+        setQuoteUI(quote);
+    }
+
 }
 function setQuoteUI(value) {
     $html("quote",  value.quote);
