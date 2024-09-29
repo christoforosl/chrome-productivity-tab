@@ -1,60 +1,48 @@
-import { $html, options } from "./common.js";
+import { $html } from "./common.js";
 
-const CALL_QUOTE_HEADERS = new Headers({
-    accept: "application/json",
-    useQueryString: true,
-});
 
 /**
  * returns true if quote is older than 24 hours
- * @param {long} quoteDate: the quote's set time, in epoch seconds
+ * @param {quote} quote: the quote object
  */
-function getQuoteIsOld(quoteDate) {
-    if (!quoteDate) return true;
+function getQuoteIsOld(quote) {
+    if(!quote) return true;
+    if(Object.keys(quote).length==0) return true;
+    if(!quote.quoteDate) return true;
+
+    const quoteDate = quote.quoteDate;
     const dt = new Date().toDateString();
     return dt !== quoteDate;
 }
 
 function setQuoteFromService() {
-    fetch("https://stoic.tekloon.net/stoic-quote",{mode: 'no-cors'})
-        .then((response) => {
-           return response.text();
-        })
-        .then((contents) => {
-            if (contents) {
-                const quote = contents.data.quote;
-                const author = contents.data.author;
 
-                $html("quote", `"${quote}"`);
-                $html("quoteBy", author);
-                const dt = new Date().toDateString();
-                const quoteObj = {
-                    quote: quote,
-                    quoteBy: author,
-                    quoteDate: dt,
-                };
-                chrome.storage.local.set(quoteObj, function () {
-                    console.log("set quote in storage" + JSON.stringify(quoteObj));
-                });
-            }
-        })
-        .catch((error) => {
-            console.warn("Fetch error:", error);
-            $html("quote", "Failed to fetch quote.");
-            $html("quoteBy", "");
-        });
+    chrome.runtime.sendMessage({action: "fetchQuote"}, response => {
+        if (response.success) {
+            const quote = { "quoteDate": new Date().getTime(), ...response.data.data };
+            chrome.storage.local.set({ "quote":quote }, function() {
+                setQuoteUI(quote);
+            });
+
+        } else {
+            console.error('Error:', response.error);
+        }
+    });
+
 }
 
 export function setQuote() {
-    chrome.storage.local.get(["quote", "quoteDate", "quoteBy"], function (value) {
-        const oldq = getQuoteIsOld(value ? value.quoteDate : null);
+    chrome.storage.local.get("quote", function (quote) {
+        const oldq = getQuoteIsOld(quote ? quote.quoteDate : null);
 
-        if (!value || value.length === 0 || value.quote === "" || oldq) {
+        if (!quote || Object.keys(quote).length === 0 || quote.quote === "" || oldq) {
             setQuoteFromService();
         } else {
-            console.log("Set quote from storage :-)");
-            $html("quote", '"' + value.quote + '"');
-            $html("quoteBy", value.quoteBy);
+            setQuoteUI(quote);
         }
     });
+}
+function setQuoteUI(value) {
+    $html("quote",  value.quote);
+    $html("quoteBy", value.author);
 }
