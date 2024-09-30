@@ -8,7 +8,8 @@ export const options = {
     imageApiQuery: "https://api.unsplash.com/photos/random?query=",
     language: window.navigator.userLanguage || window.navigator.language || "en",
     profileUserEmail:null,
-    profileUserId:null
+    profileUserId:null,
+    defaultImage:"images/13818.jpg"
 };
 
 export const settings = {};
@@ -59,3 +60,21 @@ export function getElapsedTime(startTime, endTime) {
     }
     return hours + ":" + minutes + ":" + seconds;
 }
+
+export function showChromeNotification( message) {
+    // Check if the notifications permission is in the manifest
+    if (!chrome.notifications) {
+      console.error('Notifications permission is not specified in the manifest');
+      return;
+    }
+  
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: chrome.runtime.getURL('images/icon48.png'),  // Replace with path to your extension's icon
+      title: 'Solid Focus',
+      message: message,
+      priority: 2
+    }, function(notificationId) {
+      console.log('Notification shown with ID:', notificationId);
+    });
+  }

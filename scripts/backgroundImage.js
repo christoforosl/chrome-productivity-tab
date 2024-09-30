@@ -1,4 +1,4 @@
-import { $html, options, isPositiveInteger, settings } from "./common.js";
+import { $html, options, isPositiveInteger, settings, showChromeNotification } from "./common.js";
 
 const randomImages = [
     {
@@ -95,25 +95,68 @@ const CALL_IMAGE_API_HEADERS = new Headers({
     Authorization: "Client-ID " + options.imageApiKey,
 });
 
+function fetchAndSetBackgroundImage(url) {
+    return new Promise((resolve) => {
+        fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    console.log('Image could not be fetched');
+                    resolve(false);
+                }
+            })
+            .then(blob => {
+                if (blob) {
+                    const objectURL = URL.createObjectURL(blob);
+                    document.body.style.backgroundImage = `url('${objectURL}')`;
+                    backroundImageProps();
+                    console.log('Background image set successfully');
+                    resolve(true);
+                }
+            })
+            .catch(error => {
+                document.body.style.backgroundImage = `url('${ chrome.runtime.getURL(options.defaultImage)}')`;
+                backroundImageProps();
+                console.error('Error fetching image:', error);
+                resolve(false);
+            });
+    });
+}
+
+function backroundImageProps() {
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+}
+
 function setBackroundImageFromStorage(currentBackroundImage) {
-    $("html").css(
-        "background-image",
-        "url('" + currentBackroundImage.src + "')"
-    );
+    fetchAndSetBackgroundImage(currentBackroundImage.src)
+        .then(success => {
+            if (success) {
+                console.log('Background set successfully');
+                setPhotoDesriptions(currentBackroundImage);
+
+            } else {
+                showChromeNotification('Failed to update background, used default image');
+                currentBackroundImage.src = chrome.runtime.getURL(options.defaultImage);
+                currentBackroundImage.photographerUrl = "https://www.freepik.com/free-vector/dark-studio-room-vector-background_2395298.htm";
+                currentBackroundImage.photographer = "Starline / Freepik"
+                setPhotoDesriptions(currentBackroundImage);
+                console.log('Failed to update background, used default image');
+            }
+        });
+
+}
+
+function setPhotoDesriptions(currentBackroundImage) {
     let photoInfo = "Photo By ";
     if (currentBackroundImage.photographerUrl) {
-        photoInfo +=
-            '<a style="color:white" target="_new" href="' +
-            currentBackroundImage.photographerUrl +
-            '">' +
-            currentBackroundImage.photographer +
-            "</a>";
+        photoInfo += `<a style="color:white" target="_new" href="${currentBackroundImage.photographerUrl}">${currentBackroundImage.photographer}</a>`;
     } else {
         photoInfo += currentBackroundImage.photographer;
     }
-    photoInfo += currentBackroundImage.location
-        ? ", " + currentBackroundImage.location
-        : "";
+    photoInfo += currentBackroundImage.location ? ", " + currentBackroundImage.location : "";
     $("#photoinfo").attr("title", currentBackroundImage.description);
     $html("photographer", photoInfo);
 }
@@ -154,7 +197,7 @@ export function fetchImageFromApiService() {
                 localStorage.getItem("currentBackroundImageIndex")
             )
                 ? parseInt(localStorage.getItem("currentBackroundImageIndex")) +
-                  1
+                1
                 : 0;
 
             const currentImageIndex =
@@ -186,21 +229,22 @@ export function fetchImageFromApiService() {
 function isOlderThanXDays(date, days) {
     const now = new Date();
     const diffTime = now - date.getTime();
-    const diffDays = Math.floor(diffTime / (24 * 60 * 60 * 1000 ));
+    const diffDays = Math.floor(diffTime / (24 * 60 * 60 * 1000));
 
     return diffDays > days;
-  }
+}
 
 export function checkBackroundImageOnLoad() {
     const currentBackroundImage = JSON.parse(localStorage.getItem("currentBackroundImage")) || {};
 
-    const setImageFromStorage =
+    const doImageFromStorage =
         currentBackroundImage.src &&
         !isOlderThanXDays(
             new Date(currentBackroundImage.setDate),
             parseInt(settings.daysToKeepImage) ?? 30
         );
-    if (setImageFromStorage) {
+
+    if (doImageFromStorage) {
         setBackroundImageFromStorage(currentBackroundImage);
     } else {
         fetchImageFromApiService();
