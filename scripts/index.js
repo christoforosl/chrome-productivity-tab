@@ -1,7 +1,7 @@
 import { settings, options, $html, $e } from "./common.js";
 import { checkForActiveFocusTimer,setCurrentFocusAndStartTimer } from "./newTab.js";
 import { setQuote } from "./getQuote.js";
-import { checkBackroundImageOnLoad, fetchImageFromApiService } from "./backgroundImage.js";
+import { checkBackroundImageOnLoad, fetchImageFromApiService, setBackroundImage } from "./backgroundImage.js";
 
 let curentDateTimeTimer = null;
 
@@ -75,8 +75,9 @@ $(document).ready(() => {
                 $("#greetingName").val(settings.greetingName);
             }
 
-            if ($e("btnChangeWallpaper")) {
-                $e("btnChangeWallpaper").addEventListener("click", function () {
+            if ($("#btnChangeWallpaper").length>0) {
+                
+                $("#btnChangeWallpaper").on("click", function () {
                     localStorage.removeItem("currentBackroundImage");
                     fetchImageFromApiService();
                 });
@@ -85,6 +86,14 @@ $(document).ready(() => {
             console.log("User info not available");
         }
     });
+
 });
 
+window.setManualImage = function(imageUrl, photographerUrl, photographer) {
+    const currentBackroundImage = {};
+    currentBackroundImage.src = imageUrl;
+    currentBackroundImage.photographerUrl = photographerUrl;
+    currentBackroundImage.photographer = photographer
+    setBackroundImage(currentBackroundImage);
 
+}
