@@ -26,7 +26,7 @@ function fetchAndSetBackgroundImage(url) {
                 }
             })
             .catch(error => {
-                document.body.style.backgroundImage = `url('${ chrome.runtime.getURL(options.defaultImage)}')`;
+                document.body.style.backgroundImage = `url('${chrome.runtime.getURL(options.defaultImage)}')`;
                 backroundImageProps();
                 console.error('Error fetching image:', error);
                 resolve(false);
@@ -106,6 +106,8 @@ export function fetchImageFromURL(myRequest) {
             );
             setBackroundImage(currentBackroundImage);
         });
+
+
 }
 
 function isOlderThanXDays(date, days) {
@@ -131,4 +133,42 @@ export function checkBackroundImageOnLoad() {
     } else {
         fetchImageFromApiService();
     }
+}
+
+
+/**
+ * Checks and requests permission for a given image URL if not already granted.
+ * @param {string} imageUrl - The complete URL of the image.
+ * @returns {Promise<boolean>} - Resolves to true if permission is granted, false otherwise.
+ */
+export function checkAndRequestPermission(imageUrl) {
+    return new Promise((resolve, reject) => {
+        try {
+            // Extract the origin from the URL
+            const url = new URL(imageUrl);
+            const origin = url.origin + '/*';
+           
+            // Check if we already have permission
+            chrome.permissions.contains({ origins: [origin] }, (result) => {
+                if (result) {
+                    // We already have permission
+                    resolve(true);
+                } else {
+                    // We don't have permission, so let's request it
+                    chrome.permissions.request({ origins: [origin] }, (granted) => {
+                        if (granted) {
+                            // Permission was granted
+                            resolve(true);
+                        } else {
+                            // Permission was denied
+                            resolve(false);
+                        }
+                    });
+                }
+            });
+        } catch (error) {
+            // If there's an error (e.g., invalid URL), reject the promise
+            reject(new Error(`Invalid URL or permission error: ${error.message}`));
+        }
+    });
 }

@@ -1,7 +1,7 @@
 import { settings, options, $html, $e } from "./common.js";
 import { checkForActiveFocusTimer,setCurrentFocusAndStartTimer } from "./newTab.js";
 import { setQuote } from "./getQuote.js";
-import { checkBackroundImageOnLoad, fetchImageFromApiService, setBackroundImage } from "./backgroundImage.js";
+import { checkBackroundImageOnLoad, checkAndRequestPermission, setBackroundImage } from "./backgroundImage.js";
 
 let curentDateTimeTimer = null;
 
@@ -24,6 +24,21 @@ function loadSettings() {
     }
 }
 
+function getManifestVersion() {
+    try {
+        const manifest = chrome.runtime.getManifest();
+        if (manifest && typeof manifest.version === 'string') {
+            return manifest.version;
+        } else {
+            console.warn('Manifest version is not a string or is undefined');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error reading manifest:', error);
+        return null;
+    }
+}
+
 function setCurrentDateTime() {
     const d = new Date();
     const centeredText = d.toDateString() + ", " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -38,7 +53,7 @@ function setCurrentDateTime() {
     }
     greeting = greeting + (settings.greetingName || "[Specify Name In Settings]");
     $html("btnSetWorkItem", options.whatShallWeWorkOnQuestionText);
-    $html("currentTime", `${centeredText}<br>Solid Focus, version ${options.version}<br>${options.profileUserEmail} [Id:${options.profileUserId}]`);
+    $html("currentTime", `${centeredText}<br>Solid Focus, version ${getManifestVersion()}<br>${options.profileUserEmail} [Id:${options.profileUserId}]`);
     $html("greeting", greeting);
 }
 
@@ -78,8 +93,7 @@ $(document).ready(() => {
             if ($("#btnChangeWallpaper").length>0) {
                 
                 $("#btnChangeWallpaper").on("click", function () {
-                    localStorage.removeItem("currentBackroundImage");
-                    fetchImageFromApiService();
+                    setManualImage('https://appel.nasa.gov/wp-content/uploads/2024/07/virtual-background-Phytoplankton-Bloom.jpg','https://nasa.gov','NASA');
                 });
             }
         } else {
@@ -90,10 +104,16 @@ $(document).ready(() => {
 });
 
 window.setManualImage = function(imageUrl, photographerUrl, photographer) {
-    const currentBackroundImage = {};
-    currentBackroundImage.src = imageUrl;
-    currentBackroundImage.photographerUrl = photographerUrl;
-    currentBackroundImage.photographer = photographer
-    setBackroundImage(currentBackroundImage);
+    
+    checkAndRequestPermission(imageUrl)
+    .then(hasPermission => {
+      if (hasPermission) {
+        const currentBackroundImage = {};
+        currentBackroundImage.src = imageUrl;
+        currentBackroundImage.photographerUrl = photographerUrl;
+        currentBackroundImage.photographer = photographer
+        setBackroundImage(currentBackroundImage);
+      }
+    });
 
 }
