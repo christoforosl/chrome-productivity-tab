@@ -1,7 +1,7 @@
 {
   "name": "Solid Focus",
   "description": "Help focus on tasks and measure time for a task",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "manifest_version": 3,
   "permissions": [
     "identity",
@@ -10,7 +10,7 @@
     "alarms",
     "storage"
   ],
-  "optional_permissions": [
+  "optional_host_permissions": [
     "https://*/*"
   ],
   "host_permissions": [
