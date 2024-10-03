@@ -21,7 +21,7 @@ function fetchAndSetBackgroundImage(url) {
                     const objectURL = URL.createObjectURL(blob);
                     document.body.style.backgroundImage = `url('${objectURL}')`;
                     backroundImageProps();
-                    console.log('Background image set successfully');
+                    console.log(`Background image set successfully from ${objectURL}`);
                     resolve(true);
                 }
             })
@@ -44,11 +44,10 @@ export function setBackroundImage(currentBackroundImage) {
     fetchAndSetBackgroundImage(currentBackroundImage.src)
         .then(success => {
             if (success) {
-                console.log('Background set successfully');
                 setPhotoDesriptions(currentBackroundImage);
 
             } else {
-                showChromeNotification('Failed to update background, used default image');
+                console.log('Failed to update background, using default image');
                 currentBackroundImage.src = chrome.runtime.getURL(options.defaultImage);
                 currentBackroundImage.photographerUrl = "https://www.freepik.com/free-vector/dark-studio-room-vector-background_2395298.htm";
                 currentBackroundImage.photographer = "Starline / Freepik"
