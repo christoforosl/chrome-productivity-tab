@@ -1,4 +1,4 @@
-import { $html, options, settings, showChromeNotification } from "./common.js";
+import { $html, options, settings } from "./common.js";
 
 const CALL_IMAGE_API_HEADERS = new Headers({
     accept: "application/json",
@@ -118,18 +118,15 @@ function isOlderThanXDays(date, days) {
 }
 
 export function checkBackroundImageOnLoad() {
+    console.log("--checkBackroundImageOnLoad")
     const currentBackroundImage = JSON.parse(localStorage.getItem("currentBackroundImage")) || {};
-
-    const doImageFromStorage =
-        currentBackroundImage.src &&
-        !isOlderThanXDays(
-            new Date(currentBackroundImage.setDate),
-            parseInt(settings.daysToKeepImage) ?? 30
-        );
+    const doImageFromStorage = currentBackroundImage.src; 
 
     if (doImageFromStorage) {
+        console.log("--checkBackroundImageOnLoad:doImageFromStorage")
         setBackroundImage(currentBackroundImage);
     } else {
+        console.log("--checkBackroundImageOnLoad:fetchImageFromApiService")
         fetchImageFromApiService();
     }
 }

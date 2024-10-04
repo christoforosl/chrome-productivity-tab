@@ -1,7 +1,7 @@
 import { settings, options, $html, $e } from "./common.js";
 import { checkForActiveFocusTimer,setCurrentFocusAndStartTimer } from "./newTab.js";
 import { setQuote } from "./getQuote.js";
-import { checkBackroundImageOnLoad, checkAndRequestPermission, setBackroundImage } from "./backgroundImage.js";
+import { checkBackroundImageOnLoad, checkAndRequestPermission, setBackroundImage, fetchImageFromApiService } from "./backgroundImage.js";
 
 let curentDateTimeTimer = null;
 
@@ -93,7 +93,8 @@ $(document).ready(() => {
             if ($("#btnChangeWallpaper").length>0) {
                 
                 $("#btnChangeWallpaper").on("click", function () {
-                    setManualImage('https://appel.nasa.gov/wp-content/uploads/2024/07/virtual-background-Phytoplankton-Bloom.jpg','https://nasa.gov','NASA');
+                    fetchImageFromApiService();
+                    //setManualImage('https://appel.nasa.gov/wp-content/uploads/2024/07/virtual-background-Phytoplankton-Bloom.jpg','https://nasa.gov','NASA');
                 });
             }
         } else {
