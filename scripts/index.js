@@ -7,6 +7,24 @@ import { AuthService } from './auth-service.js';
 const authService = new AuthService();
 let curentDateTimeTimer = null;
 
+const profileMenuHtml = `
+<div class="dropdown">
+    <a class="dropdown-toggle pt-2" style="color: white;" data-toggle="dropdown" href="#" role="button"
+        aria-haspopup="true" aria-expanded="false">
+        <div id="userProfileInfo"></div>
+    </a>
+    <div class="dropdown-menu">
+        <button class="dropdown-item" type="button" id="btnUpdateEmail">
+        <i class="far fa-envelope me-2"></i>Update Email
+    </button>
+        <div role="separator" class="dropdown-divider"></div>
+        <button class="dropdown-item" type="button" id="btnLogout">
+        <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+    </button>
+    </div>
+</div>
+`;
+
 function setCurrentDateTimeTimer() {
     curentDateTimeTimer = setInterval(setCurrentDateTime, 1000);
 }
@@ -40,7 +58,7 @@ function setCurrentDateTime() {
     }
     greeting = greeting + (settings.greetingName || "[Specify Name In Settings]");
     $html("btnSetWorkItem", options.whatShallWeWorkOnQuestionText);
-    $html("currentTime", `${centeredText}<br>Solid Focus, version ${options.version}`);
+    $html("currentTime", centeredText);
     $html("greeting", greeting);
 }
 
@@ -51,6 +69,8 @@ $(document).ready(() => {
         if (userInfo.email) {
             options.profileUserEmail = userInfo.email;
             options.profileUserId = userInfo.id;
+
+            $html("systemVersion", `Solid Focus, version ${options.version}`);
 
             checkBackroundImageOnLoad();
             checkForActiveFocusTimer();
@@ -96,22 +116,6 @@ $(document).ready(() => {
     });
 });
 
-const profileMenuHtml = `
-<div class="dropdown">
-    <a id="userProfileInfo" class="dropdown-toggle small pt-2" style="color: white;" data-toggle="dropdown" href="#" role="button"
-        aria-haspopup="true" aria-expanded="false"><div class="small" id="userProfileInfo"></div></a>
-    <div class="dropdown-menu">
-        <button class="dropdown-item" type="button" id="btnUpdateEmail">
-        <i class="far fa-envelope me-2"></i>Update Email
-    </button>
-        <div role="separator" class="dropdown-divider"></div>
-        <button class="dropdown-item" type="button" id="btnLogout">
-        <i class="fas fa-sign-out-alt me-2"></i>Sign Out
-    </button>
-    </div>
-</div>
-`;
-
 // Add this JavaScript to handle the profile button:
 document.addEventListener('DOMContentLoaded', function() {
   // Insert the menu HTML
@@ -119,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (menuContainer) {
     menuContainer.innerHTML = profileMenuHtml;
   }
-
 
   // Update profile info
   const updateProfileInfo = async () => {
@@ -142,7 +145,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Handle email update
 document.getElementById('btnUpdateEmail')?.addEventListener('click', async () => {
+
     try {
+
       await authService.promptForEmail(true);
       updateProfileInfo(); // Refresh the display after update
 

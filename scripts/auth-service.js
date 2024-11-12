@@ -1,3 +1,4 @@
+import {showItem, hideItem} from './pageUI';
 // auth-service.js
 
 export class AuthService {
@@ -34,7 +35,7 @@ export class AuthService {
       }
 
       // Validate email format
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(newEmail)) {
         throw new Error('Invalid email format');
       }
@@ -58,41 +59,50 @@ export class AuthService {
   }
 
   async promptForEmail(isUpdate = false) {
+
     return new Promise((resolve, reject) => {
-      const modal = document.createElement('div');
-      modal.innerHTML = `
-        <div class="modal fade show" style="display: block; background: rgba(0,0,0,0.5);">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">${isUpdate ? 'Update Email' : 'Welcome to Solid Focus'}</h5>
-              </div>
-              <div class="modal-body">
-                <p>${isUpdate ? 'Enter your new email address:' : 'Please enter your email to continue:'}</p>
-                <input type="email" id="userEmail" class="form-control" required
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-                <div class="invalid-feedback">
-                  Please enter a valid email address
+
+      if (! document.getElementById('divPromptForEmail')) {
+
+        const modaldiv = document.createElement('div');
+
+        modaldiv.innerHTML = `
+          <div id="divPromptForEmail" class="modal fade show" style="display: block; background: rgba(0,0,0,0.5);">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">${isUpdate ? 'Update Email' : 'Welcome to Solid Focus'}</h5>
                 </div>
-              </div>
-              <div class="modal-footer">
-                ${isUpdate ? '<button type="button" class="btn btn-secondary" id="cancelEmail">Cancel</button>' : ''}
-                <button type="button" class="btn btn-primary" id="saveEmail">
-                  ${isUpdate ? 'Update' : 'Continue'}
-                </button>
+                <div class="modal-body">
+                  <p>${isUpdate ? 'Enter your new email address:' : 'Please enter your email to continue:'}</p>
+                  <input type="email" id="userEmail" class="form-control" required>
+                  <div class="invalid-feedback">
+                    Please enter a valid email address
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  ${isUpdate ? '<button type="button" class="btn btn-secondary" id="cancelEmail">Cancel</button>' : ''}
+                  <button type="button" class="btn btn-primary" id="saveEmail">
+                    ${isUpdate ? 'Update' : 'Continue'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      `;
+        `;
 
-      document.body.appendChild(modal);
+        document.body.appendChild(modaldiv);
+      }
 
+      $showItem('divPromptForEmail');
+
+      const modal = document.getElementById('divPromptForEmail');
       const emailInput = document.getElementById('userEmail');
       const saveButton = document.getElementById('saveEmail');
       const cancelButton = document.getElementById('cancelEmail');
 
       const handleSave = async () => {
+
         if (emailInput.checkValidity()) {
           const user = {
             email: emailInput.value,
@@ -102,16 +112,17 @@ export class AuthService {
           if (isUpdate) {
             try {
               await this.updateUserEmail(emailInput.value);
-              document.body.removeChild(modal);
+              $hideItem('divPromptForEmail');
               resolve(user);
             } catch (error) {
+              console.error('Error updating email:', error);
               emailInput.classList.add('is-invalid');
               emailInput.setCustomValidity(error.message);
               emailInput.reportValidity();
             }
           } else {
             chrome.storage.local.set({ [this.storageKey]: user }, () => {
-              document.body.removeChild(modal);
+              $hideItem('divPromptForEmail');
               resolve(user);
             });
           }
@@ -121,7 +132,7 @@ export class AuthService {
       };
 
       const handleCancel = () => {
-        document.body.removeChild(modal);
+        $hideItem('divPromptForEmail');
         reject(new Error('Email update cancelled'));
       };
 
@@ -160,7 +171,7 @@ export class AuthService {
 
   async logOut() {
     return new Promise((resolve) => {
-      debugger;
+
       chrome.storage.local.remove(this.storageKey, () => {
         resolve();
       });
