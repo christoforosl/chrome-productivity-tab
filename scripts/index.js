@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initial profile info update
   updateProfileInfo();
 
-});
+
 
 // Handle email update
 document.getElementById('btnUpdateEmail')?.addEventListener('click', async () => {
@@ -197,3 +197,5 @@ document.getElementById('btnUpdateEmail')?.addEventListener('click', async () =>
       console.error('Logout failed:', error);
     }
   });
+
+});
