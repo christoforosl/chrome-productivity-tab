@@ -97,34 +97,19 @@ $(document).ready(() => {
 });
 
 const profileMenuHtml = `
-<li class="dropdown small">
-  <button class="btn btn-link dropdown-toggle text-white text-decoration-none" type="button" id="userProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-    <span id="userProfileInfo" class="me-1"></span>
-  </button>
-  <div class="dropdown-menu">
-    <li><button class="dropdown-item" type="button" id="btnUpdateEmail">
-            <i class="far fa-envelope me-2"></i>Update Email
-        </button>
-    </li>
-    <li><hr class="dropdown-divider"></li>
-    <li><button class="dropdown-item" type="button" id="btnLogout">
-            <i class="fas fa-sign-out-alt me-2"></i>Sign Out
-        </button>
-    </li>
-  </div>
-</li>
-<style>
-.dropdown-toggle::after {
-  vertical-align: middle;
-}
-.dropdown-item {
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-}
-.dropdown-item:hover {
-  background-color: #f8f9fa;
-}
-</style>
+<div class="dropdown">
+    <a id="userProfileInfo" class="dropdown-toggle small pt-2" style="color: white;" data-toggle="dropdown" href="#" role="button"
+        aria-haspopup="true" aria-expanded="false"><div class="small" id="userProfileInfo"></div></a>
+    <div class="dropdown-menu">
+        <button class="dropdown-item" type="button" id="btnUpdateEmail">
+        <i class="far fa-envelope me-2"></i>Update Email
+    </button>
+        <div role="separator" class="dropdown-divider"></div>
+        <button class="dropdown-item" type="button" id="btnLogout">
+        <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+    </button>
+    </div>
+</div>
 `;
 
 // Add this JavaScript to handle the profile button:

@@ -160,6 +160,7 @@ export class AuthService {
 
   async logOut() {
     return new Promise((resolve) => {
+      debugger;
       chrome.storage.local.remove(this.storageKey, () => {
         resolve();
       });
