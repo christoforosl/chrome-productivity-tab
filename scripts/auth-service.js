@@ -1,4 +1,4 @@
-import {showItem, hideItem} from './pageUI';
+import {showItem, hideItem} from './pageUI.js';
 // auth-service.js
 
 export class AuthService {
@@ -94,7 +94,7 @@ export class AuthService {
         document.body.appendChild(modaldiv);
       }
 
-      $showItem('divPromptForEmail');
+      showItem('divPromptForEmail');
 
       const modal = document.getElementById('divPromptForEmail');
       const emailInput = document.getElementById('userEmail');
@@ -112,7 +112,7 @@ export class AuthService {
           if (isUpdate) {
             try {
               await this.updateUserEmail(emailInput.value);
-              $hideItem('divPromptForEmail');
+              hideItem('divPromptForEmail');
               resolve(user);
             } catch (error) {
               console.error('Error updating email:', error);
@@ -122,7 +122,7 @@ export class AuthService {
             }
           } else {
             chrome.storage.local.set({ [this.storageKey]: user }, () => {
-              $hideItem('divPromptForEmail');
+              hideItem('divPromptForEmail');
               resolve(user);
             });
           }
@@ -132,7 +132,7 @@ export class AuthService {
       };
 
       const handleCancel = () => {
-        $hideItem('divPromptForEmail');
+        hideItem('divPromptForEmail');
         reject(new Error('Email update cancelled'));
       };
 
