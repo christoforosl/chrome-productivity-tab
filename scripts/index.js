@@ -2,7 +2,9 @@ import { settings, options, $html, $e } from "./common.js";
 import { checkForActiveFocusTimer,setCurrentFocusAndStartTimer } from "./newTab.js";
 import { setQuote } from "./getQuote.js";
 import { checkBackroundImageOnLoad, fetchImageFromApiService } from "./backgroundImage.js";
+import { AuthService } from './auth-service.js';
 
+const authService = new AuthService();
 let curentDateTimeTimer = null;
 
 function setCurrentDateTimeTimer() {
@@ -44,7 +46,7 @@ function setCurrentDateTime() {
 
 $(document).ready(() => {
     loadSettings();
-    chrome.identity.getProfileUserInfo(function (userInfo) {
+    authService.getCurrentUser().then(function (userInfo) {
 
         if (userInfo.email) {
             options.profileUserEmail = userInfo.email;
@@ -83,6 +85,13 @@ $(document).ready(() => {
             }
         } else {
             console.log("User info not available");
+            chrome.notifications.create({
+                type: 'basic',
+                iconUrl: 'images/icon16.png',
+                title: 'Authentication Required',
+                message: 'Please provide your email address to use Solid Focus.',
+                priority: 2
+              });
         }
     });
 });

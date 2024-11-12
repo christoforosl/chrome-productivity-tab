@@ -1,14 +1,16 @@
 {
   "name": "Solid Focus",
   "description": "Help focus on tasks and measure time for a task",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "manifest_version": 3,
   "permissions": [
     "identity",
     "identity.email",
     "tabs",
     "alarms",
-    "storage"
+    "storage",
+    "notifications",
+    "unlimitedStorage"
   ],
   "host_permissions": [
     "https://stoic.tekloon.net/*",

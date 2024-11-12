@@ -301,6 +301,7 @@ export function getTimerRecordFromStorage() {
 }
 
 export function getFocusHistoryData(callback) {
+
     const user = options.profileUserEmail;
     const query = 'max=200&h={"$orderby":{"startTime":-1}}&q={"user":"' + user + '"}&d=' + new Date().getTime();
     const myRequest = new Request(options.APIDBHostTasks + "?" + query, {
