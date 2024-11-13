@@ -10,9 +10,6 @@
     "alarms",
     "storage"
   ],
-  "optional_host_permissions": [
-    "https://*/*"
-  ],
   "host_permissions": [
     "https://stoic.tekloon.net/*",
     "https://chrometimertasks-879e.restdb.io/*"

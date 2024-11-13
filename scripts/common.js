@@ -21,7 +21,7 @@ export function $e(id) {
 export function $html(id, text) {
     const elent = $e(id);
     if (elent) {
-        if (elent.nodeName === "DIV") {
+        if (elent.nodeName === "DIV" || elent.nodeName === "SPAN") {
             if (elent.innerHTML != text) {
                 elent.innerHTML = text;
             }
