@@ -2,6 +2,7 @@ import { settings, options, $html, $e } from "./common.js";
 import { checkForActiveFocusTimer,setCurrentFocusAndStartTimer } from "./newTab.js";
 import { setQuote } from "./getQuote.js";
 import { checkBackroundImageOnLoad, fetchImageFromApiService } from "./backgroundImage.js";
+import { AuthService } from "./auth-service.js";
 
 const authService = new AuthService();
 let curentDateTimeTimer = null;
