@@ -1,7 +1,7 @@
 import { settings, options, $html, $e } from "./common.js";
 import { checkForActiveFocusTimer,setCurrentFocusAndStartTimer } from "./newTab.js";
 import { setQuote } from "./getQuote.js";
-import { checkBackroundImageOnLoad, checkAndRequestPermission, setBackroundImage, fetchImageFromApiService } from "./backgroundImage.js";
+import { checkBackroundImageOnLoad, setBackroundImage, fetchImageFromApiService } from "./backgroundImage.js";
 
 let curentDateTimeTimer = null;
 
@@ -104,17 +104,4 @@ $(document).ready(() => {
 
 });
 
-window.setManualImage = function(imageUrl, photographerUrl, photographer) {
-    
-    checkAndRequestPermission(imageUrl)
-    .then(hasPermission => {
-      if (hasPermission) {
-        const currentBackroundImage = {};
-        currentBackroundImage.src = imageUrl;
-        currentBackroundImage.photographerUrl = photographerUrl;
-        currentBackroundImage.photographer = photographer
-        setBackroundImage(currentBackroundImage);
-      }
-    });
 
-}

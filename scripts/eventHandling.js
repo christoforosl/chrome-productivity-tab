@@ -1,11 +1,12 @@
 
 import { getElapsedTime, options, settings, $e } from "./common.js";
-import { fetchImageFromApiService } from "./backgroundImage.js";
+import { fetchImageFromApiService, initializeCustomBackground} from "./backgroundImage.js";
 import { getFocusHistoryData, showTimerData, updateTimerService, getTimerRecordFromStorage,onShowDSModal, deleteFocusData } from "./newTab.js";
 
 export function initializeEventHandlers() {
     if ($e("btnShowSettings")) {
         $e("btnShowSettings").addEventListener("click", function () {
+            initializeCustomBackground();
             $("#settingsModal").modal("show");
         });
     }
@@ -27,7 +28,7 @@ export function initializeEventHandlers() {
             }
 
             settings.greetingName = $("#greetingName").val();
-            settings.daysToKeepImage = $("#daysToKeepImage").val();
+            
             window.localStorage.setItem("settings", JSON.stringify(settings));
             $("#settingsModal").modal("hide");
         });

@@ -5,6 +5,8 @@ const CALL_IMAGE_API_HEADERS = new Headers({
     Authorization: "Client-ID " + options.imageApiKey,
 });
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB max file size
+
 function fetchAndSetBackgroundImage(url) {
     return new Promise((resolve) => {
         fetch(url)
@@ -26,7 +28,7 @@ function fetchAndSetBackgroundImage(url) {
                 }
             })
             .catch(error => {
-                document.body.style.backgroundImage = `url('${chrome.runtime.getURL(options.defaultImage)}')`;
+                document.body.style.backgroundImage = `url('${chrome.runtime.getURL(options.defaultBackround)}')`;
                 backroundImageProps();
                 console.error('Error fetching image:', error);
                 resolve(false);
@@ -48,7 +50,7 @@ export function setBackroundImage(currentBackroundImage) {
 
             } else {
                 console.log('Failed to update background, using default image');
-                currentBackroundImage.src = chrome.runtime.getURL(options.defaultImage);
+                currentBackroundImage.src = chrome.runtime.getURL(options.defaultBackround);
                 currentBackroundImage.photographerUrl = "https://www.freepik.com/free-vector/dark-studio-room-vector-background_2395298.htm";
                 currentBackroundImage.photographer = "Starline / Freepik"
                 setPhotoDesriptions(currentBackroundImage);
@@ -117,54 +119,121 @@ function isOlderThanXDays(date, days) {
     return diffDays > days;
 }
 
-export function checkBackroundImageOnLoad() {
-    console.log("--checkBackroundImageOnLoad")
-    const currentBackroundImage = JSON.parse(localStorage.getItem("currentBackroundImage")) || {};
-    const doImageFromStorage = currentBackroundImage.src; 
+// Initialize the custom background functionality
+export function initializeCustomBackground() {
+    const fileInput = document.getElementById('customBackgroundInput');
+    const removeButton = document.getElementById('removeCustomBackground');
 
-    if (doImageFromStorage) {
-        console.log("--checkBackroundImageOnLoad:doImageFromStorage")
-        setBackroundImage(currentBackroundImage);
-    } else {
-        console.log("--checkBackroundImageOnLoad:fetchImageFromApiService")
-        fetchImageFromApiService();
+    if (fileInput) {
+        fileInput.addEventListener('change', handleFileSelect);
+
+        // Update file input label with selected filename
+        fileInput.addEventListener('change', function (e) {
+            const fileName = e.target.files[0]?.name || 'Choose file...';
+            e.target.nextElementSibling.textContent = fileName;
+        });
+    }
+
+    if (removeButton) {
+        removeButton.addEventListener('click', removeCustomBackground);
+    }
+
+    // Check for existing custom background
+    chrome.storage.local.get(['customBackground'], function (result) {
+        if (result.customBackground) {
+            document.getElementById('currentImageName').textContent = 'Custom image set';
+            document.getElementById('removeCustomBackground').style.display = 'inline-block';
+        }
+    });
+}
+
+// Handle file selection
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+        alert('Please select an image smaller than 5MB.');
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const imageData = e.target.result;
+
+        // Store the image data in Chrome storage
+        chrome.storage.local.set({
+            customBackground: {
+                data: imageData,
+                name: file.name,
+                type: file.type,
+                timestamp: new Date().getTime()
+            }
+        }, function () {
+            document.getElementById('currentImageName').textContent = file.name;
+            document.getElementById('removeCustomBackground').style.display = 'inline-block';
+            setCustomBackgroundImage(imageData);
+        });
+    };
+
+    reader.readAsDataURL(file);
+}
+
+// Remove custom background
+function removeCustomBackground() {
+    chrome.storage.local.remove(['customBackground'], function () {
+        document.getElementById('currentImageName').textContent = 'None';
+        document.getElementById('removeCustomBackground').style.display = 'none';
+        document.getElementById('customBackgroundInput').value = '';
+        document.getElementById('customBackgroundInput').nextElementSibling.textContent = 'Choose file...';
+
+        // Revert to default background behavior
+        checkBackroundImageOnLoad();
+    });
+}
+
+// Set the custom background image
+function setCustomBackgroundImage(imageData) {
+    if (window.jQuery) {
+        $("html").css("background-image", `url('${imageData}')`);
+        $("#photoinfo").attr("title", "Custom Background Image");
+        $html("photographer", "Custom Background");
+    }
+}
+
+function setDefaultBackgroundImage() {
+    
+    const defaultImageUrl = chrome.runtime.getURL(options.defaultBackground);
+    $("html").css("background-image", `url('${defaultImageUrl}')`);
+    $("#photoinfo").attr("title", "Default Background");
+    $html("photographer", "Default Background");
+}
+
+// Modify the existing checkBackroundImageOnLoad function
+export function checkBackroundImageOnLoad() {
+    if (window.jQuery) {
+        $(document).ready(function () {
+            // First check for custom background
+            chrome.storage.local.get(['customBackground'], function (result) {
+                if (result.customBackground) {
+                    // Use custom background if it exists
+                    setCustomBackgroundImage(result.customBackground.data);
+                } else {
+                    // set default background
+                    setDefaultBackgroundImage();
+                }
+            });
+        });
     }
 }
 
 
-/**
- * Checks and requests permission for a given image URL if not already granted.
- * @param {string} imageUrl - The complete URL of the image.
- * @returns {Promise<boolean>} - Resolves to true if permission is granted, false otherwise.
- */
-export function checkAndRequestPermission(imageUrl) {
-    return new Promise((resolve, reject) => {
-        try {
-            // Extract the origin from the URL
-            const url = new URL(imageUrl);
-            const origin = url.origin + '/*';
-           
-            // Check if we already have permission
-            chrome.permissions.contains({ origins: [origin] }, (result) => {
-                if (result) {
-                    // We already have permission
-                    resolve(true);
-                } else {
-                    // We don't have permission, so let's request it
-                    chrome.permissions.request({ origins: [origin] }, (granted) => {
-                        if (granted) {
-                            // Permission was granted
-                            resolve(true);
-                        } else {
-                            // Permission was denied
-                            resolve(false);
-                        }
-                    });
-                }
-            });
-        } catch (error) {
-            // If there's an error (e.g., invalid URL), reject the promise
-            reject(new Error(`Invalid URL or permission error: ${error.message}`));
-        }
-    });
-}

@@ -9,7 +9,7 @@ export const options = {
     language: window.navigator.userLanguage || window.navigator.language || "en",
     profileUserEmail:null,
     profileUserId:null,
-    defaultImage:"images/13818.jpg"
+    defaultBackground: "/images/defaultBackround.jpg"
 };
 
 export const settings = {};
